@@ -1,0 +1,17 @@
+.register-container {
+    margin: 0 auto;
+    max-width: 1200px;
+}
+
+.content {
+    .title {
+        display: flex;
+        justify-content: center;
+        margin: 100px 0 20px 0;
+        font-size: 20px;
+    }
+    .form-content {
+        max-width: 40%;
+        margin: 0 auto;
+    }
+}
