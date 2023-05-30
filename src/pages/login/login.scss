@@ -3,7 +3,7 @@
     --color-background-form: #fff;
 }
 
-.register-container {
+.login-container {
     background-color: var(--color-background-register);
     height: 100vh;
     width: 100vw;
@@ -15,34 +15,13 @@
     padding: 0;
 }
 .content {
-    padding: 60px 60px 0 60px;
     margin: 0 auto;
     background-color: var(--color-background-form);
     border-radius: 10px;
-    position: relative;
     .title {
         display: flex;
         justify-content: center;
         margin: 20px 0 20px 0;
         font-size: 20px;
-    }
-    .form-content {
-        max-width: 100%;
-    }
-    .image-bg {
-        position: absolute;
-        bottom: 0;
-        left: 0;
-        transform: translateX(-100%);
-    }
-    .text {
-        margin-bottom: 20px;
-        cursor: pointer;
-    }
-}
-
-@media screen and (max-width: 768px) {
-    img {
-        display: none;
     }
 }

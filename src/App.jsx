@@ -2,7 +2,7 @@ import React, { useState } from "react";
 
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { Outlet } from "react-router-dom";
-import LoginPage from "./pages/login";
+import LoginPage from "./pages/login/login";
 import ContactPage from "./pages/contact";
 import BookPage from "./pages/book";
 import Header from "./components/header";
