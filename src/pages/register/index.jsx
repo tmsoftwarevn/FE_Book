@@ -1,7 +1,7 @@
 import { Button, Divider, Form, Input, message , notification} from "antd";
 import "./register.scss";
 import bgRegister from "../../images/bgRegister.webp";
-import RegisterUser from "../../services/api";
+import {RegisterUser} from "../../services/api";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 

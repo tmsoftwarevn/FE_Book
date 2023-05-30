@@ -1,6 +1,8 @@
 :root {
     --color-background-register: #accffe;
     --color-background-form: #fff;
+    --color-fb: #1877f2;
+    --color-gg: #e74236;
 }
 
 .login-container {
@@ -15,6 +17,7 @@
     padding: 0;
 }
 .content {
+    padding: 30px !important;
     margin: 0 auto;
     background-color: var(--color-background-form);
     border-radius: 10px;
@@ -23,5 +26,29 @@
         justify-content: center;
         margin: 20px 0 20px 0;
         font-size: 20px;
+    }
+
+    .text {
+        display: flex;
+        justify-content: space-between;
+    }
+    .group {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        .login-with {
+            display: flex;
+            font-size: 30px;
+            .faceBook {
+                color: var(--color-fb);
+                margin-left: 10px;
+                cursor: pointer;
+            }
+            .google {
+                color: var(--color-gg);
+                cursor: pointer;
+            }
+        }
     }
 }
