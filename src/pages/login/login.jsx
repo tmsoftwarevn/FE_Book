@@ -3,14 +3,20 @@ import "./login.scss";
 import { FacebookOutlined, GoogleOutlined } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
 import { ApiLogin } from "../../services/api";
+import { useDispatch } from "react-redux";
+import {doLoginAction} from "../../redux/account/accountSlice"
+
 const LoginPage = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch()
   const onFinish = async (values) => {
     const { username, password } = values;
-    console.log("Success:", values);
+  
     let res = await ApiLogin(username, password);
+    console.log('>>>. res', res)
     if (res?.data) {
       localStorage.setItem('access_token', res.data.access_token)
+      dispatch(doLoginAction(res.data))
       message.success("Đăng nhập thành công");
       navigate("/");
     } else {
@@ -33,12 +39,12 @@ const LoginPage = () => {
           <Form name="basic" onFinish={onFinish} autoComplete="off">
             <Form.Item
               labelCol={{ span: 24 }}
-              label="Email/Phone"
+              label="Email"
               name="username"
               rules={[
                 {
                   required: true,
-                  message: "Please input your email or phone!",
+                  message: "Please input your email!",
                 },
               ]}
             >

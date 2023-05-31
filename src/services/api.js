@@ -15,3 +15,7 @@ export const ApiLogin = (username, password) => {
     password,
   });
 };
+
+export const callGetAccount = () => {
+  return axios.get("/api/v1/auth/account");
+};
