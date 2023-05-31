@@ -1,0 +1,97 @@
+input,
+button {
+    border: none;
+    outline: none;
+}
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+.header-main {
+    background-color: #ffffff;
+    .container {
+        .header-content {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+
+            .header-left {
+                display: flex;
+                align-items: center;
+                padding: 10px;
+                .icon-header {
+                    font-size: 40px;
+                    margin-right: 10px;
+                    color: orange;
+                    cursor: pointer;
+                }
+                .search-header {
+                    display: flex;
+                    border: 1px solid #ccc;
+                    border-radius: 10px;
+                    font-size: 20px;
+                    .group {
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+
+                        .icon-search {
+                            margin: 10px;
+                        }
+                        input {
+                            width: 650px;
+                        }
+                    }
+                    button {
+                        padding: 10px;
+                        border-top-right-radius: 10px;
+                        border-bottom-right-radius: 10px;
+                        &:hover {
+                            background-color: rgb(102 162 240);
+                            cursor: pointer;
+                        }
+                    }
+                }
+            }
+
+            .header-right {
+                display: flex;
+                width: 25%;
+                justify-content: space-between;
+                align-items: center;
+                font-size: 18px;
+
+                .basket {
+                    display: flex;
+                    align-items: center;
+                    &:hover {
+                        cursor: pointer;
+                    }
+                    .badge {
+                        transform: translateY(-50%);
+                    }
+                }
+                .home {
+                    display: flex;
+                    align-items: center;
+                    &:hover {
+                        cursor: pointer;
+                    }
+                }
+                .account {
+                    display: flex;
+                    align-items: center;
+                    &:hover {
+                        cursor: pointer;
+                    }
+                }
+            }
+        }
+    }
+}

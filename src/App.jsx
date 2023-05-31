@@ -20,8 +20,8 @@ const Layout = () => {
   return (
     <div className="layout-app">
       <Header />
-      <Outlet />
-      <Footer />
+      {/* <Outlet />
+      <Footer /> */}
     </div>
   );
 };
