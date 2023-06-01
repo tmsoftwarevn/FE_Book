@@ -50,5 +50,12 @@
                 cursor: pointer;
             }
         }
+        .home {
+            cursor: pointer;
+            margin-top: 10px;
+            &:hover {
+                color: blue;
+            }
+        }
     }
 }

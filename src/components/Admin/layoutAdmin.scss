@@ -1,0 +1,28 @@
+ul,
+li {
+    text-decoration: none;
+}
+.admin {
+    padding: 10px;
+    border-radius: 10px;
+    transform: translateX(1600%);
+    margin-right: 70px;
+    text-decoration: underline;
+    font-size: 18px;
+    color: blue;
+    width: fit-content;
+    &:hover {
+        background-color: #f1c40f;
+    }
+    position: relative;
+    &:hover {
+        display: block;
+    }
+    .dropdown {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        transform: translateY(100%);
+        // display: none;
+    }
+}

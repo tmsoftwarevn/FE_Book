@@ -39,6 +39,15 @@
         margin-bottom: 20px;
         cursor: pointer;
     }
+    .home {
+        cursor: pointer;
+        display: flex;
+        justify-content: center;
+        margin-top: 10px;
+        &:hover {
+            color: blue;
+        }
+    }
 }
 
 @media screen and (max-width: 768px) {

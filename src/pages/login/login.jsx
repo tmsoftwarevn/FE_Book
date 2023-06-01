@@ -100,6 +100,11 @@ const LoginPage = () => {
               <FacebookOutlined />
             </div>
           </div>
+          <div className="home" 
+          onClick={() => navigate('/')}
+          >
+            	&#60;	&#60;Back home
+          </div>
         </div>
       </div>
     </div>
