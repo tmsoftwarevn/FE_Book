@@ -21,8 +21,8 @@ const Layout = () => {
   return (
     <div className="layout-app">
       <Header />
-       <Outlet />
-      <Footer /> 
+      <Outlet />
+      <Footer />
     </div>
   );
 };
@@ -30,24 +30,22 @@ const Layout = () => {
 export default function App() {
   const dispatch = useDispatch();
   const isAuthenticated = useSelector((state) => state.account.isAuthenticated);
+  console.log('au', isAuthenticated)
+  //const[isLoading, setIsLoading] = useState(false)
   const getAccount = async () => {
-    if (
-      window.location.pathname === "/login" ||
-      window.location.pathname === "/register" 
-      
-  
-    )
-      return;
+    //setIsLoading(true)
     let res = await callGetAccount();
+   // setIsLoading(false)
     if (res && res.data) {
       dispatch(doGetAccountAction(res.data));
     }
   };
-
+  
   useEffect(() => {
-    getAccount();
+    if (localStorage.getItem("access_token")) {
+      getAccount();
+    }
   }, []);
-
   const router = createBrowserRouter([
     {
       path: "/",
@@ -76,38 +74,39 @@ export default function App() {
     {
       path: "/admin",
       element: <LayoutAdmin />,
-     
+      errorElement: <Notfound />,
       children: [
         {
           index: true,
           element: (
-            <ProtecedRoute>
+            <ProtecedRoute
+          
+            >
               <Admin />
             </ProtecedRoute>
           ),
         },
         {
           path: "book",
-          element: <BookPage />
+          element: <BookPage />,
         },
         {
           path: "order",
-          element: <ContactPage />
-        }
+          element: <ContactPage />,
+        },
       ],
     },
   ]);
 
   return (
     <>
-      {isAuthenticated === true ||
-      window.location.pathname === "/login" ||
-      window.location.pathname === "/register"||
-      window.location.pathname === "/" ? (
-        <RouterProvider router={router} />
-      ) : (
+      {
+         window.location.pathname==='/login' || window.location.pathname==='/'?
+         <RouterProvider router={router} />     
+        :
         <Loading />
-      )}
+      }
+     
     </>
   );
 }

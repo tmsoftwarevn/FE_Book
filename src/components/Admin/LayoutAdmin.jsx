@@ -38,6 +38,34 @@ const items = [
   ),
 ];
 
+const AccountAdmin = () => {
+  const items = [
+    {
+      label: <Link to ="/">Quản lý tài khoản</Link>,
+      key: "account",
+    },
+    {
+      label: <Link to ="/">Đăng xuất</Link>,
+      key: "logout",
+    },
+  ]
+  return (  
+      <Space direction="vertical">
+        <Space wrap>
+          <Dropdown
+            menu={{
+              items,
+            }}
+            placement="bottomLeft"
+          >
+           <div className="admin">
+            Admin
+           </div>
+          </Dropdown>
+        </Space>
+      </Space>
+  );
+};
 const LayoutAdmin = () => {
   const [keyActive, setKeyActive] = useState("1");
   const [collapsed, setCollapsed] = useState(false);
@@ -81,16 +109,9 @@ const LayoutAdmin = () => {
             background: colorBgContainer,
           }}
         />
-        <Content>
-          <div className="admin">
-            Admin
-            <div className="dropdown">
-              <ul>
-                <li>Quản lí tài khoản</li>
-                <li>Đăng xuất</li>
-              </ul>
-            </div>
-          </div>
+        <Content>              
+            <AccountAdmin />
+
           <div
             style={{
               padding: 24,

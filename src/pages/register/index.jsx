@@ -3,12 +3,17 @@ import "./register.scss";
 import bgRegister from "../../images/bgRegister.webp";
 import {RegisterUser} from "../../services/api";
 import { useNavigate } from "react-router-dom";
-import { useState } from "react";
-
+import { useState, useEffect } from "react";
+import { useSelector } from "react-redux";
 const RegisterPage = () => {
   const navigate = useNavigate();
   const [isSubmit, setIsSubmit] = useState(false);
+  const isAuthenticated = useSelector((state) => state.account.isAuthenticated);
 
+  useEffect(() => {
+    if(isAuthenticated === true)
+    navigate('/')
+  },[])
   const onFinish = async (values) => {
     const { fullName, email, password, phone } = values;
     setIsSubmit(true);

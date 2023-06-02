@@ -63,7 +63,6 @@ button {
             .header-right {
                 display: flex;
                 align-items: center;
-                font-size: 18px;
 
                 .basket {
                     display: flex;
@@ -86,6 +85,10 @@ button {
                     margin-right: 40px;
                     padding: 10px;
                     border-radius: 10px;
+                    p {
+                        margin-left: 5px;
+                        font-size: 20px;
+                    }
                     &:hover {
                         cursor: pointer;
                         background-color: #ccc;
@@ -103,9 +106,12 @@ button {
                     }
                     .name {
                         white-space: nowrap;
-                        max-width: 80px;
+                        max-width: 100px;
                         overflow: hidden;
                         text-overflow: ellipsis;
+                        font-family: 'Times New Roman', Times, serif;
+                        font-size: 20px;
+                        color: grey;
                     }
                     .username {
                         display: flex;

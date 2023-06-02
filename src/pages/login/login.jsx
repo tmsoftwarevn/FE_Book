@@ -4,19 +4,26 @@ import { FacebookOutlined, GoogleOutlined } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
 import { ApiLogin } from "../../services/api";
 import { useDispatch } from "react-redux";
-import {doLoginAction} from "../../redux/account/accountSlice"
+import { doLoginAction } from "../../redux/account/accountSlice";
+import { useEffect } from "react";
+import { useSelector } from "react-redux";
+import Loading from "../../components/Loading/loading";
+import Admin from "../admin/admin";
 
 const LoginPage = () => {
   const navigate = useNavigate();
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
+  const isAuthenticated = useSelector((state) => state.account.isAuthenticated);
+
   const onFinish = async (values) => {
     const { username, password } = values;
-  
+    console.log('loading plz');
+    <Loading  />
     let res = await ApiLogin(username, password);
-    console.log('>>>. res', res)
+    //<Loading isLoading={false} />;
     if (res?.data) {
-      localStorage.setItem('access_token', res.data.access_token)
-      dispatch(doLoginAction(res.data))
+      localStorage.setItem("access_token", res.data.access_token);
+      dispatch(doLoginAction(res.data));
       message.success("Đăng nhập thành công");
       navigate("/");
     } else {
@@ -30,7 +37,9 @@ const LoginPage = () => {
       });
     }
   };
-
+  useEffect(() => {
+    if (isAuthenticated === true) navigate("/");
+  }, []);
   return (
     <div className="login-container">
       <div className="content">
@@ -100,10 +109,8 @@ const LoginPage = () => {
               <FacebookOutlined />
             </div>
           </div>
-          <div className="home" 
-          onClick={() => navigate('/')}
-          >
-            	&#60;	&#60;Back home
+          <div className="home" onClick={() => navigate("/")}>
+            &#60; &#60;Back home
           </div>
         </div>
       </div>
