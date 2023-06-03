@@ -59,6 +59,7 @@ instance.interceptors.response.use(
       +error.response.status === 400 &&
       error.config.url === "/api/v1/auth/refresh"
     ) {
+      localStorage.removeItem("access_token");
       window.location.href = "/login";
     }
 

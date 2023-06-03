@@ -6,15 +6,13 @@ import { ApiLogin } from "../../services/api";
 import { useDispatch } from "react-redux";
 import { doLoginAction } from "../../redux/account/accountSlice";
 import { useEffect } from "react";
-
 const LoginPage = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+
   const onFinish = async (values) => {
     const { username, password } = values;
-    
-    let res = await ApiLogin(username, password);
-    
+    let res = await ApiLogin(username, password);    
     if (res?.data) {
       localStorage.setItem("access_token", res.data.access_token);
       dispatch(doLoginAction(res.data));
@@ -84,7 +82,7 @@ const LoginPage = () => {
         </div>
 
         <div className="text">
-          <u onClick={() => navigate("/register")}>Sign Up</u>
+          <p onClick={() => navigate("/register")}>Sign Up</p>
           <u>Forgot password ?</u>
         </div>
         <div className="group">

@@ -1,14 +1,7 @@
-input,
-button {
-    border: none;
-    outline: none;
-}
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-
+@import '../../scss/media';
+@import '../../scss/reset';
+@import '../../scss/flex';
+@import '../../scss/grid';
 .container {
     max-width: 1200px;
     margin: 0 auto;
@@ -24,6 +17,9 @@ button {
                 display: flex;
                 align-items: center;
                 padding: 10px;
+                @include xs {
+                    width: 60%;
+                }
                 .icon-header {
                     font-size: 40px;
                     margin-right: 10px;
@@ -62,14 +58,14 @@ button {
 
             .header-right {
                 display: flex;
-                align-items: center;
-
                 .basket {
                     display: flex;
                     align-items: center;
                     margin-right: 40px;
                     padding: 10px;
                     border-radius: 10px;
+                    font-size: 18px;
+                    color: grey;
                     &:hover {
                         cursor: pointer;
                         background-color: rgb(128 175 255);
@@ -85,9 +81,10 @@ button {
                     margin-right: 40px;
                     padding: 10px;
                     border-radius: 10px;
+                    font-size: 18px;
+                    color: grey;
                     p {
                         margin-left: 5px;
-                        font-size: 20px;
                     }
                     &:hover {
                         cursor: pointer;
@@ -95,27 +92,32 @@ button {
                     }
                 }
                 .account {
-                    display: flex;
-                    align-items: center;
                     padding: 10px;
                     border-radius: 10px;
-
+                    display: flex;
                     &:hover {
                         cursor: pointer;
                         background-color: #ccc;
                     }
-                    .name {
-                        white-space: nowrap;
-                        max-width: 100px;
-                        overflow: hidden;
-                        text-overflow: ellipsis;
-                        font-family: 'Times New Roman', Times, serif;
-                        font-size: 20px;
-                        color: grey;
-                    }
                     .username {
                         display: flex;
                         align-items: center;
+                        font-size: 18px;
+                        color: grey;
+                        .user {
+                            white-space: nowrap;
+                            max-width: 100px;
+                            overflow: hidden;
+                            text-overflow: ellipsis;
+                            font-family: 'Times New Roman', Times, serif;
+                        }
+                    }
+                    .name {
+                        display: flex;
+                        align-items: center;
+                        font-size: 18px;
+                        color: grey;
+                        font-family: 'Times New Roman', Times, serif;
                     }
                 }
             }

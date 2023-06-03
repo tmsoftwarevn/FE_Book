@@ -9,16 +9,16 @@ import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { callLogout } from "../../services/api";
-import {doLogoutAction} from "../../redux/account/accountSlice"
+import { doLogoutAction } from "../../redux/account/accountSlice";
 const Header = () => {
   const isAuthenticated = useSelector((state) => state.account.isAuthenticated);
   const username = useSelector((state) => state.account.user.fullName);
   const userEmail = useSelector((state) => state.account.user.email);
-  const dispatch = useDispatch()
-  const navigate = useNavigate()
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   const [items, setItems] = useState([
     {
-      label: <Link to ="/login">Đăng nhập</Link>,
+      label: <Link to="/login">Đăng nhập</Link>,
       key: "login",
     },
     {
@@ -35,16 +35,14 @@ const Header = () => {
           key: "account",
         },
         {
-          label: <p
-          onClick={() => handleLogout()}
-          >Đăng xuất</p>,
+          label: <p onClick={() => handleLogout()}>Đăng xuất</p>,
           key: "logout",
         },
       ]);
     } else {
       setItems([
         {
-          label: <Link to ="/login">Đăng nhập</Link>,
+          label: <Link to="/login">Đăng nhập</Link>,
           key: "login",
         },
         {
@@ -58,14 +56,14 @@ const Header = () => {
     listItems();
   }, [isAuthenticated]);
 
-  const handleLogout = async() =>{
+  const handleLogout = async () => {
     const res = await callLogout();
-    if(res && res.data){
+    if (res && res.data) {
       dispatch(doLogoutAction());
-      message.success('Đăng xuất thành công')
-      navigate('/login')
+      message.success("Đăng xuất thành công");
+      navigate("/login");
     }
-  }
+  };
   return (
     <div className="header-main">
       <div className="container">
@@ -85,15 +83,12 @@ const Header = () => {
 
           <div className="header-right">
             <div className="basket">
-              <SlBasket style={{ fontSize: "1.125rem", color: "grey" }} />
+              <SlBasket />
               <Space size="middle" className="badge">
                 <Badge count={3}></Badge>
               </Space>
             </div>
-            <div
-              className="home"
-              style={{ fontSize: "1.125rem", color: "grey" }}
-            >
+            <div className="home">
               <AiFillHome />
               <p> Trang chủ</p>
             </div>
@@ -107,12 +102,11 @@ const Header = () => {
                     placement="bottomLeft"
                   >
                     {isAuthenticated === true ? (
-                      <div
-                        className="username"
-                        style={{ fontSize: "1.125rem", color: "grey" }}
-                      >
-                        <VscAccount />
-                        <p> {username ? username : userEmail}</p>
+                      <div className="username">
+                        <div style={{marginTop: '3px'}}>
+                          <VscAccount />
+                        </div>
+                        <div className="user">{username ? username : userEmail}</div>
                       </div>
                     ) : (
                       <div className="name">Tài khoản</div>

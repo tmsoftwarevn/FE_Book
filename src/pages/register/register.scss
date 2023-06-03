@@ -37,7 +37,12 @@
     }
     .text {
         margin-bottom: 20px;
-        cursor: pointer;
+        b {
+            cursor: pointer;
+            &:hover {
+                color: blue;
+            }
+        }
     }
     .home {
         cursor: pointer;

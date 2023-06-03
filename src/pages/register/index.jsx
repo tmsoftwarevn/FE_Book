@@ -1,7 +1,7 @@
-import { Button, Divider, Form, Input, message , notification} from "antd";
+import { Button, Divider, Form, Input, message, notification } from "antd";
 import "./register.scss";
 import bgRegister from "../../images/bgRegister.webp";
-import {RegisterUser} from "../../services/api";
+import { RegisterUser } from "../../services/api";
 import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
@@ -11,7 +11,7 @@ const RegisterPage = () => {
   const isAuthenticated = useSelector((state) => state.account.isAuthenticated);
 
   useEffect(() => {
-    if (localStorage.getItem('access_token')) return navigate("/");
+    if (localStorage.getItem("access_token")) return navigate("/");
   }, []);
   const onFinish = async (values) => {
     const { fullName, email, password, phone } = values;
@@ -108,16 +108,13 @@ const RegisterPage = () => {
         <div className="image-bg">
           <img src={bgRegister} alt="" />
         </div>
-        <div className="text"
-        onClick={() => navigate('/login')}
-        >
-          Have already an account? <b>Login here</b>
+        <div className="text">
+          Have already an account?{" "}
+          <b onClick={() => navigate("/login")}>Login here</b>
         </div>
-        <div className="home" 
-          onClick={() => navigate('/')}
-          >
-            	&#60;	&#60;Trang chủ
-          </div>
+        <div className="home" onClick={() => navigate("/")}>
+          &#60; &#60;Trang chủ
+        </div>
       </div>
     </div>
   );

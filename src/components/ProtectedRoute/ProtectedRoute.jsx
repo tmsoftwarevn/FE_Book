@@ -12,19 +12,20 @@ const RoleBaseRoute = (props) => {
     return <NotPermitted />;
   }
 };
-function mapStateToProps(state) {
-  return {
-    isAuthenticated: state.account.isAuthenticated,
-  };
-}
+// function mapStateToProps(state) {
+//   return {
+//     isAuthenticated: state.account.isAuthenticated,
+//   };
+// }
 const ProtectedRoute = (props) => {
   const isAdminRoute = window.location.pathname.startsWith("/admin");
-  console.log('is au protect', props.isAuthenticated)
+  const isAuthenticated = useSelector(state => state.account.isAuthenticated)
+  
     return (
       <>
-        {props.isAuthenticated === true && isAdminRoute ? (
+        {isAuthenticated === true && isAdminRoute ? (
           <RoleBaseRoute>{props.children}</RoleBaseRoute>
-        ) : props.isAuthenticated === true ? (
+        ) : isAuthenticated === true ? (
           props.children
         ) : (
           <Navigate to="/login" replace />
@@ -34,4 +35,5 @@ const ProtectedRoute = (props) => {
     )
 };
 
-export default connect(mapStateToProps)(ProtectedRoute);
+// export default connect(mapStateToProps)(ProtectedRoute);
+export default ProtectedRoute;

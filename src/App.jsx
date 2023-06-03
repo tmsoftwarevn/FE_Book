@@ -99,6 +99,7 @@ export default function App() {
     },
   ]);
   const permissionPath = ["/login", "register", "/"];
+
   if (isLoading === true && !permissionPath.includes(window.location.pathname) ) {
     return (
       <>
