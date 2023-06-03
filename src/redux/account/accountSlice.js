@@ -4,7 +4,7 @@ const initialState = {
   isAuthenticated: false,
   isLoading: true,
   user: {
-    email: "",
+    email: "a",
     phone: "",
     fullName: "",
     role: "",

@@ -6,10 +6,13 @@ import {
   ExceptionOutlined,
   DollarCircleOutlined,
 } from "@ant-design/icons";
-import { Breadcrumb, Layout, Menu, theme } from "antd";
+import { Breadcrumb, Layout, Menu, theme,message } from "antd";
 import { useState } from "react";
-import { Link, Outlet } from "react-router-dom";
+import { Link, Outlet, useNavigate } from "react-router-dom";
 import { Dropdown, Space } from "antd";
+import { useDispatch, useSelector } from "react-redux";
+import { callLogout } from "../../services/api";
+import { doLogoutAction } from "../../redux/account/accountSlice";
 
 const { Header, Content, Footer, Sider } = Layout;
 function getItem(label, key, icon, children) {
@@ -39,13 +42,25 @@ const items = [
 ];
 
 const AccountAdmin = () => {
+  const dispatch = useDispatch();
+  const  navigate = useNavigate();
+  const handleLogout = async() =>{
+    const res = await callLogout();
+    if(res && res.data){
+      dispatch(doLogoutAction());
+      message.success('Đăng xuất thành công')
+      navigate('/login')
+    }
+  }
   const items = [
     {
       label: <Link to ="/">Quản lý tài khoản</Link>,
       key: "account",
     },
     {
-      label: <Link to ="/">Đăng xuất</Link>,
+      label: <p
+      onClick={() =>handleLogout()}
+      >Đăng xuất</p>,
       key: "logout",
     },
   ]
@@ -67,6 +82,7 @@ const AccountAdmin = () => {
   );
 };
 const LayoutAdmin = () => {
+  
   const [keyActive, setKeyActive] = useState("1");
   const [collapsed, setCollapsed] = useState(false);
   const {

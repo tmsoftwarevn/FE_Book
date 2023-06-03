@@ -11,9 +11,8 @@ const RegisterPage = () => {
   const isAuthenticated = useSelector((state) => state.account.isAuthenticated);
 
   useEffect(() => {
-    if(isAuthenticated === true)
-    navigate('/')
-  },[])
+    if (localStorage.getItem('access_token')) return navigate("/");
+  }, []);
   const onFinish = async (values) => {
     const { fullName, email, password, phone } = values;
     setIsSubmit(true);
@@ -117,7 +116,7 @@ const RegisterPage = () => {
         <div className="home" 
           onClick={() => navigate('/')}
           >
-            	&#60;	&#60;Back home
+            	&#60;	&#60;Trang chủ
           </div>
       </div>
     </div>

@@ -15,7 +15,7 @@ import { doGetAccountAction } from "./redux/account/accountSlice";
 import Loading from "./components/Loading/loading";
 import Notfound from "./components/Notfound";
 import Admin from "./pages/admin/admin";
-import ProtecedRoute from "./components/ProtectedRoute/ProtectedRoute";
+import ProtectedRoute from "./components/ProtectedRoute/ProtectedRoute";
 import LayoutAdmin from "./components/Admin/LayoutAdmin";
 const Layout = () => {
   return (
@@ -30,22 +30,21 @@ const Layout = () => {
 export default function App() {
   const dispatch = useDispatch();
   const isAuthenticated = useSelector((state) => state.account.isAuthenticated);
-  console.log('au', isAuthenticated)
-  //const[isLoading, setIsLoading] = useState(false)
+  const isLoading = useSelector((state) => state.account.isLoading);
+  console.log("<<< au", isAuthenticated);
   const getAccount = async () => {
-    //setIsLoading(true)
     let res = await callGetAccount();
-   // setIsLoading(false)
     if (res && res.data) {
       dispatch(doGetAccountAction(res.data));
     }
   };
-  
+
   useEffect(() => {
     if (localStorage.getItem("access_token")) {
       getAccount();
     }
   }, []);
+
   const router = createBrowserRouter([
     {
       path: "/",
@@ -59,7 +58,11 @@ export default function App() {
         },
         {
           path: "book",
-          element: <BookPage />,
+          element: 
+          <ProtectedRoute>
+             <BookPage />
+          </ProtectedRoute>
+          ,
         },
       ],
     },
@@ -73,18 +76,16 @@ export default function App() {
     },
     {
       path: "/admin",
-      element: <LayoutAdmin />,
+      element: (
+        <ProtectedRoute>
+          <LayoutAdmin />
+        </ProtectedRoute>
+      ),
       errorElement: <Notfound />,
       children: [
         {
           index: true,
-          element: (
-            <ProtecedRoute
-          
-            >
-              <Admin />
-            </ProtecedRoute>
-          ),
+          element: <Admin />,
         },
         {
           path: "book",
@@ -97,16 +98,17 @@ export default function App() {
       ],
     },
   ]);
-
-  return (
-    <>
-      {
-         window.location.pathname==='/login' || window.location.pathname==='/'?
-         <RouterProvider router={router} />     
-        :
+  const permissionPath = ["/login", "register", "/"];
+  if (isLoading === true && !permissionPath.includes(window.location.pathname) ) {
+    return (
+      <>
         <Loading />
-      }
-     
-    </>
-  );
+      </>
+    );
+  } else {
+    return (
+      
+      <RouterProvider router={router} />
+    );
+  }
 }

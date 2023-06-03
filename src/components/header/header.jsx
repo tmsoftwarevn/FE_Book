@@ -15,7 +15,7 @@ const Header = () => {
   const username = useSelector((state) => state.account.user.fullName);
   const userEmail = useSelector((state) => state.account.user.email);
   const dispatch = useDispatch()
-  const navigte = useNavigate()
+  const navigate = useNavigate()
   const [items, setItems] = useState([
     {
       label: <Link to ="/login">Đăng nhập</Link>,
@@ -63,7 +63,7 @@ const Header = () => {
     if(res && res.data){
       dispatch(doLogoutAction());
       message.success('Đăng xuất thành công')
-      navigte('/login')
+      navigate('/login')
     }
   }
   return (
