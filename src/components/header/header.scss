@@ -4,7 +4,7 @@
 @import '../../scss/grid';
 
 .container {
-    max-width: 1200px;
+    max-width: 1300px;
     margin: 0 auto;
 }
 .header-main {
@@ -14,21 +14,32 @@
             display: flex;
             align-items: center;
             padding: 10px;
-            //justify-content: space-between;
+
             .header-left {
                 padding: 10px;
                 @include xs {
-                    width: 100%;
+                    width: 70%;
+                }
+                @include sm {
+                    width: 70%;
                 }
                 .search-header {
                     display: flex;
                     align-items: center;
                     .icon-header {
-                        margin-right: 7px;
                         color: orange;
                         cursor: pointer;
                         @include xs {
                             font-size: 30px;
+                            margin-right: 7px;
+                        }
+                        @include sm {
+                            margin-right: 7px;
+                            font-size: 40px;
+                        }
+                        @include md {
+                            margin-right: 7px;
+                            font-size: 50px;
                         }
                     }
                     .group {
@@ -37,14 +48,30 @@
                         border-top-left-radius: 10px;
                         border-bottom-left-radius: 10px;
                         border: 1px solid #ccc;
+
                         @include xs {
                             padding: 3px;
                             width: 100%;
                             border-radius: 10px;
                         }
+                        @include sm {
+                            padding: 6px;
+                            width: 70%;
+                        }
+                        @include md {
+                            padding: 10px;
+                            width: 70%;
+                        }
+                        @include lg {
+                            padding: 10px;
+                            width: 78%;
+                        }
                         .icon-search {
                             @include xs {
                                 margin: 5px;
+                            }
+                            @include sm {
+                                margin-right: 5px;
                             }
                         }
                         input {
@@ -53,13 +80,21 @@
                     }
                     button {
                         border: 1px solid #ccc;
+                        border-top-right-radius: 10px;
+                        border-bottom-right-radius: 10px;
                         @include xs {
                             display: none;
                         }
-                        border-top-right-radius: 10px;
-                        border-bottom-right-radius: 10px;
+                        @include sm {
+                            color: gray;
+                            padding: 6px;
+                        }
+                        @include md {
+                            color: gray;
+                            padding: 10px;
+                        }
                         &:hover {
-                            background-color: rgb(102 162 240);
+                            background-color: #82ccdd;
                             cursor: pointer;
                         }
                     }
@@ -70,21 +105,30 @@
                 display: flex;
                 align-items: center;
                 justify-content: center;
+
                 @include xs {
+                    width: 30%;
+                }
+                @include sm {
                     width: 30%;
                 }
                 .basket {
                     color: grey;
                     position: relative;
-
+                    margin-top: 4px;
+                    cursor: pointer;
                     @include xs {
-                        font-size: 16px;
+                        font-size: 18px;
                         width: 50%;
-                        &:hover {
-                            cursor: pointer;
-                        }
                     }
-
+                    @include sm {
+                        font-size: 18px;
+                        width: 30%;
+                    }
+                    @include lg {
+                        font-size: 18px;
+                        width: 20%;
+                    }
                     .badge {
                         position: absolute;
                         transform: translate(-20%, -80%);
@@ -95,15 +139,17 @@
                     @include xs {
                         display: none;
                     }
-                    display: flex;
-                    align-items: center;
-                    margin-right: 40px;
-                    padding: 10px;
-                    border-radius: 10px;
-                    font-size: 18px;
-                    color: grey;
-                    p {
-                        margin-left: 5px;
+                    @include sm {
+                        display: none;
+                    }
+                    @include lg {
+                        display: flex;
+                        align-items: center;
+                        padding: 10px;
+                        border-radius: 10px;
+                        font-size: 18px;
+                        color: grey;
+                        margin-right: 10px;
                     }
                     &:hover {
                         cursor: pointer;
@@ -111,13 +157,11 @@
                     }
                 }
                 .account {
-                    // padding: 10px;
+                    padding: 10px;
                     border-radius: 10px;
                     display: flex;
                     justify-content: center;
-                    @include xs {
-                        //width: 60%;
-                    }
+
                     &:hover {
                         cursor: pointer;
                         background-color: #ccc;
@@ -132,19 +176,17 @@
                                 display: none;
                             }
                             white-space: nowrap;
-                            max-width: 100px;
+                            max-width: 80px;
                             overflow: hidden;
                             text-overflow: ellipsis;
                             font-family: 'Times New Roman', Times, serif;
                         }
                     }
                     .icon-acount {
-                        font-size: 16px;
+                        font-size: 18px;
                         color: gray;
                     }
                     .name {
-                        // display: flex;
-                        // align-items: center;
                         @include xs {
                             display: none;
                         }
