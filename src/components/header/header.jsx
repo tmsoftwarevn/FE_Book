@@ -68,11 +68,11 @@ const Header = () => {
     <div className="header-main">
       <div className="container">
         <div className="header-content">
-          <div className="header-left">
-            <div className="icon-header">
-              <GiSpellBook />
-            </div>
+          <div className="header-left ">
             <div className="search-header">
+              <div className="icon-header">
+                <GiSpellBook />
+              </div>
               <div className="group">
                 <AiOutlineSearch className="icon-search" />
                 <input type="text" placeholder="Bạn tìm gì hôm nay " />
@@ -103,13 +103,20 @@ const Header = () => {
                   >
                     {isAuthenticated === true ? (
                       <div className="username">
-                        <div style={{marginTop: '3px'}}>
+                        <div style={{ marginTop: "3px" }}>
                           <VscAccount />
                         </div>
-                        <div className="user">{username ? username : userEmail}</div>
+                        <div className="user">
+                          {username ? username : userEmail}
+                        </div>
                       </div>
                     ) : (
+                     <div className="username">
+
+                      <VscAccount className="icon-acount"/>
                       <div className="name">Tài khoản</div>
+                     </div>
+                      
                     )}
                   </Dropdown>
                 </Space>

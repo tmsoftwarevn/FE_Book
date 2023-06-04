@@ -88,7 +88,7 @@ const LoginPage = () => {
         <div className="group">
           <Divider
             style={{
-              fontWeight: "600",
+              borderColor: "black"
             }}
           >
             Or Sign Up Using
@@ -102,7 +102,7 @@ const LoginPage = () => {
             </div>
           </div>
           <div className="home" onClick={() => navigate("/")}>
-            &#60; &#60;Trang chủ
+          &#60;Home&#62;
           </div>
         </div>
       </div>

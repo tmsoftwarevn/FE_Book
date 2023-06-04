@@ -2,6 +2,7 @@
 @import '../../scss/reset';
 @import '../../scss/flex';
 @import '../../scss/grid';
+
 .container {
     max-width: 1200px;
     margin: 0 auto;
@@ -12,38 +13,49 @@
         .header-content {
             display: flex;
             align-items: center;
-            justify-content: space-between;
+            padding: 10px;
+            //justify-content: space-between;
             .header-left {
-                display: flex;
-                align-items: center;
                 padding: 10px;
-
-                .icon-header {
-                    font-size: 40px;
-                    margin-right: 10px;
-                    color: orange;
-                    cursor: pointer;
+                @include xs {
+                    width: 100%;
                 }
                 .search-header {
                     display: flex;
-                    border: 1px solid #ccc;
-                    border-radius: 10px;
-                    font-size: 20px;
+                    align-items: center;
+                    .icon-header {
+                        margin-right: 7px;
+                        color: orange;
+                        cursor: pointer;
+                        @include xs {
+                            font-size: 30px;
+                        }
+                    }
                     .group {
                         display: flex;
                         align-items: center;
-                        justify-content: center;
-
+                        border-top-left-radius: 10px;
+                        border-bottom-left-radius: 10px;
+                        border: 1px solid #ccc;
+                        @include xs {
+                            padding: 3px;
+                            width: 100%;
+                            border-radius: 10px;
+                        }
                         .icon-search {
-                            margin: 10px;
+                            @include xs {
+                                margin: 5px;
+                            }
                         }
                         input {
-                            width: 600px;
+                            width: 100%;
                         }
                     }
-
                     button {
-                        padding: 10px;
+                        border: 1px solid #ccc;
+                        @include xs {
+                            display: none;
+                        }
                         border-top-right-radius: 10px;
                         border-bottom-right-radius: 10px;
                         &:hover {
@@ -56,24 +68,33 @@
 
             .header-right {
                 display: flex;
+                align-items: center;
+                justify-content: center;
+                @include xs {
+                    width: 30%;
+                }
                 .basket {
-                    display: flex;
-                    align-items: center;
-                    margin-right: 40px;
-                    padding: 10px;
-                    border-radius: 10px;
-                    font-size: 18px;
                     color: grey;
-                    &:hover {
-                        cursor: pointer;
-                        background-color: rgb(128 175 255);
+                    position: relative;
+
+                    @include xs {
+                        font-size: 16px;
+                        width: 50%;
+                        &:hover {
+                            cursor: pointer;
+                        }
                     }
+
                     .badge {
-                        transform: translateY(-50%);
+                        position: absolute;
+                        transform: translate(-20%, -80%);
                     }
                 }
 
                 .home {
+                    @include xs {
+                        display: none;
+                    }
                     display: flex;
                     align-items: center;
                     margin-right: 40px;
@@ -90,9 +111,13 @@
                     }
                 }
                 .account {
-                    padding: 10px;
+                    // padding: 10px;
                     border-radius: 10px;
                     display: flex;
+                    justify-content: center;
+                    @include xs {
+                        //width: 60%;
+                    }
                     &:hover {
                         cursor: pointer;
                         background-color: #ccc;
@@ -103,6 +128,9 @@
                         font-size: 18px;
                         color: grey;
                         .user {
+                            @include xs {
+                                display: none;
+                            }
                             white-space: nowrap;
                             max-width: 100px;
                             overflow: hidden;
@@ -110,10 +138,16 @@
                             font-family: 'Times New Roman', Times, serif;
                         }
                     }
+                    .icon-acount {
+                        font-size: 16px;
+                        color: gray;
+                    }
                     .name {
-                        display: flex;
-                        align-items: center;
-                        font-size: 18px;
+                        // display: flex;
+                        // align-items: center;
+                        @include xs {
+                            display: none;
+                        }
                         color: grey;
                         font-family: 'Times New Roman', Times, serif;
                     }
