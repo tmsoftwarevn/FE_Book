@@ -6,7 +6,7 @@ import {
   ExceptionOutlined,
   DollarCircleOutlined,
 } from "@ant-design/icons";
-import { Breadcrumb, Layout, Menu, theme,message } from "antd";
+import { Breadcrumb, Layout, Menu, theme, message } from "antd";
 import { useState } from "react";
 import { Link, Outlet, useNavigate } from "react-router-dom";
 import { Dropdown, Space } from "antd";
@@ -43,46 +43,41 @@ const items = [
 
 const AccountAdmin = () => {
   const dispatch = useDispatch();
-  const  navigate = useNavigate();
-  const handleLogout = async() =>{
+  const navigate = useNavigate();
+  const handleLogout = async () => {
     const res = await callLogout();
-    if(res && res.data){
+    if (res && res.data) {
       dispatch(doLogoutAction());
-      message.success('Đăng xuất thành công')
-      navigate('/login')
+      message.success("Đăng xuất thành công");
+      navigate("/login");
     }
-  }
+  };
   const items = [
     {
-      label: <Link to ="/">Quản lý tài khoản</Link>,
+      label: <Link to="/">Quản lý tài khoản</Link>,
       key: "account",
     },
     {
-      label: <p
-      onClick={() =>handleLogout()}
-      >Đăng xuất</p>,
+      label: <p onClick={() => handleLogout()}>Đăng xuất</p>,
       key: "logout",
     },
-  ]
-  return (  
-      <Space direction="vertical">
-        <Space wrap>
-          <Dropdown
-            menu={{
-              items,
-            }}
-            placement="bottomLeft"
-          >
-           <div className="admin">
-            Admin
-           </div>
-          </Dropdown>
-        </Space>
+  ];
+  return (
+    <Space direction="vertical">
+      <Space wrap>
+        <Dropdown
+          menu={{
+            items,
+          }}
+          placement="bottomLeft"
+        >
+          <div className="admin">Admin</div>
+        </Dropdown>
       </Space>
+    </Space>
   );
 };
 const LayoutAdmin = () => {
-  
   const [keyActive, setKeyActive] = useState("1");
   const [collapsed, setCollapsed] = useState(false);
   const {
@@ -103,8 +98,6 @@ const LayoutAdmin = () => {
         <div
           style={{
             margin: 40,
-            textAlign: "center",
-            color: "white",
           }}
         ></div>
         <div className="demo-logo-vertical" />
@@ -125,16 +118,15 @@ const LayoutAdmin = () => {
             background: colorBgContainer,
           }}
         />
-        <Content>              
-            <AccountAdmin />
-
+        <Content>
+          <AccountAdmin />
           <div
             style={{
               padding: 24,
               minHeight: 500,
               background: colorBgContainer,
             }}
-          >
+          >          
             <Outlet />
           </div>
         </Content>

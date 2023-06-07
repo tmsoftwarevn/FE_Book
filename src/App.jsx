@@ -1,6 +1,10 @@
 import React, { useEffect, useState } from "react";
 
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import {
+  createBrowserRouter,
+  RouterProvider,
+  useNavigate,
+} from "react-router-dom";
 import { Outlet } from "react-router-dom";
 import LoginPage from "./pages/login/login";
 import ContactPage from "./pages/contact";
@@ -17,7 +21,15 @@ import Notfound from "./components/Notfound";
 import Admin from "./pages/admin/admin";
 import ProtectedRoute from "./components/ProtectedRoute/ProtectedRoute";
 import LayoutAdmin from "./components/Admin/LayoutAdmin";
+
 const Layout = () => {
+  const role = useSelector((state) => state.account?.user?.role);
+  console.log("role", role);
+  const navigate = useNavigate();
+  useEffect(() => {
+    if (role && role === "ADMIN") navigate('/admin');
+  }, []);
+
   return (
     <div className="layout-app">
       <Header />
@@ -29,9 +41,7 @@ const Layout = () => {
 
 export default function App() {
   const dispatch = useDispatch();
-  const isAuthenticated = useSelector((state) => state.account.isAuthenticated);
   const isLoading = useSelector((state) => state.account.isLoading);
-  console.log("<<< au", isAuthenticated);
   const getAccount = async () => {
     let res = await callGetAccount();
     if (res && res.data) {
@@ -44,7 +54,7 @@ export default function App() {
       getAccount();
     }
   }, []);
-
+  
   const router = createBrowserRouter([
     {
       path: "/",
@@ -58,11 +68,11 @@ export default function App() {
         },
         {
           path: "book",
-          element: 
-          <ProtectedRoute>
-             <BookPage />
-          </ProtectedRoute>
-          ,
+          element: (
+            <ProtectedRoute>
+              <BookPage />
+            </ProtectedRoute>
+          ),
         },
       ],
     },
@@ -100,16 +110,16 @@ export default function App() {
   ]);
   const permissionPath = ["/login", "register", "/"];
 
-  if (isLoading === true && !permissionPath.includes(window.location.pathname) ) {
+  if (
+    isLoading === true &&
+    !permissionPath.includes(window.location.pathname)
+  ) {
     return (
       <>
         <Loading />
       </>
     );
   } else {
-    return (
-      
-      <RouterProvider router={router} />
-    );
+    return <RouterProvider router={router} />;
   }
 }

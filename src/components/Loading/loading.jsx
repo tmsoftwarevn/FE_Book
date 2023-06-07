@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import ScaleLoader from "react-spinners/ScaleLoader";
 
 const Loading = () => {
-  console.log('run loading')
+  
   useEffect(() =>{
     if(!localStorage.getItem("access_token")){
     window.location.href='/login'

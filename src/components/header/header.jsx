@@ -90,7 +90,9 @@ const Header = () => {
             </div>
             <div className="home">
               <AiFillHome />
-              <p> Trang chủ</p>
+              <p
+              onClick={() => navigate('/')}
+              > Trang chủ</p>
             </div>
             <div className="account">
               <Space direction="vertical">

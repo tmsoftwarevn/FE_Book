@@ -10,6 +10,7 @@ const instance = axios.create({
 instance.defaults.headers.common = {
   Authorization: `Bearer ${localStorage.getItem("access_token")}`,
 };
+
 const handleRefreshToken = async () => {
   const res = await instance.get("/api/v1/auth/refresh");
   if (res && res.data) return res.data.access_token;

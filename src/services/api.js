@@ -23,3 +23,13 @@ export const callGetAccount = () => {
 export const callLogout = () => {
   return axios.post("/api/v1/auth/logout");
 };
+
+export const callGetAllUser = () => {
+  return axios.get("/api/v1/user");
+};
+
+export const callSearchUser = (current, pageSize, fullName, email, phone) => {
+  return axios.get(
+    `/api/v1/user?current=${current}&pageSize=${pageSize}&fullName=${fullName}&email=${email}&phone=${phone}`
+  );
+};
