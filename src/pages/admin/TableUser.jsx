@@ -1,58 +1,60 @@
 import { Button, Table } from "antd";
 import { useEffect, useState } from "react";
-import { callGetAllUser, callSearchUser } from "../../services/api";
+import {  callGetListUser } from "../../services/api";
+import Loading from "../../components/Loading/loading";
 
 const TableUser = (props) => {
   const [data, setDataTable] = useState([]);
   const [total, setTotal] = useState(0);
   const [current, setCurrent] = useState(1);
-  const [pageSize, setPageSize] = useState(5);
-
+  const [pageSize, setPageSize] = useState(2);
+  const [isLoading, setIsLoading] = useState(false);
+  const [sort, setSort] = useState("");
   const { searchData } = props;
 
   const onChange = (pagination, filters, sorter, extra) => {
-    console.log("params", pagination);
+    //console.log("params", sorter);
     setCurrent(pagination.current);
     setPageSize(pagination.pageSize);
+    customSort(sorter.field, sorter.order);
   };
-  const getListUser = async () => {
-    let res = await callGetAllUser();
-    if (res && res.data) {
-     
-      customListUser(res.data);
+  const customSort = (field, order) => {
+    if (order === "ascend") {
+      setSort(field);
+    }
+    if (order === "descend") {
+      setSort(`-${field}`);
     }
   };
-  const getSearchListUser = async () => {
-    let res = await callSearchUser(
+ 
+  const getListUser = async () => {
+    setIsLoading(true);
+    let res = await callGetListUser(
       current,
-      pageSize,
+      pageSize, 
       searchData?.fullName,
       searchData?.email,
-      searchData?.phone
+      searchData?.phone,
+      sort
     );
+    
     if (res && res.data) {
-     
       setTotal(res.data.meta.total);
       customListUser(res.data.result);
-      console.log("<< data search", res.data.result);
-
+      setIsLoading(false);    
     }
   };
-
-  useEffect(() => {
-    if (searchData) {
-      console.log("runnn search");
-      getSearchListUser();
-    } else {
-      console.log("run lisssst");
-      getListUser();
-    }
-  }, [searchData]);
+  useEffect(() =>{
+    setCurrent(1)
+  },[searchData])
+  useEffect(() => {   
+     getListUser()
+  }, [searchData,current,pageSize, sort]);
 
   const customListUser = (listUser) => {
     // fake data
     if (listUser && listUser.length > 0) {
-      listUser = listUser.concat(listUser).concat(listUser);
+      //listUser = listUser.concat(listUser).concat(listUser);
       let arr = [];
       listUser.map((item, index) => {
         arr.push({
@@ -64,7 +66,7 @@ const TableUser = (props) => {
           action: index + 1,
         });
       });
-      setTotal(arr.length);
+     // setTotal(arr.length);
       setDataTable(arr);
     } else {
       setTotal(0);
@@ -101,26 +103,30 @@ const TableUser = (props) => {
   let locale = {
     emptyText: "Không có kết quả nào.",
   };
-  
-  return (
-    <div className="table-main">
-      <div style={{ fontSize: "20px", marginBottom: "5px" }}>List Users</div>
-      <Table
-        locale={locale}
-        columns={columns}
-        dataSource={data}
-        onChange={onChange}
-        pagination={{
-          pageSize: pageSize,
-          total: total,
-          current: current,
-          showSizeChanger: true,
-          position: ["bottomCenter"],
-        }}
-        scroll={{ y: "300px" }}
-      />
-    </div>
-  );
+  console.log(sort)
+  if (isLoading === true) {
+    return <Loading />;
+  } else
+    return (
+      <div className="table-main">
+        <div style={{ fontSize: "20px", marginBottom: "5px" }}>List Users</div>
+        <Table
+          locale={locale}
+          columns={columns}
+          dataSource={data}
+          onChange={onChange}
+          pagination={{
+            pageSize: pageSize,
+            total: total,
+            current: current,
+            showSizeChanger: true,
+            position: ["bottomCenter"],
+            pageSizeOptions: [2, 10, 20, 50],
+          }}
+          scroll={{ y: "300px" }}
+        />
+      </div>
+    );
 };
 
 export default TableUser;

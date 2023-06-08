@@ -24,7 +24,6 @@ import LayoutAdmin from "./components/Admin/LayoutAdmin";
 
 const Layout = () => {
   const role = useSelector((state) => state.account?.user?.role);
-  console.log("role", role);
   const navigate = useNavigate();
   useEffect(() => {
     if (role && role === "ADMIN") navigate('/admin');
@@ -54,7 +53,7 @@ export default function App() {
       getAccount();
     }
   }, []);
-  
+
   const router = createBrowserRouter([
     {
       path: "/",
