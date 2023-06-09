@@ -8,7 +8,7 @@ import { Dropdown, Badge, Space, message } from "antd";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { callLogout } from "../../services/api";
+import { callGetAllUser, callLogout } from "../../services/api";
 import { doLogoutAction } from "../../redux/account/accountSlice";
 const Header = () => {
   const isAuthenticated = useSelector((state) => state.account.isAuthenticated);
@@ -64,6 +64,10 @@ const Header = () => {
       navigate("/login");
     }
   };
+  const handleGetApi =async() =>{
+    let res = await callGetAllUser();
+    console.log('res apii test')
+  }
   return (
     <div className="header-main">
       <div className="container">
@@ -91,7 +95,8 @@ const Header = () => {
             <div className="home">
               <AiFillHome />
               <p
-              onClick={() => navigate('/')}
+              //onClick={() => navigate('/')}
+              onClick={() =>handleGetApi()}
               > Trang chủ</p>
             </div>
             <div className="account">

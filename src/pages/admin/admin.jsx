@@ -1,5 +1,5 @@
 import { Button, Input, message } from "antd";
-import TableUser from "./TableUser";
+import TableUser from "./user/TableUser";
 import { useEffect, useRef, useState } from "react";
 
 const Admin = () => {
@@ -12,7 +12,7 @@ const Admin = () => {
     email: "",
     phone: "",
   });
-
+  
   useEffect(() =>{
     if(reset === true){setReset(false)}
   },[reset])
@@ -148,7 +148,6 @@ const Admin = () => {
           </Button>
         </div>
       </div>
-
       <div className="table-user" style={{ marginTop: "30px" }}>
         <TableUser searchData={searchData} />
       </div>

@@ -48,6 +48,7 @@ export default function App() {
     }
   };
 
+
   useEffect(() => {
     if (localStorage.getItem("access_token")) {
       getAccount();

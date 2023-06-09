@@ -61,6 +61,10 @@ const AccountAdmin = () => {
       label: <p onClick={() => handleLogout()}>Đăng xuất</p>,
       key: "logout",
     },
+    {
+      label: <Link to="/">Trang chủ</Link>,
+      key: "home",
+    },
   ];
   return (
     <Space direction="vertical">

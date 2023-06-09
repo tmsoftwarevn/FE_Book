@@ -1,5 +1,5 @@
 import axios from "axios";
-
+import axiosRetry from "axios-retry";
 const baseURL = import.meta.env.VITE_BACKEND_URL;
 
 const instance = axios.create({
@@ -7,46 +7,52 @@ const instance = axios.create({
   withCredentials: true,
 });
 
-instance.defaults.headers.common = {
-  Authorization: `Bearer ${localStorage.getItem("access_token")}`,
-};
+axiosRetry(instance, {
+  retries: 2,
+  retryCondition: (error) => {
+    return error.response.status === 401;
+  },
+  retryDelay: (retryCount, error) => {
+    return retryCount * 100;
+  },
+});
 
 const handleRefreshToken = async () => {
   const res = await instance.get("/api/v1/auth/refresh");
   if (res && res.data) return res.data.access_token;
   else return null;
 };
-// Add a request interceptor
+
 instance.interceptors.request.use(
   function (config) {
-    // Do something before request is sent
+    // config khi login ban dau, khoi tao lai header, save outside not auto save
+    const user = localStorage.getItem("access_token");
+    if (user) {
+      config.headers.Authorization = `Bearer ${user}`;
+    }
+
     return config;
   },
   function (error) {
-    // Do something with request error
     return Promise.reject(error);
   }
 );
 
 const NO_RETRY_HEADER = "x-no-retry";
-// Add a response interceptor
+
 instance.interceptors.response.use(
   function (response) {
-    // Any status code that lie within the range of 2xx cause this function to trigger
-    // Do something with response data
     return response && response.data ? response.data : response;
   },
   async function (error) {
-    // Any status codes that falls outside the range of 2xx cause this function to trigger
-    // Do something with response error
     if (
       error.config &&
       error.response &&
-      +error.response.status === 401 &&
-      !error.config.headers[NO_RETRY_HEADER]
+      +error.response.status === 401
+      // !error.config.headers[NO_RETRY_HEADER] // chay 1 lan , no retry
     ) {
       const access_token = await handleRefreshToken();
-      error.config.headers[NO_RETRY_HEADER] = "true";
+      //error.config.headers[NO_RETRY_HEADER] = "true";
       if (access_token) {
         error.config.headers["Authorization"] = `Bearer ${access_token}`;
         localStorage.setItem("access_token", access_token);
