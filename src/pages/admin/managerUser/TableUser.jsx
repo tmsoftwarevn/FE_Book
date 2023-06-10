@@ -1,12 +1,15 @@
-import { Button, Table } from "antd";
+import { Button, Form, Table } from "antd";
 import { useEffect, useState } from "react";
 import { callGetListUser } from "../../../services/api";
 import Loading from "../../../components/Loading/loading";
 import { AiFillDelete } from "react-icons/ai";
-import { FaStreetView } from "react-icons/fa";
-import { GrDocumentUpdate } from "react-icons/gr";
-import {FaEye} from "react-icons/fa"
+import { BsFillPencilFill } from "react-icons/bs";
+import { FaEye } from "react-icons/fa";
+import { AiOutlineExport } from "react-icons/ai";
+import {AiOutlineImport} from"react-icons/ai"
 import ViewUser from "./View";
+import moment from 'moment';
+import AddUser from "./AddUser";
 const TableUser = (props) => {
   const [data, setDataTable] = useState([]);
   const [total, setTotal] = useState(0);
@@ -16,8 +19,18 @@ const TableUser = (props) => {
   const [sort, setSort] = useState("");
   const [view, setView] = useState(false);
   const [dataView, setDataView] = useState("");
-
+  const [isModalAddUser, setIsModalAddUser] = useState(false)
+  const [isModalDeleteUser, setIsModalDeleteUser] = useState(false)
+  
   const { searchData } = props;
+
+  useEffect(() => {
+    setCurrent(1);
+  }, [searchData]);
+  useEffect(() => {
+    getListUser();
+  }, [searchData, current, pageSize, sort]);
+
   const onChange = (pagination, filters, sorter, extra) => {
     //console.log("params", sorter);
     setCurrent(pagination.current);
@@ -48,15 +61,8 @@ const TableUser = (props) => {
       setTotal(res.data.meta.total);
       customListUser(res.data.result);
       setIsLoading(false);
-      console.log('list user', res.data.result)
     }
   };
-  useEffect(() => {
-    setCurrent(1);
-  }, [searchData]);
-  useEffect(() => {
-    getListUser();
-  }, [searchData, current, pageSize, sort]);
 
   const customListUser = (listUser) => {
     // fake data
@@ -71,8 +77,8 @@ const TableUser = (props) => {
           email: item.email,
           phone: item.phone,
           action: index + 1,
-          createdAt: item.createdAt,
-          updatedAt: item.updatedAt
+          createdAt:  moment(item?.createdAt).format('DD-MM-YY hh:mm:ss'),
+          updatedAt: moment(item?.updatedAt).format('DD-MM-YY hh:mm:ss'),
         });
       });
       // setTotal(arr.length);
@@ -102,6 +108,11 @@ const TableUser = (props) => {
       dataIndex: "phone",
     },
     {
+      title: "Ngày cập nhật",
+      dataIndex: "updatedAt",
+      sorter: true
+    },
+    {
       title: "Action",
       dataIndex: "action",
       render: (text, record, index) => {
@@ -119,7 +130,7 @@ const TableUser = (props) => {
                 setDataView(record);
               }}
             />
-            <GrDocumentUpdate
+            <BsFillPencilFill
               style={{ cursor: "pointer" }}
               onClick={() => {
                 console.log("click item", record);
@@ -133,17 +144,45 @@ const TableUser = (props) => {
   let locale = {
     emptyText: "Không có kết quả nào.",
   };
-  console.log('data view', dataView)
+  const renderTitleTable = () => {
+    return (
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          fontSize: "18px",
+        }}
+      >
+        <div>Danh sách Users</div>
+        <div style={{ gap: 15, display: "flex" }}>
+          <Button
+            type="primary"
+            style={{ alignItems: "center", display: "flex", gap: 4}}
+          >
+            <AiOutlineExport />
+            Export
+          </Button>
+          <Button type="primary"  style={{ alignItems: "center", display: "flex",gap: 4 }}>
+            <AiOutlineImport />
+            Import</Button>
+          <Button type="primary"
+          onClick={() => setIsModalAddUser(true)}
+          >Thêm mới</Button>
+        </div>
+      </div>
+    );
+  };
   if (isLoading === true) {
     return <Loading />;
   } else
     return (
       <>
         <div className="table-main">
-          <div style={{ fontSize: "20px", marginBottom: "5px" }}>
+          {/* <div style={{ fontSize: "20px", marginBottom: "5px" }}>
             List Users
-          </div>
+          </div> */}
           <Table
+            title={renderTitleTable}
             locale={locale}
             columns={columns}
             dataSource={data}
@@ -160,6 +199,11 @@ const TableUser = (props) => {
           />
         </div>
         <ViewUser view={view} setView={setView} dataView={dataView} />
+        <AddUser 
+        isModalAddUser = {isModalAddUser}
+        setIsModalAddUser ={setIsModalAddUser}
+     
+        />
       </>
     );
 };

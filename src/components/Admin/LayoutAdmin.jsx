@@ -8,7 +8,7 @@ import {
 } from "@ant-design/icons";
 import { Breadcrumb, Layout, Menu, theme, message } from "antd";
 import { useState } from "react";
-import { Link, Outlet, useNavigate } from "react-router-dom";
+import { Link, Outlet, useLocation, useNavigate } from "react-router-dom";
 import { Dropdown, Space } from "antd";
 import { useDispatch, useSelector } from "react-redux";
 import { callLogout } from "../../services/api";
@@ -52,6 +52,7 @@ const AccountAdmin = () => {
       navigate("/login");
     }
   };
+  const location = useLocation();
   const items = [
     {
       label: <Link to="/">Quản lý tài khoản</Link>,
@@ -62,12 +63,14 @@ const AccountAdmin = () => {
       key: "logout",
     },
     {
-      label: <Link to="/">Trang chủ</Link>,
+      label: <p 
+      onClick={() =>navigate("/", { state: { from: location } })}
+      >Trang chủ</p>,
       key: "home",
     },
   ];
   return (
-    <Space direction="vertical">
+    <Space direction="vertical" >
       <Space wrap>
         <Dropdown
           menu={{

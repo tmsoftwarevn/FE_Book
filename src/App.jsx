@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import {
   createBrowserRouter,
   RouterProvider,
+  useLocation,
   useNavigate,
 } from "react-router-dom";
 import { Outlet } from "react-router-dom";
@@ -25,8 +26,12 @@ import LayoutAdmin from "./components/Admin/LayoutAdmin";
 const Layout = () => {
   const role = useSelector((state) => state.account?.user?.role);
   const navigate = useNavigate();
+  const location = useLocation();
+ 
   useEffect(() => {
-    if (role && role === "ADMIN") navigate('/admin');
+    if (role && role === "ADMIN" && location.state?.from?.pathname !='/admin') {
+      navigate("/admin")
+    }
   }, []);
 
   return (
@@ -47,7 +52,6 @@ export default function App() {
       dispatch(doGetAccountAction(res.data));
     }
   };
-
 
   useEffect(() => {
     if (localStorage.getItem("access_token")) {

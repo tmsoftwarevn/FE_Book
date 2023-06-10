@@ -14,6 +14,7 @@ const Header = () => {
   const isAuthenticated = useSelector((state) => state.account.isAuthenticated);
   const username = useSelector((state) => state.account.user.fullName);
   const userEmail = useSelector((state) => state.account.user.email);
+  const role = useSelector((state) => state.account.user.role);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [items, setItems] = useState([
@@ -28,7 +29,7 @@ const Header = () => {
   ]);
 
   const listItems = () => {
-    if (isAuthenticated === true) {
+    if (isAuthenticated === true && role === 'USER') {
       setItems([
         {
           label: <Link to="/">Quản lý tài khoản</Link>,
@@ -39,7 +40,24 @@ const Header = () => {
           key: "logout",
         },
       ]);
-    } else {
+    }
+    else if(isAuthenticated === true && role === 'ADMIN'){
+      setItems([
+        {
+          label: <Link to="/">Quản lí tài khoản</Link>,
+          key: "account",
+        },
+        {
+          label: <Link to="/admin">Trang quản trị</Link>,
+          key: "admin",
+        },
+        {
+          label: <p onClick={() => handleLogout()}>Đăng xuất</p>,
+          key: "logout",
+        },
+      ]);
+    }
+     else {
       setItems([
         {
           label: <Link to="/login">Đăng nhập</Link>,
@@ -53,7 +71,7 @@ const Header = () => {
     }
   };
   useEffect(() => {
-    listItems();
+    listItems(); 
   }, [isAuthenticated]);
 
   const handleLogout = async () => {

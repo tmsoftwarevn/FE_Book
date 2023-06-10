@@ -2,20 +2,11 @@ import { Button, Drawer, Space } from "antd";
 import { useEffect, useState } from "react";
 import { Badge, Descriptions } from "antd";
 import moment from 'moment';
-//moment().format();
-const ViewUser = (props) => {
-  const [open, setOpen] = useState(false);
 
+const ViewUser = (props) => {  
   const { view, setView, dataView } = props;
-  useEffect(() => {
-    if (view === true) showDrawer();
-  }, [view]);
-
-  const showDrawer = () => {
-    setOpen(true);
-  };
+ 
   const onClose = () => {
-    setOpen(false);
     setView(false);
   };
   return (
@@ -25,7 +16,7 @@ const ViewUser = (props) => {
         placement={"top"}
         width={500}
         onClose={onClose}
-        open={open}
+        open={view}
         extra={
           <Space>
             <Button onClick={onClose}>Cancel</Button>

@@ -40,3 +40,7 @@ export const callGetListUser = (
     `/api/v1/user?current=${current}&pageSize=${pageSize}&fullName=${fullName}&email=${email}&phone=${phone}&sort=${sort}`
   );
 };
+
+export const callCreateUser = (fullName, email, password, phone) => {
+  return axios.post("/api/v1/user", { fullName, email, password, phone });
+};

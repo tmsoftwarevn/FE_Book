@@ -1,5 +1,5 @@
 import { Button, Input, message } from "antd";
-import TableUser from "./user/TableUser";
+import TableUser from "./managerUser/TableUser";
 import { useEffect, useRef, useState } from "react";
 
 const Admin = () => {
