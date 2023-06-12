@@ -1,14 +1,15 @@
 import { Button, Table } from "antd";
 import { useEffect, useState } from "react";
-import { callGetListUser } from "../../../services/api";
+import { callGetListBook } from "../../../services/api";
 import Loading from "../../../components/Loading/loading";
+import moment from "moment";
+import ViewBook from "./ViewBook";
+import { MdOutlinePreview } from "react-icons/md";
 import { AiFillDelete } from "react-icons/ai";
+import { BsFillPencilFill } from "react-icons/bs";
 
-import { FaEye } from "react-icons/fa";
-import ViewUser from "./View";
-import moment from 'moment';
-import AddUser from "./AddUser";
-const TableUser = (props) => {
+const TableBook = (props) => {
+  const [dataBook, setDataBook] = useState("");
   const [data, setDataTable] = useState([]);
   const [total, setTotal] = useState(0);
   const [current, setCurrent] = useState(1);
@@ -17,15 +18,16 @@ const TableUser = (props) => {
   const [sort, setSort] = useState("");
   const [view, setView] = useState(false);
   const [dataView, setDataView] = useState("");
-  const [isModalAddUser, setIsModalAddUser] = useState(false)
- 
+  const [isModalAddUser, setIsModalAddUser] = useState(false);
+  const [isModalDeleteUser, setIsModalDeleteUser] = useState(false);
+
   const { searchData } = props;
 
   useEffect(() => {
     setCurrent(1);
   }, [searchData]);
   useEffect(() => {
-    getListUser();
+    getListBook();
   }, [searchData, current, pageSize, sort]);
 
   const onChange = (pagination, filters, sorter, extra) => {
@@ -43,39 +45,41 @@ const TableUser = (props) => {
     }
   };
 
-  const getListUser = async () => {
+  const getListBook = async () => {
     setIsLoading(true);
-    let res = await callGetListUser(
+    let res = await callGetListBook(
       current,
-      pageSize,
-      searchData?.fullName,
-      searchData?.email,
-      searchData?.phone,
-      sort
+      pageSize
+      // searchData?.name,
+      // searchData?.author,
+      // searchData?.category,
+      // sort
     );
 
     if (res && res.data) {
+      setDataBook(res.data.result);
       setTotal(res.data.meta.total);
-      customListUser(res.data.result);
+      customListBook(res.data.result);
       setIsLoading(false);
     }
   };
 
-  const customListUser = (listUser) => {
+  const customListBook = (list) => {
     // fake data
-    if (listUser && listUser.length > 0) {
+    if (list && list.length > 0) {
       //listUser = listUser.concat(listUser).concat(listUser);
       let arr = [];
-      listUser.map((item, index) => {
+      list.map((item, index) => {
         arr.push({
           key: `item-${index}`,
           stt: index + 1,
-          fullName: item.fullName,
-          email: item.email,
-          phone: item.phone,
-          action: index + 1,
-          createdAt:  moment(item?.createdAt).format('DD-MM-YY hh:mm:ss'),
-          updatedAt: moment(item?.updatedAt).format('DD-MM-YY hh:mm:ss'),
+          name: item.mainText,
+          category: item.category,
+          author: item.author,
+          price: `${item.price.toLocaleString()}đ`,
+          action: index ,
+          createdAt: moment(item?.createdAt).format("DD-MM-YY hh:mm:ss"),
+          updatedAt: moment(item?.updatedAt).format("DD-MM-YY hh:mm:ss"),
         });
       });
       // setTotal(arr.length);
@@ -91,23 +95,28 @@ const TableUser = (props) => {
       dataIndex: "stt",
     },
     {
-      title: "Tên hiển thị",
-      dataIndex: "fullName",
+      title: "Tên sách",
+      dataIndex: "name",
       sorter: true,
     },
     {
-      title: "Email",
-      dataIndex: "email",
+      title: "Thể loại",
+      dataIndex: "category",
       sorter: true,
     },
     {
-      title: "Số điện thoại",
-      dataIndex: "phone",
+      title: "Tác giả",
+      dataIndex: "author",
+    },
+    {
+      title: "Giá tiền",
+      dataIndex: "price",
+      sorter: true,
     },
     {
       title: "Ngày cập nhật",
       dataIndex: "updatedAt",
-      sorter: true
+      sorter: true,
     },
     {
       title: "Action",
@@ -115,13 +124,27 @@ const TableUser = (props) => {
       render: (text, record, index) => {
         //console.log(text, record, index)
         return (
-          <div style={{cursor: "pointer",textDecoration:'underline', color:'blue' }}
-          onClick={() => {
-            setView(true);
-            setDataView(record);
-          }}
-          >          
-           Chi tiết
+          <div
+            style={{
+              cursor: "pointer",
+              display: "flex",
+              justifyContent: "center",
+              fontSize: "18px",
+              gap: 20,
+            }}
+          >
+            <AiFillDelete style={{ color: "red" }} />
+            <MdOutlinePreview
+              style={{ color: "blue" }}
+              onClick={() => {
+                setView(true);
+                setDataView(record);
+                // console.log('check acion index', record.action)
+              }}
+            />
+            <BsFillPencilFill 
+            style={{fontSize: "15px"}}
+            />
           </div>
         );
       },
@@ -139,17 +162,23 @@ const TableUser = (props) => {
           fontSize: "18px",
         }}
       >
-        <div>Danh sách Users: </div>
-        <div>
-          <Button type="primary" style={{cursor: 'pointer'}}
-          onClick={() =>setIsModalAddUser(true)}
-          >
-            Thêm mới
-          </Button>
+        <div>Danh sách Books: </div>
+        <div style={{ gap: 10, display: "flex" }}>
+          <div>
+            <Button type="primary">Export</Button>
+          </div>
+          <div>
+            <Button type="primary">Import</Button>
+          </div>
+          <div>
+            {" "}
+            <Button type="primary">Thêm mới</Button>
+          </div>
         </div>
       </div>
     );
   };
+  
   if (isLoading === true) {
     return <Loading />;
   } else
@@ -173,14 +202,15 @@ const TableUser = (props) => {
             scroll={{ y: "300px" }}
           />
         </div>
-        <ViewUser view={view} setView={setView} dataView={dataView} />
-        <AddUser 
-        isModalAddUser = {isModalAddUser}
-        setIsModalAddUser ={setIsModalAddUser}
-     
+        <ViewBook
+          view={view}
+          setView={setView}
+          dataView={dataView}
+          setDataView= {setDataView}
+          dataBook={dataBook}
         />
       </>
     );
 };
 
-export default TableUser;
+export default TableBook;

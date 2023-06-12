@@ -44,3 +44,14 @@ export const callGetListUser = (
 export const callCreateUser = (fullName, email, password, phone) => {
   return axios.post("/api/v1/user", { fullName, email, password, phone });
 };
+
+export const callGetListBook = (
+  current,
+  pageSize
+  // name,
+  // author,
+  // category,
+  // sort
+) => {
+  return axios.get(`/api/v1/book?current=${current}&pageSize=${pageSize}`);
+};

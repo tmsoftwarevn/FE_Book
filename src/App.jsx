@@ -19,18 +19,20 @@ import { callGetAccount } from "./services/api";
 import { doGetAccountAction } from "./redux/account/accountSlice";
 import Loading from "./components/Loading/loading";
 import Notfound from "./components/Notfound";
-import Admin from "./pages/admin/admin";
+import ManagerUser from "./pages/admin/managerUser/ManagerUser";
 import ProtectedRoute from "./components/ProtectedRoute/ProtectedRoute";
 import LayoutAdmin from "./components/Admin/LayoutAdmin";
+import Dashboard from "./pages/admin/dashboard/Dashboard";
+import ManagerBook from "./pages/admin/managerBook/ManagerBook";
 
 const Layout = () => {
   const role = useSelector((state) => state.account?.user?.role);
   const navigate = useNavigate();
   const location = useLocation();
- 
+  const prevUrl = location.state?.from?.pathname.startsWith('/admin')
   useEffect(() => {
-    if (role && role === "ADMIN" && location.state?.from?.pathname !='/admin') {
-      navigate("/admin")
+    if (role && role === "ADMIN" && prevUrl !==true) {
+      navigate("/admin/dashboard")
     }
   }, []);
 
@@ -99,11 +101,16 @@ export default function App() {
       children: [
         {
           index: true,
-          element: <Admin />,
+          path: "dashboard",
+          element: <Dashboard />,
+        },
+        {
+          path: "user",
+          element: <ManagerUser />,
         },
         {
           path: "book",
-          element: <BookPage />,
+          element: <ManagerBook />,
         },
         {
           path: "order",

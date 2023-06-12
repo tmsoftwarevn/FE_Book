@@ -1,8 +1,8 @@
 import { Button, Input, message } from "antd";
-import TableUser from "./managerUser/TableUser";
+import TableUser from "./TableUser";
 import { useEffect, useRef, useState } from "react";
 
-const Admin = () => {
+const ManagerUser = () => {
   const nameref = useRef("");
   const emailRef = useRef("");
   const phoneRef = useRef("");
@@ -155,4 +155,4 @@ const Admin = () => {
   );
 };
 
-export default Admin;
+export default ManagerUser;

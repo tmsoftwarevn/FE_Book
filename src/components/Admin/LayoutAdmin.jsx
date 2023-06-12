@@ -24,9 +24,9 @@ function getItem(label, key, icon, children) {
   };
 }
 const items = [
-  getItem(<Link to="/admin">Dashboard</Link>, "1", <AppstoreOutlined />),
+  getItem(<Link to="/admin/dashboard">Dashboard</Link>, "1", <AppstoreOutlined />),
   getItem("Manager Users", "sub1", <UserOutlined />, [
-    getItem("CRUD", "2", <TeamOutlined />),
+    getItem(<Link to="/admin/user">User</Link>, "2", <TeamOutlined />),
     getItem("File", "3", <TeamOutlined />),
   ]),
   getItem(
