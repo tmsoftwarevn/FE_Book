@@ -7,18 +7,23 @@ import ViewBook from "./ViewBook";
 import { MdOutlinePreview } from "react-icons/md";
 import { AiFillDelete } from "react-icons/ai";
 import { BsFillPencilFill } from "react-icons/bs";
+import AddNewBook from "./AddNewBook";
+import UpdateBook from "./UpdateBook";
 
 const TableBook = (props) => {
   const [dataBook, setDataBook] = useState("");
   const [data, setDataTable] = useState([]);
   const [total, setTotal] = useState(0);
   const [current, setCurrent] = useState(1);
-  const [pageSize, setPageSize] = useState(2);
+  const [pageSize, setPageSize] = useState(5);
   const [isLoading, setIsLoading] = useState(false);
   const [sort, setSort] = useState("");
   const [view, setView] = useState(false);
   const [dataView, setDataView] = useState("");
-  const [isModalAddUser, setIsModalAddUser] = useState(false);
+  const [dataUpdate, setDataUpdate] = useState('')
+
+  const [isModalAddBook, setIsModalAddBook] = useState(false);
+  const [isModalUpdateBook, setIsModalUpdateBook] = useState(false);
   const [isModalDeleteUser, setIsModalDeleteUser] = useState(false);
 
   const { searchData } = props;
@@ -72,12 +77,15 @@ const TableBook = (props) => {
       list.map((item, index) => {
         arr.push({
           key: `item-${index}`,
+          id: item._id,
           stt: index + 1,
           name: item.mainText,
           category: item.category,
           author: item.author,
-          price: `${item.price.toLocaleString()}đ`,
-          action: index ,
+          price: `${item.price}`.replace(/\B(?=(\d{3})+(?!\d))/g, ","),         
+          sold: item.sold,
+          quantity: item.quantity,
+          action: index,
           createdAt: moment(item?.createdAt).format("DD-MM-YY hh:mm:ss"),
           updatedAt: moment(item?.updatedAt).format("DD-MM-YY hh:mm:ss"),
         });
@@ -89,6 +97,7 @@ const TableBook = (props) => {
       setDataTable([]);
     }
   };
+  
   const columns = [
     {
       title: "STT",
@@ -109,7 +118,7 @@ const TableBook = (props) => {
       dataIndex: "author",
     },
     {
-      title: "Giá tiền",
+      title: "Giá tiền (VND)",
       dataIndex: "price",
       sorter: true,
     },
@@ -122,7 +131,6 @@ const TableBook = (props) => {
       title: "Action",
       dataIndex: "action",
       render: (text, record, index) => {
-        //console.log(text, record, index)
         return (
           <div
             style={{
@@ -139,11 +147,14 @@ const TableBook = (props) => {
               onClick={() => {
                 setView(true);
                 setDataView(record);
-                // console.log('check acion index', record.action)
               }}
             />
-            <BsFillPencilFill 
-            style={{fontSize: "15px"}}
+            <BsFillPencilFill
+              style={{ fontSize: "15px" }}
+              onClick={() => {
+                setIsModalUpdateBook(true),
+                setDataUpdate(record)
+              }}
             />
           </div>
         );
@@ -171,14 +182,15 @@ const TableBook = (props) => {
             <Button type="primary">Import</Button>
           </div>
           <div>
-            {" "}
-            <Button type="primary">Thêm mới</Button>
+            <Button type="primary" onClick={() => setIsModalAddBook(true)}>
+              Thêm mới
+            </Button>
           </div>
         </div>
       </div>
     );
   };
-  
+
   if (isLoading === true) {
     return <Loading />;
   } else
@@ -206,8 +218,22 @@ const TableBook = (props) => {
           view={view}
           setView={setView}
           dataView={dataView}
-          setDataView= {setDataView}
+          setDataView={setDataView}
           dataBook={dataBook}
+        />
+
+        <AddNewBook
+          isModalAddBook={isModalAddBook}
+          setIsModalAddBook={setIsModalAddBook}
+          getListBook={getListBook}
+        />
+        <UpdateBook
+          isModalUpdateBook={isModalUpdateBook}
+          setIsModalUpdateBook={setIsModalUpdateBook}
+          getListBook={getListBook}
+          dataUpdate = {dataUpdate}
+          setDataUpdate ={setDataUpdate}
+          dataBook = {dataBook}
         />
       </>
     );

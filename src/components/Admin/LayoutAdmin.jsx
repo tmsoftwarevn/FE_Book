@@ -7,7 +7,7 @@ import {
   DollarCircleOutlined,
 } from "@ant-design/icons";
 import { Breadcrumb, Layout, Menu, theme, message } from "antd";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link, Outlet, useLocation, useNavigate } from "react-router-dom";
 import { Dropdown, Space } from "antd";
 import { useDispatch, useSelector } from "react-redux";
@@ -24,19 +24,19 @@ function getItem(label, key, icon, children) {
   };
 }
 const items = [
-  getItem(<Link to="/admin/dashboard">Dashboard</Link>, "1", <AppstoreOutlined />),
+  getItem(<Link to="/admin/dashboard">Dashboard</Link>, "/admin/dashboard", <AppstoreOutlined />),
   getItem("Manager Users", "sub1", <UserOutlined />, [
-    getItem(<Link to="/admin/user">User</Link>, "2", <TeamOutlined />),
+    getItem(<Link to="/admin/user">User</Link>, "/admin/user", <TeamOutlined />),
     getItem("File", "3", <TeamOutlined />),
   ]),
   getItem(
     <Link to="/admin/book">Manager Books</Link>,
-    "4",
+    "/admin/book",
     <ExceptionOutlined />
   ),
   getItem(
     <Link to="/admin/order">Manager Orders</Link>,
-    "5",
+    "/admin/order",
     <DollarCircleOutlined />
   ),
 ];
@@ -85,8 +85,12 @@ const AccountAdmin = () => {
   );
 };
 const LayoutAdmin = () => {
-  const [keyActive, setKeyActive] = useState("1");
+  const [keyActive, setKeyActive] = useState('/admin/dashboard');
   const [collapsed, setCollapsed] = useState(false);
+  const location = useLocation();
+  useEffect(() =>{
+    setKeyActive(location.pathname)
+  },[keyActive])
   const {
     token: { colorBgContainer },
   } = theme.useToken();
@@ -110,7 +114,7 @@ const LayoutAdmin = () => {
         <div className="demo-logo-vertical" />
         <Menu
           theme="dark"
-          defaultSelectedKeys={[keyActive]}
+          selectedKeys={[keyActive]}
           mode="inline"
           items={items}
           onClick={(e) => setKeyActive(e.key)}

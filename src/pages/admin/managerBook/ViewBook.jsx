@@ -17,9 +17,9 @@ const ViewBook = (props) => {
       status: "done",
       url: "https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png",
     },
-    
   ]);
   const handleCancel = () => setPreviewOpen(false);
+
   const handlePreview = async (file) => {
     setPreviewImage(file.url || file.preview);
     setPreviewOpen(true);
@@ -30,19 +30,18 @@ const ViewBook = (props) => {
 
   const onClose = () => {
     setView(false);
-    setFileList([])
-    setDataView('')
+    setFileList([]);
+    setDataView("");
   };
   const customData = (dataBook) => {
     let data = dataBook[+dataView?.action];
-    console.log(data);
     let arr = [];
     arr.push({
       uid: uuidv4(),
       name: data?.mainText,
       status: "done",
       url: `${import.meta.env.VITE_BACKEND_URL}/images/book/${data?.thumbnail}`,
-    })
+    });
     if (data && data.slider) {
       data.slider.map((pic, index) => {
         arr.push({
@@ -51,15 +50,15 @@ const ViewBook = (props) => {
           status: "done",
           url: `${import.meta.env.VITE_BACKEND_URL}/images/book/${pic}`,
         });
-      });
-      console.log("check arrr cus", arr);
-      setFileList(arr)
+      });  
+
+      setFileList(arr);
     }
   };
   
-  useEffect(() =>{
+  useEffect(() => {
     customData(dataBook);
-  },[dataBook[dataView?.action]])
+  }, [dataBook[dataView?.action]]);
 
   return (
     <>
@@ -89,19 +88,20 @@ const ViewBook = (props) => {
             {dataView.category}
           </Descriptions.Item>
           <Descriptions.Item label="Giá tiền">
-            {dataView.price}
+            {dataView.price}đ
           </Descriptions.Item>
           <Descriptions.Item label="Created At">
-            {moment(dataView?.createdAt).format("DD-MM-YY hh:mm:ss")}
+            {dataView?.createdAt}
           </Descriptions.Item>
           <Descriptions.Item label="Updated At">
-            {moment(dataView?.updatedAt)
-              .utcOffset("+0700")
-              .format("DD-MM-YY hh:mm:ss")}
+            {dataView?.updatedAt}
+              
           </Descriptions.Item>
-          <Descriptions.Item label="Số lượng" span={2}>
-            <Badge status="processing" text="Còn hàng" />
+          <Descriptions.Item label="Số lượng">
+            {/* <Badge status="processing"  /> */}
+            {dataView.quantity}
           </Descriptions.Item>
+          <Descriptions.Item label="Đã bán">{dataView.sold}</Descriptions.Item>
         </Descriptions>
         <Divider>Ảnh Book</Divider>
         <Upload
@@ -121,7 +121,8 @@ const ViewBook = (props) => {
           <img
             alt="example"
             style={{
-              width: "100%",
+              width: "100%",            
+             
             }}
             src={previewImage}
           />
