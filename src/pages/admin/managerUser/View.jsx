@@ -26,17 +26,16 @@ const ViewUser = (props) => {
           </Space>
         }
       >
-        <Descriptions  bordered>
+        <Descriptions  bordered column={2}>
           <Descriptions.Item label="Email">{dataView.email}</Descriptions.Item>
           <Descriptions.Item label="Tên hiển thị">{dataView.fullName}</Descriptions.Item>
-          <Descriptions.Item label="Số điện thoại">{dataView.phone}</Descriptions.Item>
-          <Descriptions.Item label="Created At">
-          {moment(dataView?.createdAt).format('DD-MM-YY hh:mm:ss')}
+          <Descriptions.Item label="Created At" >
+          {dataView?.createdAt}
           </Descriptions.Item>
-          <Descriptions.Item label="Updated At" span={2}>
-            {moment(dataView?.updatedAt).utcOffset('+0700').format('DD-MM-YY hh:mm:ss')}
+          <Descriptions.Item label="Updated At" >
+            {dataView?.updatedAt}
           </Descriptions.Item>
-          <Descriptions.Item label="Role" span={3}>
+          <Descriptions.Item label="Role" span={2}>
             <Badge status="processing" text="User" />
           </Descriptions.Item>
           

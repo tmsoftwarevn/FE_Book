@@ -24,11 +24,14 @@ function getItem(label, key, icon, children) {
   };
 }
 const items = [
-  getItem(<Link to="/admin/dashboard">Dashboard</Link>, "/admin/dashboard", <AppstoreOutlined />),
-  getItem("Manager Users", "sub1", <UserOutlined />, [
-    getItem(<Link to="/admin/user">User</Link>, "/admin/user", <TeamOutlined />),
-    getItem("File", "3", <TeamOutlined />),
-  ]),
+  getItem(
+    <Link to="/admin/dashboard">Dashboard</Link>,
+    "/admin/dashboard",
+    <AppstoreOutlined />
+  ),
+  getItem(<Link to="/admin/user">User</Link>,
+  "/admin/user",
+  <TeamOutlined />),
   getItem(
     <Link to="/admin/book">Manager Books</Link>,
     "/admin/book",
@@ -63,34 +66,38 @@ const AccountAdmin = () => {
       key: "logout",
     },
     {
-      label: <p 
-      onClick={() =>navigate("/", { state: { from: location } })}
-      >Trang chủ</p>,
+      label: (
+        <p onClick={() => navigate("/", { state: { from: location } })}>
+          Trang chủ
+        </p>
+      ),
       key: "home",
     },
   ];
   return (
-    <Space direction="vertical" >
-      <Space wrap>
-        <Dropdown
-          menu={{
-            items,
-          }}
-          placement="bottomLeft"
-        >
-          <div className="admin">Admin</div>
-        </Dropdown>
+    <div style={{ display: "flex", justifyContent: "flex-end" }}>
+      <Space direction="vertical">
+        <Space wrap>
+          <Dropdown
+            menu={{
+              items,
+            }}
+            placement="bottomLeft"
+          >
+            <div className="admin">Admin</div>
+          </Dropdown>
+        </Space>
       </Space>
-    </Space>
+    </div>
   );
 };
 const LayoutAdmin = () => {
-  const [keyActive, setKeyActive] = useState('/admin/dashboard');
+  const [keyActive, setKeyActive] = useState("/admin/dashboard");
   const [collapsed, setCollapsed] = useState(false);
   const location = useLocation();
-  useEffect(() =>{
-    setKeyActive(location.pathname)
-  },[keyActive])
+  useEffect(() => {
+    setKeyActive(location.pathname);
+  }, [keyActive]);
   const {
     token: { colorBgContainer },
   } = theme.useToken();
@@ -137,17 +144,17 @@ const LayoutAdmin = () => {
               minHeight: 500,
               background: colorBgContainer,
             }}
-          >          
+          >
             <Outlet />
           </div>
         </Content>
-        <Footer
+        {/* <Footer
           style={{
             textAlign: "center",
           }}
         >
           Ant Design ©2023 Created by Ant UED
-        </Footer>
+        </Footer> */}
       </Layout>
     </Layout>
   );

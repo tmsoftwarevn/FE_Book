@@ -1,6 +1,6 @@
-import { Button, Table } from "antd";
+import { Button, Popconfirm, Table, message, notification } from "antd";
 import { useEffect, useState } from "react";
-import { callGetListBook } from "../../../services/api";
+import { callDeleteBook, callGetListBook } from "../../../services/api";
 import Loading from "../../../components/Loading/loading";
 import moment from "moment";
 import ViewBook from "./ViewBook";
@@ -9,6 +9,7 @@ import { AiFillDelete } from "react-icons/ai";
 import { BsFillPencilFill } from "react-icons/bs";
 import AddNewBook from "./AddNewBook";
 import UpdateBook from "./UpdateBook";
+import BookImport from "./dataImport/BookImport";
 
 const TableBook = (props) => {
   const [dataBook, setDataBook] = useState("");
@@ -20,13 +21,30 @@ const TableBook = (props) => {
   const [sort, setSort] = useState("");
   const [view, setView] = useState(false);
   const [dataView, setDataView] = useState("");
-  const [dataUpdate, setDataUpdate] = useState('')
+  const [dataUpdate, setDataUpdate] = useState("");
 
   const [isModalAddBook, setIsModalAddBook] = useState(false);
   const [isModalUpdateBook, setIsModalUpdateBook] = useState(false);
-  const [isModalDeleteUser, setIsModalDeleteUser] = useState(false);
+  
+  const [isModalImportBook, setIsModalImportBook] =useState(false)
 
   const { searchData } = props;
+
+  const title ='Xác nhận xóa sách này ?'
+  const confirm = async(id) => {
+
+    let res = await callDeleteBook(id);
+    if (res && res.data) {
+      message.success("Xóa thành công book");
+      getListBook()
+      setCurrent(1);
+    } else {
+      notification.error({
+        description: "Có lỗi xảy ra",
+      });
+    }
+
+   };
 
   useEffect(() => {
     setCurrent(1);
@@ -82,7 +100,7 @@ const TableBook = (props) => {
           name: item.mainText,
           category: item.category,
           author: item.author,
-          price: `${item.price}`.replace(/\B(?=(\d{3})+(?!\d))/g, ","),         
+          price: `${item.price}`.replace(/\B(?=(\d{3})+(?!\d))/g, ","),
           sold: item.sold,
           quantity: item.quantity,
           action: index,
@@ -97,7 +115,7 @@ const TableBook = (props) => {
       setDataTable([]);
     }
   };
-  
+
   const columns = [
     {
       title: "STT",
@@ -141,21 +159,38 @@ const TableBook = (props) => {
               gap: 20,
             }}
           >
-            <AiFillDelete style={{ color: "red" }} />
-            <MdOutlinePreview
-              style={{ color: "blue" }}
-              onClick={() => {
-                setView(true);
-                setDataView(record);
+            <div
+              style={{
+                whiteSpace: "nowrap",
               }}
-            />
-            <BsFillPencilFill
-              style={{ fontSize: "15px" }}
-              onClick={() => {
-                setIsModalUpdateBook(true),
-                setDataUpdate(record)
-              }}
-            />
+            >
+              <Popconfirm
+                placement="left"
+                title={title}
+                onConfirm={() =>{confirm(record?.id)}}
+                okText="Yes"
+                cancelText="No"
+              >
+                <AiFillDelete style={{ color: "red" }} />
+              </Popconfirm>
+            </div>
+            <div>
+              <MdOutlinePreview
+                style={{ color: "blue" }}
+                onClick={() => {
+                  setView(true);
+                  setDataView(record);
+                }}
+              />
+            </div>
+            <div>
+              <BsFillPencilFill
+                style={{ fontSize: "15px" }}
+                onClick={() => {
+                  setIsModalUpdateBook(true), setDataUpdate(record);
+                }}
+              />
+            </div>
           </div>
         );
       },
@@ -176,10 +211,14 @@ const TableBook = (props) => {
         <div>Danh sách Books: </div>
         <div style={{ gap: 10, display: "flex" }}>
           <div>
-            <Button type="primary">Export</Button>
+            <Button type="primary"
+
+            >Export data</Button>
           </div>
           <div>
-            <Button type="primary">Import</Button>
+            <Button type="primary"
+            onClick={() => setIsModalImportBook(true)}
+            >Import data</Button>
           </div>
           <div>
             <Button type="primary" onClick={() => setIsModalAddBook(true)}>
@@ -231,9 +270,13 @@ const TableBook = (props) => {
           isModalUpdateBook={isModalUpdateBook}
           setIsModalUpdateBook={setIsModalUpdateBook}
           getListBook={getListBook}
-          dataUpdate = {dataUpdate}
-          setDataUpdate ={setDataUpdate}
-          dataBook = {dataBook}
+          dataUpdate={dataUpdate}
+          setDataUpdate={setDataUpdate}
+          dataBook={dataBook}
+        />
+        <BookImport 
+          isModalImportBook = {isModalImportBook}
+          setIsModalImportBook = {setIsModalImportBook}
         />
       </>
     );

@@ -28,21 +28,18 @@ export const callGetAllUser = () => {
   return axios.get("/api/v1/user");
 };
 
-export const callGetListUser = (
-  current,
-  pageSize,
-  fullName,
-  email,
-  phone,
-  sort
-) => {
+export const callGetListUser = (current, pageSize, fullName, email, sort) => {
   return axios.get(
-    `/api/v1/user?current=${current}&pageSize=${pageSize}&fullName=${fullName}&email=${email}&phone=${phone}&sort=${sort}`
+    `/api/v1/user?current=${current}&pageSize=${pageSize}&fullName=${fullName}&email=${email}&sort=${sort}`
   );
 };
 
 export const callCreateUser = (fullName, email, password, phone) => {
   return axios.post("/api/v1/user", { fullName, email, password, phone });
+};
+
+export const callDeleteUser = (id) => {
+  return axios.delete(`/api/v1/user/${id}`);
 };
 
 export const callGetListBook = (
@@ -116,4 +113,8 @@ export const callUpdateBook = (
     quantity,
     category,
   });
+};
+
+export const callDeleteBook = (id) => {
+  return axios.delete(`/api/v1/book/${id}`);
 };

@@ -1,24 +1,23 @@
-import { Button, Table } from "antd";
+import { Button, Popconfirm, Table, message, notification } from "antd";
 import { useEffect, useState } from "react";
-import { callGetListUser } from "../../../services/api";
+import { callDeleteUser, callGetListUser } from "../../../services/api";
 import Loading from "../../../components/Loading/loading";
 import { AiFillDelete } from "react-icons/ai";
 
-import { FaEye } from "react-icons/fa";
 import ViewUser from "./View";
-import moment from 'moment';
+import moment from "moment";
 import AddUser from "./AddUser";
 const TableUser = (props) => {
   const [data, setDataTable] = useState([]);
   const [total, setTotal] = useState(0);
   const [current, setCurrent] = useState(1);
-  const [pageSize, setPageSize] = useState(2);
+  const [pageSize, setPageSize] = useState(5);
   const [isLoading, setIsLoading] = useState(false);
   const [sort, setSort] = useState("");
   const [view, setView] = useState(false);
   const [dataView, setDataView] = useState("");
-  const [isModalAddUser, setIsModalAddUser] = useState(false)
- 
+  const [isModalAddUser, setIsModalAddUser] = useState(false);
+
   const { searchData } = props;
 
   useEffect(() => {
@@ -28,6 +27,19 @@ const TableUser = (props) => {
     getListUser();
   }, [searchData, current, pageSize, sort]);
 
+  const title = "Xác nhận xóa người dùng này ?";
+  const confirm = async (id) => {
+    let res = await callDeleteUser(id);
+    if (res && res.data) {
+      message.success("Xóa thành công user");
+      getListUser();
+      setCurrent(1);
+    } else {
+      notification.error({
+        description: "Có lỗi xảy ra",
+      });
+    }
+  };
   const onChange = (pagination, filters, sorter, extra) => {
     //console.log("params", sorter);
     setCurrent(pagination.current);
@@ -50,7 +62,6 @@ const TableUser = (props) => {
       pageSize,
       searchData?.fullName,
       searchData?.email,
-      searchData?.phone,
       sort
     );
 
@@ -70,12 +81,12 @@ const TableUser = (props) => {
         arr.push({
           key: `item-${index}`,
           stt: index + 1,
+          id: item._id,
           fullName: item.fullName,
           email: item.email,
-          phone: item.phone,
           action: index + 1,
-          createdAt:  moment(item?.createdAt).format('DD-MM-YY hh:mm:ss'),
-          updatedAt: moment(item?.updatedAt).format('DD-MM-YY hh:mm:ss'),
+          createdAt: moment(item?.createdAt).format("DD-MM-YY hh:mm:ss"),
+          updatedAt: moment(item?.updatedAt).format("DD-MM-YY hh:mm:ss"),
         });
       });
       // setTotal(arr.length);
@@ -101,13 +112,9 @@ const TableUser = (props) => {
       sorter: true,
     },
     {
-      title: "Số điện thoại",
-      dataIndex: "phone",
-    },
-    {
       title: "Ngày cập nhật",
       dataIndex: "updatedAt",
-      sorter: true
+      sorter: true,
     },
     {
       title: "Action",
@@ -115,13 +122,36 @@ const TableUser = (props) => {
       render: (text, record, index) => {
         //console.log(text, record, index)
         return (
-          <div style={{cursor: "pointer",textDecoration:'underline', color:'blue' }}
-          onClick={() => {
-            setView(true);
-            setDataView(record);
-          }}
-          >          
-           Chi tiết
+          <div className="container" style={{display: 'flex', gap: 20, cursor: "pointer",}}>
+            <div
+              style={{
+                cursor: "pointer",
+                textDecoration: "underline",
+                color: "blue",
+              }}
+              onClick={() => {
+                setView(true);
+                setDataView(record);
+              }}
+            >
+              Chi tiết
+            </div>
+
+            <div
+              style={{
+                whiteSpace: "nowrap",
+              }}
+            >
+              <Popconfirm
+                placement="left"
+                title={title}
+                onConfirm={() =>{confirm(record?.id)}}
+                okText="Yes"
+                cancelText="No"
+              >
+                <AiFillDelete style={{ color: "red" }} />
+              </Popconfirm>
+            </div>
           </div>
         );
       },
@@ -141,8 +171,10 @@ const TableUser = (props) => {
       >
         <div>Danh sách Users: </div>
         <div>
-          <Button type="primary" style={{cursor: 'pointer'}}
-          onClick={() =>setIsModalAddUser(true)}
+          <Button
+            type="primary"
+            style={{ cursor: "pointer" }}
+            onClick={() => setIsModalAddUser(true)}
           >
             Thêm mới
           </Button>
@@ -174,10 +206,9 @@ const TableUser = (props) => {
           />
         </div>
         <ViewUser view={view} setView={setView} dataView={dataView} />
-        <AddUser 
-        isModalAddUser = {isModalAddUser}
-        setIsModalAddUser ={setIsModalAddUser}
-     
+        <AddUser
+          isModalAddUser={isModalAddUser}
+          setIsModalAddUser={setIsModalAddUser}
         />
       </>
     );

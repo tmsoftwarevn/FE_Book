@@ -1,15 +1,10 @@
 .admin {
     padding: 10px;
     border-radius: 10px;
-    transform: translateX(1600%);
-    //position: relative;
-    margin-right: 70px;
-    right: 0;
-    top: 0;
+    margin-right: 100px;
     text-decoration: underline;
     font-size: 18px;
     color: blue;
-    //width: fit-content;
     &:hover {
         background-color: #f1c40f;
     }

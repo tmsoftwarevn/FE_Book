@@ -1,7 +1,7 @@
 import { Button, Input, message } from "antd";
-
 import { useEffect, useRef, useState } from "react";
 import TableBook from "./TableBook";
+import {FiRefreshCcw} from 'react-icons/fi'
 
 const ManagerBook = () => {
   const nameRef = useRef("");
@@ -119,17 +119,19 @@ const ManagerBook = () => {
             marginTop: "1rem",
           }}
         >
-          <Button
+         <Button
             onClick={() => {
               setSearchData({
                 ...searchData,
-                name: "",
-                author: "",
-                category: "",
+                fullName: "",
+                email: "",
+                phone: "",
               });
               setReset(true)
             }}
+            type="primary"
           >
+            <FiRefreshCcw style={{marginRight: 5}}/>
             Danh sách ban đầu
           </Button>
           <Button

@@ -11,7 +11,6 @@ import {
 import { Form, Input, Upload } from "antd";
 import { useEffect, useState } from "react";
 import {
-  callCreateBook,
   callFetchCategory,
   callUpdateBook,
   callUploadBookImg,
@@ -98,10 +97,12 @@ const UpdateBook = (props) => {
       form.resetFields();
     };
   }, [dataUpdate]);
+
   const onFinish = async (values) => {
     const { name, author, category, price, quantity, sold } = values;
-    let newprice =price.toString().replace(",","")    
-    console.log('new price', newprice)
+    let newprice = price.toString().replaceAll(",", "");
+    newprice = parseInt(newprice);
+
     if (dataThumbnail.length === 0) {
       notification.error({
         description: "Hãy upload ảnh thumbnail",
@@ -115,20 +116,12 @@ const UpdateBook = (props) => {
       return;
     }
     const slider = dataSlider.map((item) => item.name);
-    console.log('<<<<<<',  dataThumbnail[0].name,
-    slider,
-    name, 
-    author,
-    +newprice,
-    sold,
-    quantity,
-    category)
-    
+
     let res = await callUpdateBook(
       dataUpdate?.id,
       dataThumbnail[0]?.name,
       slider,
-      name, 
+      name,
       author,
       +newprice,
       sold,
@@ -246,6 +239,7 @@ const UpdateBook = (props) => {
         onOk={() => {
           form.submit();
         }}
+        okText="Sửa"
         onCancel={handleCancel}
         width={1000}
         maskClosable={false}
@@ -363,6 +357,7 @@ const UpdateBook = (props) => {
                 //noStyle
               >
                 <Upload
+                  accept="image/*"
                   listType="picture-card"
                   className="avatar-uploader"
                   maxCount={1}
@@ -395,6 +390,7 @@ const UpdateBook = (props) => {
                 // noStyle
               >
                 <Upload
+                 accept="image/*"
                   multiple
                   listType="picture-card"
                   className="avatar-uploader"

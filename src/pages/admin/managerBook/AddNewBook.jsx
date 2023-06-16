@@ -42,7 +42,7 @@ const AddNewBook = (props) => {
   };
   const onFinish = async (values) => {
     const { name, author, category, price, quantity, sold } = values;
-    console.log('gia tien', price)
+    
     if (dataThumbnail.length === 0) {
       notification.error({
         description: "Hãy upload ảnh thumbnail",
@@ -70,7 +70,7 @@ const AddNewBook = (props) => {
    
     if (res && res.data) {
       setDataSlider([]), setDataThumbnail([]);
-      message.success("Tạo thành công book");
+      message.success("Thêm mới thành công book");
     } else {
       notification.error({
         description: "Có lỗi xảy ra",
@@ -180,6 +180,7 @@ const AddNewBook = (props) => {
         onCancel={handleCancel}
         width={1000}
         maskClosable={false}
+        okText="Thêm mới"
       >
         <Form name="basic" onFinish={onFinish} autoComplete="off" form={form}>
           <Row gutter={10}>
@@ -301,6 +302,7 @@ const AddNewBook = (props) => {
                 noStyle
               >
                 <Upload
+                 accept="image/*"
                   name="thumbnail"
                   listType="picture-card"
                   className="avatar-uploader"
@@ -334,6 +336,7 @@ const AddNewBook = (props) => {
                 noStyle
               >
                 <Upload
+                 accept="image/*"
                   multiple
                   name="slider"
                   listType="picture-card"
