@@ -1,10 +1,10 @@
-import {  Modal, Table } from "antd";
+import { Modal, Table } from "antd";
 import { useState } from "react";
 import { InboxOutlined } from "@ant-design/icons";
 import { message, Upload } from "antd";
 const { Dragger } = Upload;
 import * as XLSX from "xlsx";
-import templateFile from './template.xlsx?url'
+//import templateFile from "./template.xlsx?url";
 
 const BookImport = (props) => {
   const { isModalImportBook, setIsModalImportBook } = props;
@@ -43,7 +43,7 @@ const BookImport = (props) => {
             let data = new Uint8Array(e.target.result);
             let workbook = XLSX.read(data, { type: "array" });
             // find the name of your sheet in the workbook first
-            let worksheet = workbook.Sheets["Sheet1"];
+            let worksheet = workbook.Sheets[workbook.SheetNames[0]];
 
             // convert to json format
             const jsonData = XLSX.utils.sheet_to_json(worksheet, {
@@ -105,8 +105,13 @@ const BookImport = (props) => {
             Click or drag file to this area to upload
           </p>
           <p className="ant-upload-hint">
-            Chỉ được phép upload file .csv,.xls or .xlsx{" "}	&nbsp;	&nbsp;
-            <a onClick={(e) => e.stopPropagation()} href={templateFile} download>
+            Chỉ được phép upload file .csv,.xls or .xlsx &nbsp; &nbsp;
+            <a
+              onClick={(e) => e.stopPropagation()}
+              href="https://docs.google.com/spreadsheets/d/1qY-BrWKOyNFWsb6bLrUYzhDJlaUXavn7QKD-Tql2lBw/edit?hl=vi#gid=0"
+              download
+              target="_blank"
+            >
               Download example file
             </a>
           </p>

@@ -24,6 +24,7 @@ import ProtectedRoute from "./components/ProtectedRoute/ProtectedRoute";
 import LayoutAdmin from "./components/Admin/LayoutAdmin";
 import Dashboard from "./pages/admin/dashboard/Dashboard";
 import ManagerBook from "./pages/admin/managerBook/ManagerBook";
+import { ConfigProvider } from "antd";
 
 const Layout = () => {
   const role = useSelector((state) => state.account?.user?.role);
@@ -132,5 +133,16 @@ export default function App() {
     );
   } else {
     return <RouterProvider router={router} />;
+  //   return (
+  //     <ConfigProvider
+  //         theme={{
+  //             token: {
+  //                 fontFamily: "Times New Roman",
+  //             },
+  //         }}
+  //     >
+  //         <RouterProvider router={router} />
+  //     </ConfigProvider>
+  // )
   }
 }

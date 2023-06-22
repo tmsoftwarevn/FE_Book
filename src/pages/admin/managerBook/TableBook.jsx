@@ -10,7 +10,7 @@ import { BsFillPencilFill } from "react-icons/bs";
 import AddNewBook from "./AddNewBook";
 import UpdateBook from "./UpdateBook";
 import BookImport from "./dataImport/BookImport";
-
+import * as XLSX from "xlsx";
 const TableBook = (props) => {
   const [dataBook, setDataBook] = useState("");
   const [data, setDataTable] = useState([]);
@@ -115,7 +115,13 @@ const TableBook = (props) => {
       setDataTable([]);
     }
   };
-
+  const handleExportData =() =>{
+    const worksheet = XLSX.utils.json_to_sheet(dataBook);
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, "Sheet1");
+    
+    XLSX.writeFile(workbook, "exportBook.csv");
+  }
   const columns = [
     {
       title: "STT",
@@ -212,7 +218,7 @@ const TableBook = (props) => {
         <div style={{ gap: 10, display: "flex" }}>
           <div>
             <Button type="primary"
-
+              onClick={() => handleExportData()}
             >Export data</Button>
           </div>
           <div>
