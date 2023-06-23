@@ -4,7 +4,7 @@
 @import '../../scss/grid';
 
 .container {
-    max-width: 1300px;
+    max-width: 1200px !important;
     margin: 0 auto;
 }
 .header-main {
@@ -13,10 +13,9 @@
         .header-content {
             display: flex;
             align-items: center;
-            padding: 10px;
+            padding: 10px 0 10px 0;
 
             .header-left {
-                padding: 10px;
                 @include xs {
                     width: 70%;
                 }
