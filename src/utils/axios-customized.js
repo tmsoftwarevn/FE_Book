@@ -1,5 +1,6 @@
 import axios from "axios";
 import axiosRetry from "axios-retry";
+
 const baseURL = import.meta.env.VITE_BACKEND_URL;
 
 const instance = axios.create({

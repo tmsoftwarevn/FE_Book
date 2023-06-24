@@ -232,6 +232,9 @@
                         display: flex;
                         align-items: center;
                         .rate {
+                            @include xs {
+                                font-size: 12px;
+                            }
                             @include md {
                                 display: none;
                             }

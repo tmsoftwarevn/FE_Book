@@ -336,7 +336,8 @@ const Home = () => {
                     onClick={() => {
                       handleSelectPrice("a", [40000]);
                     }}
-                    className={activePrice.a === true ? "active" : ""}
+                    // className={activePrice.a === true ? "active" : ""}
+                    type={activePrice.a === true ? "primary" : "default"}
                   >
                     Dưới 40.000
                   </Button>
@@ -344,7 +345,8 @@ const Home = () => {
                     onClick={() => {
                       handleSelectPrice("b", [40000, 120000]);
                     }}
-                    className={activePrice.b === true ? "active" : ""}
+                    // className={activePrice.b === true ? "active" : ""}
+                    type={activePrice.b === true ? "primary" : "default"}
                   >
                     {" "}
                     40.000 - 120.000
@@ -353,7 +355,8 @@ const Home = () => {
                     onClick={() => {
                       handleSelectPrice("c", [120000, 300000]);
                     }}
-                    className={activePrice.c === true ? "active" : ""}
+                    // className={activePrice.c === true ? "active" : ""}
+                    type={activePrice.c === true ? "primary" : "default"}
                   >
                     {" "}
                     120.000 - 300.000
@@ -362,7 +365,8 @@ const Home = () => {
                     onClick={() => {
                       handleSelectPrice("d", [300000]);
                     }}
-                    className={activePrice.d === true ? "active" : ""}
+                    // className={activePrice.d === true ? "active" : ""}
+                    type={activePrice.d === true ? "primary" : "default"}
                   >
                     {" "}
                     Trên 300.000
