@@ -12,6 +12,8 @@ import {
   Breadcrumb,
   Carousel,
   Drawer,
+  Dropdown,
+  Space,
 } from "antd";
 import "./home.scss";
 import { useEffect, useState } from "react";
@@ -20,6 +22,7 @@ import { AiFillFilter } from "react-icons/ai";
 import { GrPowerReset } from "react-icons/gr";
 import { AiOutlineDown } from "react-icons/ai";
 import { AiOutlineUp } from "react-icons/ai";
+import { AiFillStar } from "react-icons/ai";
 
 const Home = () => {
   const [form] = Form.useForm();
@@ -28,12 +31,21 @@ const Home = () => {
   const [current, setCurrent] = useState(1);
   const [pageSize, setPageSize] = useState(20);
   const [dataBook, setDataBook] = useState("");
+  const [price, setPrice] = useState([]);
   const [activePrice, setactivePrice] = useState({
     a: false,
     b: false,
     c: false,
     d: false,
   });
+  const [activeStar, setActiveStar] = useState([
+    {
+      five: false,
+      four: false,
+      three: false,
+    },
+  ]);
+
   const [listCategory, setlistCategory] = useState([]);
   const [showMore, setShowMore] = useState(false);
   const [modalFilter, setModalFilter] = useState(false);
@@ -49,7 +61,7 @@ const Home = () => {
   }, []);
   const numberOfItems = showMore ? listCategory.length : 5;
 
-  const handleSelectPrice = (name) => {
+  const handleSelectPrice = (name, price) => {
     if (name === "a") {
       setactivePrice({
         a: !activePrice.a,
@@ -57,6 +69,11 @@ const Home = () => {
         c: false,
         d: false,
       });
+      if (activePrice.a === true) {
+        setPrice([]);
+      } else {
+        setPrice(price);
+      }
     }
     if (name === "b") {
       setactivePrice({
@@ -65,6 +82,11 @@ const Home = () => {
         c: false,
         d: false,
       });
+      if (activePrice.b === true) {
+        setPrice([]);
+      } else {
+        setPrice(price);
+      }
     }
     if (name === "c") {
       setactivePrice({
@@ -73,6 +95,11 @@ const Home = () => {
         c: !activePrice.c,
         d: false,
       });
+      if (activePrice.c === true) {
+        setPrice([]);
+      } else {
+        setPrice(price);
+      }
     }
     if (name === "d") {
       setactivePrice({
@@ -81,9 +108,37 @@ const Home = () => {
         c: false,
         d: !activePrice.d,
       });
+      if (activePrice.d === true) {
+        setPrice([]);
+      } else {
+        setPrice(price);
+      }
     }
   };
 
+  const handleSelectStar = (name) => {
+    if (name === "five") {
+      setActiveStar({
+        five: !activeStar.five,
+        four: false,
+        three: false,
+      });
+    }
+    if (name === "four") {
+      setActiveStar({
+        five: false,
+        four: !activeStar.four,
+        three: false,
+      });
+    }
+    if (name === "three") {
+      setActiveStar({
+        five: false,
+        four: false,
+        three: !activeStar.three,
+      });
+    }
+  };
   const onClose = () => {
     setModalFilter(false);
   };
@@ -105,13 +160,15 @@ const Home = () => {
 
   const onFinish = (values) => {
     console.log("check value", values);
+    console.log("price", price);
+    onClose();
   };
 
   const onChange = (key) => {
     console.log(key);
   };
 
-  const items = [
+  const item = [
     {
       key: "1",
       label: `Phổ biến`,
@@ -153,6 +210,17 @@ const Home = () => {
     textAlign: "center",
     background: "#364d79",
   };
+
+  const items = [
+    {
+      label: <a href="">Thấp đến cao</a>,
+      key: "0",
+    },
+    {
+      label: <a href="">Cao đến thấp</a>,
+      key: "1",
+    },
+  ];
   const handleChangePage = (p, s) => {
     setCurrent(p);
   };
@@ -164,10 +232,17 @@ const Home = () => {
       c: false,
       d: false,
     });
+    setPrice([]);
+    setActiveStar({
+      five: false,
+      four: false,
+      three: false,
+    });
   };
   const handleShowMore = () => {
     setShowMore(!showMore);
   };
+
   return (
     <div className="homepage">
       <div className="container">
@@ -177,7 +252,7 @@ const Home = () => {
           items={a}
         />
         <Row style={{ gap: 40 }}>
-          <Col lg={4} sm={24} md={24} className="homepage-left">
+          <Col lg={4} md={0} sm={0} xs={0} className="homepage-left">
             <Form
               onFinish={onFinish}
               form={form}
@@ -258,28 +333,35 @@ const Home = () => {
                   </span>
 
                   <Button
-                    value={40000}
-                    onClick={() => handleSelectPrice("a")}
+                    onClick={() => {
+                      handleSelectPrice("a", [40000]);
+                    }}
                     className={activePrice.a === true ? "active" : ""}
                   >
                     Dưới 40.000
                   </Button>
                   <Button
-                    onClick={() => handleSelectPrice("b")}
+                    onClick={() => {
+                      handleSelectPrice("b", [40000, 120000]);
+                    }}
                     className={activePrice.b === true ? "active" : ""}
                   >
                     {" "}
                     40.000 - 120.000
                   </Button>
                   <Button
-                    onClick={() => handleSelectPrice("c")}
+                    onClick={() => {
+                      handleSelectPrice("c", [120000, 300000]);
+                    }}
                     className={activePrice.c === true ? "active" : ""}
                   >
                     {" "}
                     120.000 - 300.000
                   </Button>
                   <Button
-                    onClick={() => handleSelectPrice("d")}
+                    onClick={() => {
+                      handleSelectPrice("d", [300000]);
+                    }}
                     className={activePrice.d === true ? "active" : ""}
                   >
                     {" "}
@@ -333,7 +415,7 @@ const Home = () => {
             </Form>
           </Col>
 
-          <Col lg={19} md={24} className="homepage-right">
+          <Col lg={19} md={24} sm={24} xs={24} className="homepage-right">
             <div className="carousel-homepage">
               <div className="carousel">
                 <Carousel autoplay>
@@ -352,11 +434,32 @@ const Home = () => {
                 </Carousel>
               </div>
               <div className="tabs">
-                <Tabs defaultActiveKey="1" items={items} onChange={onChange} />
+                <Tabs defaultActiveKey="1" items={item} onChange={onChange} />
                 <div className="filter" onClick={() => setModalFilter(true)}>
                   <span style={{ marginRight: 10 }}>Bộ lọc</span>
                   <AiFillFilter />
                 </div>
+              </div>
+              {/* ---------Reponsive xs tabs -------- */}
+              <div className="tab-reponsive">
+                <span>Phổ Biến</span>
+                <span>Hàng Mới</span>
+                <span>
+                  <Dropdown
+                    menu={{
+                      items,
+                    }}
+                    trigger={["click"]}
+                  >
+                    <a onClick={(e) => e.preventDefault()}>
+                      <Space style={{ color: "black" }}>Giá</Space>
+                    </a>
+                  </Dropdown>
+                </span>
+                <span onClick={() => setModalFilter(true)}>
+                  {" "}
+                  <AiFillFilter />
+                </span>
               </div>
             </div>
             <div className="home-list">
@@ -390,16 +493,14 @@ const Home = () => {
                             }).format(item.price)}
                           </div>
                           <div className="rating">
-                            <Rate
-                              value={5}
-                              disabled
-                              style={{
-                                color: "#ffce3d",
-                                fontSize: 8,
-                                marginRight: 15,
-                              }}
-                            />
-                            <span style={{ display: "inline-block" }}>
+                            <Rate value={5} disabled className="star" />
+
+                            <span className="rate">5</span>
+                            <AiFillStar className="responsive-star" />
+                            <span
+                              style={{ display: "inline-block" }}
+                              className="sold"
+                            >
                               Đã bán {item.quantity}
                             </span>
                           </div>
@@ -421,13 +522,20 @@ const Home = () => {
             </Row>
           </Col>
         </Row>
+
+        {/* =============responsive============ */}
         <Drawer
           title="Bộ lọc sản phẩm"
           placement="right"
           onClose={onClose}
           open={modalFilter}
+          headerStyle={{
+            backgroundColor: "rgb(27 168 255)",
+          }}
+          width={window.innerWidth > 1200 ? 800 : "auto"} ///responsive mobile
         >
           <Form
+            className="homepage-left"
             onFinish={onFinish}
             form={form}
             onValuesChange={(changedValues, values) =>
@@ -446,45 +554,146 @@ const Home = () => {
             <Form.Item name="category" labelCol={{ span: 24 }}>
               <Checkbox.Group>
                 <Row>
-                  <Col span={24} className="category-group">
-                    <Checkbox value="A">Truyện cổ tích - Ngụ ngôn</Checkbox>
-                  </Col>
-                  <Col span={24} className="category-group">
-                    <Checkbox value="A">Sách kinh tế</Checkbox>
-                  </Col>
-                  <Col span={24}>
-                    <Checkbox value="A">Sách kinh tế</Checkbox>
-                  </Col>
-                  <Col span={24}>
-                    <Checkbox value="A">Sách kinh tế</Checkbox>
-                  </Col>
-                  <Col span={24}>
-                    <Checkbox value="A">Sách kinh tế</Checkbox>
-                  </Col>
-                  <Col span={24}>
-                    <Checkbox value="A">Sách kinh tế</Checkbox>
-                  </Col>
+                  {listCategory?.length > 0 &&
+                    listCategory.slice(0, numberOfItems).map((item, index) => {
+                      return (
+                        <Col
+                          span={24}
+                          className="category-group"
+                          key={`item-${index}`}
+                        >
+                          <Checkbox value={item}>{item}</Checkbox>
+                        </Col>
+                      );
+                    })}
+                  {showMore === false ? (
+                    <div onClick={() => handleShowMore()} className="show">
+                      <p>Xem tất cả</p>
+                      <AiOutlineDown style={{ color: "rgb(13, 92, 182)" }} />
+                    </div>
+                  ) : (
+                    <div onClick={() => handleShowMore()} className="show">
+                      <p>Thu gọn</p>
+                      <AiOutlineUp style={{ color: "rgb(13, 92, 182)" }} />
+                    </div>
+                  )}
                 </Row>
               </Checkbox.Group>
             </Form.Item>
 
             <Divider />
-            <div className="price" style={{ lineHeight: 3, marginBottom: 20 }}>
-              <span
-                style={{
-                  fontWeight: 600,
-                  fontSize: 16,
-                  display: "block",
-                }}
-              >
-                Giá
-              </span>
 
-              <Button>Dưới 40.000</Button>
-              <Button>40.000 - 120.000</Button>
-              <Button>120.000 - 280.000</Button>
-              <Button>Trên 280.000</Button>
-            </div>
+            <Form.Item>
+              <div style={{ lineHeight: 3 }}>
+                <span
+                  style={{
+                    fontWeight: 600,
+                    fontSize: 16,
+                    display: "block",
+                  }}
+                >
+                  Đánh giá
+                </span>
+                <Row gutter={10}>
+                  <Col span={8}>
+                    <div
+                      onClick={() => handleSelectStar("five")}
+                      className={activeStar?.five ? "active " : "default"}
+                    >
+                      <AiFillStar
+                        style={{ color: "#fadb14", marginRight: 5 }}
+                      />
+                      <span>5 sao</span>
+                    </div>
+                  </Col>
+
+                  <Col span={8}>
+                    <div
+                      onClick={() => handleSelectStar("four")}
+                      className={activeStar?.four ? "active" : "default"}
+                    >
+                      <AiFillStar
+                        style={{ color: "#fadb14", marginRight: 5 }}
+                      />
+                      <span>4 sao</span>
+                    </div>
+                  </Col>
+
+                  <Col span={8}>
+                    <div
+                      onClick={() => handleSelectStar("three")}
+                      className={activeStar?.three ? "active" : "default"}
+                    >
+                      <AiFillStar
+                        style={{ color: "#fadb14", marginRight: 5 }}
+                      />
+                      <span>3 sao</span>
+                    </div>
+                  </Col>
+                </Row>
+              </div>
+            </Form.Item>
+            <Divider />
+
+            <Form.Item>
+              <div className="price" style={{ lineHeight: 3 }}>
+                <span
+                  style={{
+                    fontWeight: 600,
+                    fontSize: 16,
+                    display: "block",
+                  }}
+                >
+                  Giá
+                </span>
+                <Row gutter={[10, 10]}>
+                  <Col span={12}>
+                    <div
+                      onClick={() => {
+                        handleSelectPrice("a", [40000]);
+                      }}
+                      className={activePrice.a === true ? "active" : "default"}
+                    >
+                      Dưới 40.000
+                    </div>
+                  </Col>
+                  <Col span={12}>
+                    <div
+                      onClick={() => {
+                        handleSelectPrice("b", [40000, 120000]);
+                      }}
+                      className={activePrice.b === true ? "active" : "default"}
+                    >
+                      {" "}
+                      40.000 - 120.000
+                    </div>
+                  </Col>
+
+                  <Col span={12}>
+                    <div
+                      onClick={() => {
+                        handleSelectPrice("c", [120000, 300000]);
+                      }}
+                      className={activePrice.c === true ? "active" : "default"}
+                    >
+                      {" "}
+                      120.000 - 300.000
+                    </div>
+                  </Col>
+                  <Col span={12}>
+                    <div
+                      onClick={() => {
+                        handleSelectPrice("d", [300000]);
+                      }}
+                      className={activePrice.d === true ? "active" : "default"}
+                    >
+                      {" "}
+                      Trên 300.000
+                    </div>
+                  </Col>
+                </Row>
+              </div>
+            </Form.Item>
 
             <Form.Item label="Chọn khoảng giá từ" labelCol={{ span: 24 }}>
               <div
@@ -493,10 +702,9 @@ const Home = () => {
                   justifyContent: "space-between",
                 }}
               >
-                <Form.Item name={["range", "from"]}>
+                <Form.Item name="from">
                   <InputNumber
                     className="input-number"
-                    name="from"
                     min={0}
                     placeholder="đ"
                     formatter={(value) =>
@@ -505,32 +713,25 @@ const Home = () => {
                   />
                 </Form.Item>
               </div>
-              <div>
+
+              <div
+                style={{
+                  gap: 20,
+                  display: "flex",
+                  alignItems: "center",
+                }}
+              >
                 <Button
                   onClick={() => form.submit()}
-                  style={{ width: "100%" }}
+                  style={{ width: "70%" }}
                   type="primary"
                 >
                   Áp dụng
                 </Button>
-              </div>
-            </Form.Item>
-            <Divider />
-            <div style={{ fontWeight: 600, fontSize: 16, marginBottom: 20 }}>
-              Đánh giá
-            </div>
-            <Form.Item labelCol={{ span: 24 }} style={{ cursor: "pointer" }}>
-              <div>
-                <Rate value={5} disabled style={{ fontSize: 12 }} />
-                <span className="ant-rate-text">từ 5 sao</span>
-              </div>
-              <div>
-                <Rate value={4} disabled style={{ fontSize: 12 }} />
-                <span className="ant-rate-text">từ 4 sao</span>
-              </div>
-              <div>
-                <Rate value={3} disabled style={{ fontSize: 12 }} />
-                <span className="ant-rate-text">từ 3 sao</span>
+
+                <Button onClick={() => handleReset()} style={{ width: "30%" }}>
+                  <GrPowerReset />
+                </Button>
               </div>
             </Form.Item>
           </Form>

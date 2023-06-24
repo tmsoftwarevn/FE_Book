@@ -36,7 +36,7 @@
     }
     .about-us {
         @include xs {
-            width: 40%;
+            width: 100%;
             margin-bottom: 40px;
         }
         @include sm {
@@ -49,7 +49,8 @@
     }
     .account {
         @include xs {
-            width: 40%;
+            width: 100%;
+            margin-bottom: 40px;
         }
         @include sm {
             width: 40%;
@@ -60,7 +61,8 @@
     }
     .support {
         @include xs {
-            width: 40%;
+            width: 100%;
+            margin-bottom: 40px;
         }
         @include sm {
             width: 40%;
@@ -71,7 +73,8 @@
     }
     .contact {
         @include xs {
-            width: 40%;
+            width: 100%;
+            margin-bottom: 40px;
         }
         @include sm {
             width: 40%;
