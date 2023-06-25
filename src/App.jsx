@@ -9,7 +9,6 @@ import {
 import { Outlet } from "react-router-dom";
 import LoginPage from "./pages/login/login";
 import ContactPage from "./pages/contact";
-import BookPage from "./pages/book";
 import Header from "./components/Header/header";
 import Footer from "./components/Footer";
 import Home from "./components/Home";
@@ -25,15 +24,17 @@ import LayoutAdmin from "./components/Admin/LayoutAdmin";
 import Dashboard from "./pages/admin/dashboard/Dashboard";
 import ManagerBook from "./pages/admin/managerBook/ManagerBook";
 import { ConfigProvider } from "antd";
+import BookPageDetail from "./pages/book";
+import Cart from "./pages/cart/Cart";
 
 const Layout = () => {
   const role = useSelector((state) => state.account?.user?.role);
   const navigate = useNavigate();
   const location = useLocation();
-  const prevUrl = location.state?.from?.pathname.startsWith('/admin')
+  const prevUrl = location.state?.from?.pathname.startsWith("/admin");
   useEffect(() => {
-    if (role && role === "ADMIN" && prevUrl !==true) {
-      navigate("/admin/dashboard")
+    if (role && role === "ADMIN" && prevUrl !== true) {
+      navigate("/admin/dashboard");
     }
   }, []);
 
@@ -70,25 +71,29 @@ export default function App() {
       children: [
         { index: true, element: <Home /> },
         {
-          path: "contact",
+          path: "contact/*",
           element: <ContactPage />,
         },
         {
-          path: "book",
+          path: "book/:slug",
+          element: <BookPageDetail />,
+        },
+        {
+          path: "cart",
           element: (
             <ProtectedRoute>
-              <BookPage />
+              <Cart />
             </ProtectedRoute>
           ),
         },
       ],
     },
     {
-      path: "/login",
+      path: "/login/*",
       element: <LoginPage />,
     },
     {
-      path: "/register",
+      path: "/register/*",
       element: <RegisterPage />,
     },
     {
@@ -120,12 +125,21 @@ export default function App() {
       ],
     },
   ]);
-  const permissionPath = ["/login", "register", "/"];
 
-  if (
-    isLoading === true &&
-    !permissionPath.includes(window.location.pathname)
-  ) {
+  // cho phep vao route, ko check quyen
+  const permissionPath = ["/login", "/register", "/book", "/contact"];
+
+  const str = window.location.pathname;
+
+  const contains = permissionPath.some((element) => {
+    if (window.location.pathname === "/") return true;
+    if (str.includes(element)) {
+      return true;
+    }
+    return false;
+  });
+
+  if (isLoading === true && contains === false) {
     return (
       <>
         <Loading />
@@ -133,16 +147,5 @@ export default function App() {
     );
   } else {
     return <RouterProvider router={router} />;
-  //   return (
-  //     <ConfigProvider
-  //         theme={{
-  //             token: {
-  //                 fontFamily: "Times New Roman",
-  //             },
-  //         }}
-  //     >
-  //         <RouterProvider router={router} />
-  //     </ConfigProvider>
-  // )
   }
 }

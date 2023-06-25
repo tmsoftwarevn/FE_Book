@@ -29,7 +29,7 @@ const Header = () => {
   ]);
 
   const listItems = () => {
-    if (isAuthenticated === true && role === 'USER') {
+    if (isAuthenticated === true && role === "USER") {
       setItems([
         {
           label: <Link to="/">Quản lý tài khoản</Link>,
@@ -40,8 +40,7 @@ const Header = () => {
           key: "logout",
         },
       ]);
-    }
-    else if(isAuthenticated === true && role === 'ADMIN'){
+    } else if (isAuthenticated === true && role === "ADMIN") {
       setItems([
         {
           label: <Link to="/">Quản lí tài khoản</Link>,
@@ -56,8 +55,7 @@ const Header = () => {
           key: "logout",
         },
       ]);
-    }
-     else {
+    } else {
       setItems([
         {
           label: <Link to="/login">Đăng nhập</Link>,
@@ -71,7 +69,7 @@ const Header = () => {
     }
   };
   useEffect(() => {
-    listItems(); 
+    listItems();
   }, [isAuthenticated]);
 
   const handleLogout = async () => {
@@ -82,10 +80,10 @@ const Header = () => {
       navigate("/login");
     }
   };
-  const handleGetApi =async() =>{
+  const handleGetApi = async () => {
     let res = await callGetAllUser();
-    console.log('res apii test')
-  }
+    console.log("res apii test");
+  };
   return (
     <div className="header-main">
       <div className="container">
@@ -104,7 +102,12 @@ const Header = () => {
           </div>
 
           <div className="header-right">
-            <div className="basket">
+            <div
+              className="basket"
+              onClick={() => {
+                navigate("cart");
+              }}
+            >
               <SlBasket />
               <Space size="middle" className="badge">
                 <Badge count={3}></Badge>
@@ -112,10 +115,7 @@ const Header = () => {
             </div>
             <div className="home">
               <AiFillHome />
-              <p
-              //onClick={() => navigate('/')}
-              onClick={() =>handleGetApi()}
-              > Trang chủ</p>
+              <p onClick={() => navigate("/")}> Trang chủ</p>
             </div>
             <div className="account">
               <Space direction="vertical">
@@ -136,12 +136,10 @@ const Header = () => {
                         </div>
                       </div>
                     ) : (
-                     <div className="username">
-
-                      <VscAccount className="icon-acount"/>
-                      <div className="name">Tài khoản</div>
-                     </div>
-                      
+                      <div className="username">
+                        <VscAccount className="icon-acount" />
+                        <div className="name">Tài khoản</div>
+                      </div>
                     )}
                   </Dropdown>
                 </Space>

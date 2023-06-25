@@ -5,6 +5,7 @@ import { RegisterUser } from "../../services/api";
 import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
+
 const RegisterPage = () => {
   const navigate = useNavigate();
   const [isSubmit, setIsSubmit] = useState(false);

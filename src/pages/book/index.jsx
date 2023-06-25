@@ -1,10 +1,10 @@
-const BookPage = () =>{
-    console.log('run book page')
-    return (
-        <>
-        book page
-        </>
-    )
-}
+import { useLocation, useParams } from "react-router-dom";
 
-export default BookPage
+const BookPageDetail = () => {
+  const location = useLocation();
+  //get id
+  console.log("param book", location);
+  return <>book page</>;
+};
+
+export default BookPageDetail;

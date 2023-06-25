@@ -2,13 +2,11 @@ import { useEffect } from "react";
 import ScaleLoader from "react-spinners/ScaleLoader";
 
 const Loading = () => {
-  
-  useEffect(() =>{
-  
-    if(!localStorage.getItem("access_token")){
-    window.location.href='/login'
+  useEffect(() => {
+    if (!localStorage.getItem("access_token")) {
+      window.location.href = "/login";
     }
-  },[])
+  }, []);
   const style = {
     position: "fixed",
     top: "50%",
