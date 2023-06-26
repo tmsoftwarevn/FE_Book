@@ -24,14 +24,15 @@ import { AiOutlineDown } from "react-icons/ai";
 import { AiOutlineUp } from "react-icons/ai";
 import { AiFillStar } from "react-icons/ai";
 import { useNavigate } from "react-router-dom";
-import Loading from "../Loading/loading";
+import ScaleLoader from "react-spinners/ScaleLoader";
+import HomeSkeleton from "./homeSkeleton";
 
 const Home = () => {
   const [form] = Form.useForm();
 
   const [total, setTotal] = useState(0);
   const [current, setCurrent] = useState(1);
-  const [pageSize, setPageSize] = useState(20);
+  const [pageSize, setPageSize] = useState(10);
   const [dataBook, setDataBook] = useState("");
   const [price, setPrice] = useState([]);
 
@@ -57,7 +58,11 @@ const Home = () => {
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
-    getListBook();
+    setIsLoading(true);
+    setTimeout(() => {
+      getListBook();
+    }, 5000);
+    //getListBook();
     window.scrollTo(0, 0);
   }, [current]);
 
@@ -155,7 +160,6 @@ const Home = () => {
     setModalFilter(false);
   };
   const getListBook = async () => {
-    setIsLoading(true);
     let res = await callGetListBook(current, pageSize);
     setIsLoading(false);
     if (res && res.data) {
@@ -203,14 +207,6 @@ const Home = () => {
   const a = [
     {
       title: "Trang chủ",
-    },
-    {
-      title: "Application Center",
-      href: "",
-    },
-
-    {
-      title: "An Application",
     },
   ];
 
@@ -296,373 +292,394 @@ const Home = () => {
   return (
     <div className="homepage">
       <div className="container">
-        <Breadcrumb
-          separator=">"
-          style={{ padding: "20px 0 20px 0", fontSize: 16 }}
-          items={a}
-        />
-        <Row style={{ gap: 40 }}>
-          <Col lg={4} md={0} sm={0} xs={0} className="homepage-left">
-            <Form
-              onFinish={onFinish}
-              form={form}
-              onValuesChange={(changedValues, values) =>
-                handleChangeFilter(changedValues, values)
-              }
-            >
-              <div
-                style={{
-                  fontWeight: 600,
-                  fontSize: 16,
-                  marginBottom: 20,
-                }}
+        {/* <Breadcrumb
+            separator=">"
+            style={{ padding: "10px 0", fontSize: 16 }}
+            items={a}
+          /> */}
+        {isLoading === true ? (
+          <HomeSkeleton />
+        ) : (
+          <Row style={{ gap: 40, paddingTop: 20 }}>
+            <Col lg={4} md={0} sm={0} xs={0} className="homepage-left">
+              <Form
+                onFinish={onFinish}
+                form={form}
+                onValuesChange={(changedValues, values) =>
+                  handleChangeFilter(changedValues, values)
+                }
               >
-                Danh mục sản phẩm
-              </div>
-              <Form.Item name="category" labelCol={{ span: 24 }}>
-                <Checkbox.Group>
-                  <Row>
-                    {listCategory?.length > 0 &&
-                      listCategory
-                        .slice(0, numberOfItems)
-                        .map((item, index) => {
-                          return (
-                            <Col
-                              span={24}
-                              className="category-group"
-                              key={`item-${index}`}
-                            >
-                              <Checkbox value={item}>{item}</Checkbox>
-                            </Col>
-                          );
-                        })}
-                    {showMore === false ? (
-                      <div onClick={() => handleShowMore()} className="show">
-                        <p>Xem tất cả</p>
-                        <AiOutlineDown style={{ color: "rgb(13, 92, 182)" }} />
-                      </div>
-                    ) : (
-                      <div onClick={() => handleShowMore()} className="show">
-                        <p>Thu gọn</p>
-                        <AiOutlineUp style={{ color: "rgb(13, 92, 182)" }} />
-                      </div>
-                    )}
-                  </Row>
-                </Checkbox.Group>
-              </Form.Item>
-
-              <Divider />
-              <div style={{ fontWeight: 600, fontSize: 16, marginBottom: 20 }}>
-                Đánh giá
-              </div>
-              <Form.Item labelCol={{ span: 24 }} style={{ cursor: "pointer" }}>
-                <div>
-                  <Rate value={5} disabled style={{ fontSize: 12 }} />
-                  <span className="ant-rate-text">từ 5 sao</span>
-                </div>
-                <div>
-                  <Rate value={4} disabled style={{ fontSize: 12 }} />
-                  <span className="ant-rate-text">từ 4 sao</span>
-                </div>
-                <div>
-                  <Rate value={3} disabled style={{ fontSize: 12 }} />
-                  <span className="ant-rate-text">từ 3 sao</span>
-                </div>
-              </Form.Item>
-              <Divider />
-              <Form.Item>
-                <div className="price" style={{ lineHeight: 3 }}>
-                  <span
-                    style={{
-                      fontWeight: 600,
-                      fontSize: 16,
-                      display: "block",
-                    }}
-                  >
-                    Giá
-                  </span>
-
-                  <Button
-                    onClick={() => {
-                      handleSelectPrice("a", [40000]);
-                    }}
-                    // className={activePrice.a === true ? "active" : ""}
-                    type={activePrice.a === true ? "primary" : "default"}
-                  >
-                    Dưới 40.000
-                  </Button>
-                  <Button
-                    onClick={() => {
-                      handleSelectPrice("b", [40000, 120000]);
-                    }}
-                    // className={activePrice.b === true ? "active" : ""}
-                    type={activePrice.b === true ? "primary" : "default"}
-                  >
-                    {" "}
-                    40.000 - 120.000
-                  </Button>
-                  <Button
-                    onClick={() => {
-                      handleSelectPrice("c", [120000, 300000]);
-                    }}
-                    // className={activePrice.c === true ? "active" : ""}
-                    type={activePrice.c === true ? "primary" : "default"}
-                  >
-                    {" "}
-                    120.000 - 300.000
-                  </Button>
-                  <Button
-                    onClick={() => {
-                      handleSelectPrice("d", [300000]);
-                    }}
-                    // className={activePrice.d === true ? "active" : ""}
-                    type={activePrice.d === true ? "primary" : "default"}
-                  >
-                    {" "}
-                    Trên 300.000
-                  </Button>
-                </div>
-              </Form.Item>
-
-              <Form.Item label="Chọn khoảng giá từ" labelCol={{ span: 24 }}>
                 <div
                   style={{
-                    display: "flex",
-                    justifyContent: "space-between",
+                    fontWeight: 600,
+                    fontSize: 16,
+                    marginBottom: 20,
                   }}
                 >
-                  <Form.Item name="from">
-                    <InputNumber
-                      className="input-number"
-                      min={0}
-                      placeholder="đ"
-                      formatter={(value) =>
-                        `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-                      }
-                    />
-                  </Form.Item>
+                  Danh mục sản phẩm
                 </div>
-
-                <div
-                  style={{
-                    gap: 20,
-                    display: "flex",
-                    alignItems: "center",
-                  }}
-                >
-                  <Button
-                    onClick={() => form.submit()}
-                    style={{ width: "60%" }}
-                    type="primary"
-                  >
-                    Áp dụng
-                  </Button>
-
-                  <Button
-                    onClick={() => handleReset()}
-                    style={{ width: "30%" }}
-                  >
-                    <GrPowerReset />
-                  </Button>
-                </div>
-              </Form.Item>
-            </Form>
-          </Col>
-
-          <Col lg={19} md={24} sm={24} xs={24} className="homepage-right">
-            <div className="carousel-homepage">
-              <div
-                style={{
-                  padding: 20,
-                  backgroundColor: "rgb(255 255 255)",
-                  fontWeight: 600,
-                  fontSize: 16,
-                }}
-                className="popular"
-              >
-                Phổ biến
-              </div>
-              <div className="carousel">
-                <Carousel autoplay>
-                  <div>
-                    <div
-                      style={{
-                        display: "flex",
-                        justifyContent: "space-between",
-                      }}
-                      className="carousel-1"
-                    >
-                      {dataBook &&
-                        dataBook.length > 0 &&
-                        dataBook.slice(0, 4).map((item, index) => {
-                          return (
-                            <div className="wrapper" key={`item-${item._id}`}>
-                              <div className="thumbnail">
-                                <img
-                                  src={`${
-                                    import.meta.env.VITE_BACKEND_URL
-                                  }/images/book/${item?.thumbnail}`}
-                                  alt="thumbnail book"
-                                />
-                              </div>
-
-                              <div className="text">{item.mainText}</div>
-                              <div
-                                className="price-carousel"
-                                style={{
-                                  color: "rgb(255 66 78)",
-                                  fontWeight: 600,
-                                }}
+                <Form.Item name="category" labelCol={{ span: 24 }}>
+                  <Checkbox.Group>
+                    <Row>
+                      {listCategory?.length > 0 &&
+                        listCategory
+                          .slice(0, numberOfItems)
+                          .map((item, index) => {
+                            return (
+                              <Col
+                                span={24}
+                                className="category-group"
+                                key={`item-${index}`}
                               >
-                                {new Intl.NumberFormat("vi-VN", {
-                                  style: "currency",
-                                  currency: "VND",
-                                }).format(item.price)}
-                              </div>
-                            </div>
-                          );
-                        })}
-                    </div>
-                  </div>
-
-                  <div>
-                    <div
-                      style={{
-                        display: "flex",
-                        justifyContent: "space-between",
-                      }}
-                      className="carousel-1"
-                    >
-                      {dataBook &&
-                        dataBook.length > 0 &&
-                        dataBook.slice(4, 8).map((item, index) => {
-                          return (
-                            <div className="wrapper" key={`item-${item._id}`}>
-                              <div className="thumbnail">
-                                <img
-                                  src={`${
-                                    import.meta.env.VITE_BACKEND_URL
-                                  }/images/book/${item?.thumbnail}`}
-                                  alt="thumbnail book"
-                                />
-                              </div>
-
-                              <div className="text">{item.mainText}</div>
-                              <div
-                                className="price-carousel"
-                                style={{
-                                  color: "rgb(255 66 78)",
-                                  fontWeight: 600,
-                                }}
-                              >
-                                {new Intl.NumberFormat("vi-VN", {
-                                  style: "currency",
-                                  currency: "VND",
-                                }).format(item.price)}
-                              </div>
-                            </div>
-                          );
-                        })}
-                    </div>
-                  </div>
-                </Carousel>
-
-                <Divider />
-              </div>
-
-              <div className="tabs">
-                <Tabs defaultActiveKey="1" items={item} onChange={onChange} />
-                <div className="filter" onClick={() => setModalFilter(true)}>
-                  <span style={{ marginRight: 10 }}>Bộ lọc</span>
-                  <AiFillFilter />
-                </div>
-              </div>
-              {/* ---------Reponsive xs tabs -------- */}
-              <div className="tab-reponsive">
-                <span>Phổ Biến</span>
-                <span>Hàng Mới</span>
-                <span>
-                  <Dropdown
-                    menu={{
-                      items,
-                    }}
-                    trigger={["click"]}
-                  >
-                    <a onClick={(e) => e.preventDefault()}>
-                      <Space style={{ color: "black" }}>Giá</Space>
-                    </a>
-                  </Dropdown>
-                </span>
-                <span onClick={() => setModalFilter(true)}>
-                  {" "}
-                  <AiFillFilter />
-                </span>
-              </div>
-            </div>
-            <div className="home-list">
-              {dataBook &&
-                dataBook.length > 0 &&
-                dataBook.map((item, index) => {
-                  return (
-                    <div
-                      className="column"
-                      key={`item-${index}`}
-                      onClick={() => handleRedirectBook(item)}
-                    >
-                      <div className="wrapper">
-                        <div className="thumbnail">
-                          <img
-                            src={`${
-                              import.meta.env.VITE_BACKEND_URL
-                            }/images/book/${item?.thumbnail}`}
-                            alt="thumbnail book"
+                                <Checkbox value={item}>{item}</Checkbox>
+                              </Col>
+                            );
+                          })}
+                      {showMore === false ? (
+                        <div onClick={() => handleShowMore()} className="show">
+                          <p>Xem tất cả</p>
+                          <AiOutlineDown
+                            style={{ color: "rgb(13, 92, 182)" }}
                           />
                         </div>
+                      ) : (
+                        <div onClick={() => handleShowMore()} className="show">
+                          <p>Thu gọn</p>
+                          <AiOutlineUp style={{ color: "rgb(13, 92, 182)" }} />
+                        </div>
+                      )}
+                    </Row>
+                  </Checkbox.Group>
+                </Form.Item>
 
-                        <div className="text">{item.mainText}</div>
-                        <div className="group-child">
-                          <div
-                            className="price"
-                            style={{
-                              color: "rgb(255 66 78)",
-                              fontWeight: 600,
-                            }}
-                          >
-                            {new Intl.NumberFormat("vi-VN", {
-                              style: "currency",
-                              currency: "VND",
-                            }).format(item.price)}
+                <Divider />
+                <div
+                  style={{ fontWeight: 600, fontSize: 16, marginBottom: 20 }}
+                >
+                  Đánh giá
+                </div>
+                <Form.Item
+                  labelCol={{ span: 24 }}
+                  style={{ cursor: "pointer" }}
+                >
+                  <div>
+                    <Rate value={5} disabled style={{ fontSize: 12 }} />
+                    <span className="ant-rate-text">từ 5 sao</span>
+                  </div>
+                  <div>
+                    <Rate value={4} disabled style={{ fontSize: 12 }} />
+                    <span className="ant-rate-text">từ 4 sao</span>
+                  </div>
+                  <div>
+                    <Rate value={3} disabled style={{ fontSize: 12 }} />
+                    <span className="ant-rate-text">từ 3 sao</span>
+                  </div>
+                </Form.Item>
+                <Divider />
+                <Form.Item>
+                  <div className="price" style={{ lineHeight: 3 }}>
+                    <span
+                      style={{
+                        fontWeight: 600,
+                        fontSize: 16,
+                        display: "block",
+                      }}
+                    >
+                      Giá
+                    </span>
+
+                    <Button
+                      onClick={() => {
+                        handleSelectPrice("a", [40000]);
+                      }}
+                      // className={activePrice.a === true ? "active" : ""}
+                      type={activePrice.a === true ? "primary" : "default"}
+                    >
+                      Dưới 40.000
+                    </Button>
+                    <Button
+                      onClick={() => {
+                        handleSelectPrice("b", [40000, 120000]);
+                      }}
+                      // className={activePrice.b === true ? "active" : ""}
+                      type={activePrice.b === true ? "primary" : "default"}
+                    >
+                      {" "}
+                      40.000 - 120.000
+                    </Button>
+                    <Button
+                      onClick={() => {
+                        handleSelectPrice("c", [120000, 300000]);
+                      }}
+                      // className={activePrice.c === true ? "active" : ""}
+                      type={activePrice.c === true ? "primary" : "default"}
+                    >
+                      {" "}
+                      120.000 - 300.000
+                    </Button>
+                    <Button
+                      onClick={() => {
+                        handleSelectPrice("d", [300000]);
+                      }}
+                      // className={activePrice.d === true ? "active" : ""}
+                      type={activePrice.d === true ? "primary" : "default"}
+                    >
+                      {" "}
+                      Trên 300.000
+                    </Button>
+                  </div>
+                </Form.Item>
+
+                <Form.Item label="Chọn khoảng giá từ" labelCol={{ span: 24 }}>
+                  <div
+                    style={{
+                      display: "flex",
+                      justifyContent: "space-between",
+                    }}
+                  >
+                    <Form.Item name="from">
+                      <InputNumber
+                        className="input-number"
+                        min={0}
+                        placeholder="đ"
+                        formatter={(value) =>
+                          `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                        }
+                        style={{ width: "60%" }}
+                      />
+                    </Form.Item>
+                  </div>
+
+                  <div
+                    style={{
+                      gap: 20,
+                      display: "flex",
+                      alignItems: "center",
+                    }}
+                  >
+                    <Button
+                      onClick={() => form.submit()}
+                      style={{ width: "60%" }}
+                      type="primary"
+                    >
+                      Áp dụng
+                    </Button>
+
+                    <Button
+                      onClick={() => handleReset()}
+                      style={{ width: "30%" }}
+                    >
+                      <GrPowerReset />
+                    </Button>
+                  </div>
+                </Form.Item>
+              </Form>
+            </Col>
+
+            <Col lg={19} md={24} sm={24} xs={24} className="homepage-right">
+              <div className="carousel-homepage">
+                <div
+                  style={{
+                    padding: 20,
+                    backgroundColor: "rgb(255 255 255)",
+                    fontWeight: 600,
+                    fontSize: 16,
+                  }}
+                  className="popular"
+                >
+                  Phổ biến
+                </div>
+                <div className="carousel">
+                  <Carousel autoplay>
+                    <div>
+                      <div
+                        style={{
+                          display: "flex",
+                          justifyContent: "space-between",
+                        }}
+                        className="carousel-1"
+                      >
+                        {dataBook &&
+                          dataBook.length > 0 &&
+                          dataBook.slice(0, 4).map((item, index) => {
+                            return (
+                              <div
+                                className="wrapper"
+                                key={`item-${item._id}`}
+                                onClick={() => handleRedirectBook(item)}
+                              >
+                                <div className="thumbnail">
+                                  <img
+                                    src={`${
+                                      import.meta.env.VITE_BACKEND_URL
+                                    }/images/book/${item?.thumbnail}`}
+                                    alt="thumbnail book"
+                                  />
+                                </div>
+
+                                <div className="text">{item.mainText}</div>
+                                <div
+                                  className="price-carousel"
+                                  style={{
+                                    color: "rgb(255 66 78)",
+                                    fontWeight: 600,
+                                  }}
+                                >
+                                  {new Intl.NumberFormat("vi-VN", {
+                                    style: "currency",
+                                    currency: "VND",
+                                  }).format(item.price)}
+                                </div>
+                              </div>
+                            );
+                          })}
+                      </div>
+                    </div>
+
+                    <div>
+                      <div
+                        style={{
+                          display: "flex",
+                          justifyContent: "space-between",
+                        }}
+                        className="carousel-1"
+                      >
+                        {dataBook &&
+                          dataBook.length > 0 &&
+                          dataBook.slice(4, 8).map((item, index) => {
+                            return (
+                              <div
+                                className="wrapper"
+                                key={`item-${item._id}`}
+                                onClick={() => handleRedirectBook(item)}
+                              >
+                                <div className="thumbnail">
+                                  <img
+                                    src={`${
+                                      import.meta.env.VITE_BACKEND_URL
+                                    }/images/book/${item?.thumbnail}`}
+                                    alt="thumbnail book"
+                                  />
+                                </div>
+
+                                <div className="text">{item.mainText}</div>
+                                <div
+                                  className="price-carousel"
+                                  style={{
+                                    color: "rgb(255 66 78)",
+                                    fontWeight: 600,
+                                  }}
+                                >
+                                  {new Intl.NumberFormat("vi-VN", {
+                                    style: "currency",
+                                    currency: "VND",
+                                  }).format(item.price)}
+                                </div>
+                              </div>
+                            );
+                          })}
+                      </div>
+                    </div>
+                  </Carousel>
+
+                  <Divider />
+                </div>
+
+                <div className="tabs">
+                  <Tabs defaultActiveKey="1" items={item} onChange={onChange} />
+                  <div className="filter" onClick={() => setModalFilter(true)}>
+                    <span style={{ marginRight: 10 }}>Bộ lọc</span>
+                    <AiFillFilter />
+                  </div>
+                </div>
+                {/* ---------Reponsive xs tabs -------- */}
+                <div className="tab-reponsive">
+                  <span>Phổ Biến</span>
+                  <span>Hàng Mới</span>
+                  <span>
+                    <Dropdown
+                      menu={{
+                        items,
+                      }}
+                      trigger={["click"]}
+                    >
+                      <a onClick={(e) => e.preventDefault()}>
+                        <Space style={{ color: "black" }}>Giá</Space>
+                      </a>
+                    </Dropdown>
+                  </span>
+                  <span onClick={() => setModalFilter(true)}>
+                    {" "}
+                    <AiFillFilter />
+                  </span>
+                </div>
+              </div>
+
+              <div className="home-list">
+                {dataBook &&
+                  dataBook.length > 0 &&
+                  dataBook.map((item, index) => {
+                    return (
+                      <div
+                        className="column"
+                        key={`item-${index}`}
+                        onClick={() => handleRedirectBook(item)}
+                      >
+                        <div className="wrapper">
+                          <div className="thumbnail">
+                            <img
+                              src={`${
+                                import.meta.env.VITE_BACKEND_URL
+                              }/images/book/${item?.thumbnail}`}
+                              alt="thumbnail book"
+                            />
                           </div>
-                          <div className="rating">
-                            <Rate value={5} disabled className="star" />
 
-                            <span className="rate">5</span>
-                            <AiFillStar className="responsive-star" />
-                            <span
-                              style={{ display: "inline-block" }}
-                              className="sold"
+                          <div className="text">{item.mainText}</div>
+                          <div className="group-child">
+                            <div
+                              className="price"
+                              style={{
+                                color: "rgb(255 66 78)",
+                                fontWeight: 600,
+                              }}
                             >
-                              Đã bán {item.quantity}
-                            </span>
+                              {new Intl.NumberFormat("vi-VN", {
+                                style: "currency",
+                                currency: "VND",
+                              }).format(item.price)}
+                            </div>
+                            <div className="rating">
+                              <Rate value={5} disabled className="star" />
+
+                              <span className="rate">5</span>
+                              <AiFillStar className="responsive-star" />
+                              <span
+                                style={{ display: "inline-block" }}
+                                className="sold"
+                              >
+                                Đã bán {item.quantity}
+                              </span>
+                            </div>
                           </div>
                         </div>
                       </div>
-                    </div>
-                  );
-                })}
-            </div>
-            <Divider />
-            <Row style={{ display: "flex", justifyContent: "center" }}>
-              <Pagination
-                current={current}
-                total={total}
-                pageSize={pageSize}
-                responsive
-                onChange={(p, s) => handleChangePage(p, s)}
-              />
-            </Row>
-          </Col>
-        </Row>
+                    );
+                  })}
+              </div>
+              <Divider />
+              <Row style={{ display: "flex", justifyContent: "center" }}>
+                <Pagination
+                  current={current}
+                  total={total}
+                  pageSize={pageSize}
+                  responsive
+                  onChange={(p, s) => handleChangePage(p, s)}
+                />
+              </Row>
+            </Col>
+          </Row>
+        )}
 
         {/* =============responsive============ */}
         <Drawer

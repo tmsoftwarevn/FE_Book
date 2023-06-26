@@ -23,8 +23,7 @@ import ProtectedRoute from "./components/ProtectedRoute/ProtectedRoute";
 import LayoutAdmin from "./components/Admin/LayoutAdmin";
 import Dashboard from "./pages/admin/dashboard/Dashboard";
 import ManagerBook from "./pages/admin/managerBook/ManagerBook";
-import { ConfigProvider } from "antd";
-import BookPageDetail from "./pages/book";
+import BookPageDetail from "./pages/book/BookPageDetail";
 import Cart from "./pages/cart/Cart";
 
 const Layout = () => {
