@@ -5,19 +5,14 @@ import { useEffect, useRef, useState } from "react";
 import ModalGallery from "./ModalImageGallery";
 import { MinusOutlined, PlusOutlined } from "@ant-design/icons";
 import { BsCartPlus } from "react-icons/bs";
-import {
-  Link,
-  useLocation,
-  useNavigate,
-  useSearchParams,
-} from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { callGetDetailBook } from "../../services/api";
 import BookSkeleton from "./BookSkeleton";
 
 const BookPageDetail = (props) => {
   const [isOpenModalGallery, setIsOpenModalGallery] = useState(false);
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const [detailBook, setDetailBook] = useState("");
   const refGallery = useRef(null);
 
@@ -25,9 +20,7 @@ const BookPageDetail = (props) => {
   const location = useLocation();
   const params = new URLSearchParams(location.search);
   let id = params.get("id");
-
   useEffect(() => {
-    setIsLoading(true);
     const getDetailBook = async () => {
       let res = await callGetDetailBook(id);
       if (res && res.data) {
@@ -36,11 +29,11 @@ const BookPageDetail = (props) => {
       }
       setIsLoading(false);
     };
-    setTimeout(() => {
-      getDetailBook();
-    }, 5000);
+
+    getDetailBook();
     window.scrollTo(0, 0);
   }, []);
+  console.log("<<<<images", images);
   const a = [
     {
       title: <Link to="/">Trang chủ</Link>,
@@ -73,8 +66,9 @@ const BookPageDetail = (props) => {
         originalClass: "original-image",
         thumbnailClass: "thumbnail-image",
       };
+      arr.push(obj);
     });
-    arr.push(obj);
+
     setImage(arr);
   };
 
@@ -82,17 +76,22 @@ const BookPageDetail = (props) => {
     setIsOpenModalGallery(true);
     setCurrentIndex(refGallery?.current?.getCurrentIndex() ?? 0);
   };
-
+  const handleOnclickResponsive = () => {
+    //refGallery.current?.fullScreen();
+  };
   const onChange = (value) => {
     console.log("changed", value);
   };
-
-  return (
-    <div className="book-page">
+  if (isLoading === true) {
+    return (
       <div className="container">
-        {isLoading === true ? (
-          <BookSkeleton />
-        ) : (
+        <BookSkeleton />
+      </div>
+    );
+  } else
+    return (
+      <div className="book-page">
+        <div className="container">
           <div>
             <Breadcrumb
               separator=">"
@@ -101,9 +100,11 @@ const BookPageDetail = (props) => {
             />
             <div
               className="view-detail-book"
-              style={{
-                minHeight: "calc(100vh - 130px)",
-              }}
+              style={
+                {
+                  //minHeight: "calc(100vh - 130px)",
+                }
+              }
             >
               <div
                 style={{
@@ -113,7 +114,7 @@ const BookPageDetail = (props) => {
                 }}
               >
                 <Row gutter={[40, 20]}>
-                  <Col md={10} sm={0} xs={0}>
+                  <Col lg={10} sm={24} xs={24} md={24} className="img-thumnail">
                     <ImageGallery
                       ref={refGallery}
                       items={images}
@@ -125,7 +126,27 @@ const BookPageDetail = (props) => {
                       onClick={() => handleOnClickImage()}
                     />
                   </Col>
-                  <Col md={14} sm={24}>
+                  <Col
+                    lg={10}
+                    sm={24}
+                    xs={24}
+                    md={24}
+                    className="thumnail-responsive"
+                  >
+                    <ImageGallery
+                      ref={refGallery}
+                      items={images}
+                      showPlayButton={false} //hide play button
+                      showFullscreenButton={false} //hide fullscreen button
+                      showThumbnails={false}
+                      renderLeftNav={() => <></>} //left arrow === <> </>
+                      renderRightNav={() => <></>} //right arrow === <> </>
+                      slideOnThumbnailOver={true} //onHover => auto scroll images
+                      onClick={() => handleOnclickResponsive()}
+                    />
+                  </Col>
+
+                  <Col lg={14} sm={24} md={24} xs={24}>
                     <Col span={24}>
                       <div className="title">{detailBook.mainText}</div>
                       <div className="rating">
@@ -138,6 +159,10 @@ const BookPageDetail = (props) => {
                           <Divider type="vertical" />
                           Đã bán {detailBook.sold}
                         </span>
+                      </div>
+                      <div className="author">
+                        <u style={{ marginRight: 5 }}>Tác giả:</u>{" "}
+                        <span>{detailBook.author}</span>
                       </div>
                       <div className="price">
                         <span className="currency">
@@ -177,6 +202,28 @@ const BookPageDetail = (props) => {
                 </Row>
               </div>
             </div>
+            {/* ===========responsive buy =========== */}
+            <div className="responsive-cart">
+              <div className="quantity-res">
+                <div className="count">
+                  <MinusOutlined />
+                </div>
+                <input defaultValue={1} />
+                <div className="count">
+                  <PlusOutlined />
+                </div>
+              </div>
+              <div className="add-item-res">
+                <div className="cart-res">
+                  <BsCartPlus className="icon-cart-res" />
+                  <p>Thêm vào giỏ hàng</p>
+                </div>
+              </div>
+              <div className="now-res">
+                <span>Mua ngay</span>
+              </div>
+            </div>
+
             <div className="detail">
               <div className="description">CHI TIẾT SẢN PHẨM</div>
               <div className="content" style={{ fontSize: 18 }}>
@@ -193,10 +240,9 @@ const BookPageDetail = (props) => {
               title={detailBook.mainText}
             />
           </div>
-        )}
+        </div>
       </div>
-    </div>
-  );
+    );
 };
 
 export default BookPageDetail;

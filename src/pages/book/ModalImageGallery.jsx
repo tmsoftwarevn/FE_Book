@@ -32,7 +32,7 @@ const ModalGallery = (props) => {
             ref={refGallery}
             items={items}
             showPlayButton={false} //hide play button
-            showFullscreenButton={false} //hide fullscreen button
+            showFullscreenButton={true} //hide fullscreen button
             startIndex={activeIndex} // start at current index
             showThumbnails={false} //hide thumbnail
             onSlide={(activeImgae) => setActiveIndex(activeImgae)}

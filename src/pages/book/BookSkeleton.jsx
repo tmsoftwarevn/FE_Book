@@ -3,7 +3,7 @@ import { Col, Row, Skeleton } from "antd";
 const BookSkeleton = () => {
   return (
     <Row gutter={[20, 20]}>
-      <Col md={10} sm={0} xs={0}>
+      <Col lg={10} sm={0} xs={0}>
         <Skeleton.Input
           active={true}
           block={true}
@@ -23,7 +23,7 @@ const BookSkeleton = () => {
           <Skeleton.Image active={true} />
         </div>
       </Col>
-      <Col md={14} sm={24}>
+      <Col lg={14} sm={0} xs={0}>
         <Skeleton paragraph={{ rows: 3 }} active={true} />
         <br /> <br />
         <Skeleton paragraph={{ rows: 2 }} active={true} />

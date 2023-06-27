@@ -176,6 +176,7 @@
         flex-wrap: wrap;
         justify-content: space-between;
         background-color: rgb(245 245 250);
+
         .column {
             @include xs {
                 width: 48%;

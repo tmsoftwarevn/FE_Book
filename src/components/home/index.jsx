@@ -32,7 +32,7 @@ const Home = () => {
 
   const [total, setTotal] = useState(0);
   const [current, setCurrent] = useState(1);
-  const [pageSize, setPageSize] = useState(10);
+  const [pageSize, setPageSize] = useState(12);
   const [dataBook, setDataBook] = useState("");
   const [price, setPrice] = useState([]);
 
@@ -59,10 +59,10 @@ const Home = () => {
 
   useEffect(() => {
     setIsLoading(true);
-    setTimeout(() => {
-      getListBook();
-    }, 5000);
-    //getListBook();
+    // setTimeout(() => {
+    //   getListBook();
+    // }, 3000);
+    getListBook();
     window.scrollTo(0, 0);
   }, [current]);
 
@@ -292,11 +292,6 @@ const Home = () => {
   return (
     <div className="homepage">
       <div className="container">
-        {/* <Breadcrumb
-            separator=">"
-            style={{ padding: "10px 0", fontSize: 16 }}
-            items={a}
-          /> */}
         {isLoading === true ? (
           <HomeSkeleton />
         ) : (

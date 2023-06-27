@@ -25,26 +25,24 @@ const TableBook = (props) => {
 
   const [isModalAddBook, setIsModalAddBook] = useState(false);
   const [isModalUpdateBook, setIsModalUpdateBook] = useState(false);
-  
-  const [isModalImportBook, setIsModalImportBook] =useState(false)
+
+  const [isModalImportBook, setIsModalImportBook] = useState(false);
 
   const { searchData } = props;
 
-  const title ='Xác nhận xóa sách này ?'
-  const confirm = async(id) => {
-
+  const title = "Xác nhận xóa sách này ?";
+  const confirm = async (id) => {
     let res = await callDeleteBook(id);
     if (res && res.data) {
       message.success("Xóa thành công book");
-      getListBook()
+      getListBook();
       setCurrent(1);
     } else {
       notification.error({
         description: "Có lỗi xảy ra",
       });
     }
-
-   };
+  };
 
   useEffect(() => {
     setCurrent(1);
@@ -115,13 +113,13 @@ const TableBook = (props) => {
       setDataTable([]);
     }
   };
-  const handleExportData =() =>{
+  const handleExportData = () => {
     const worksheet = XLSX.utils.json_to_sheet(dataBook);
     const workbook = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(workbook, worksheet, "Sheet1");
-    
+
     XLSX.writeFile(workbook, "exportBook.csv");
-  }
+  };
   const columns = [
     {
       title: "STT",
@@ -173,7 +171,9 @@ const TableBook = (props) => {
               <Popconfirm
                 placement="left"
                 title={title}
-                onConfirm={() =>{confirm(record?.id)}}
+                onConfirm={() => {
+                  confirm(record?.id);
+                }}
                 okText="Yes"
                 cancelText="No"
               >
@@ -217,14 +217,14 @@ const TableBook = (props) => {
         <div>Danh sách Books: </div>
         <div style={{ gap: 10, display: "flex" }}>
           <div>
-            <Button type="primary"
-              onClick={() => handleExportData()}
-            >Export data</Button>
+            <Button type="primary" onClick={() => handleExportData()}>
+              Export data
+            </Button>
           </div>
           <div>
-            <Button type="primary"
-            onClick={() => setIsModalImportBook(true)}
-            >Import data</Button>
+            <Button type="primary" onClick={() => setIsModalImportBook(true)}>
+              Import data
+            </Button>
           </div>
           <div>
             <Button type="primary" onClick={() => setIsModalAddBook(true)}>
@@ -254,7 +254,7 @@ const TableBook = (props) => {
               current: current,
               showSizeChanger: true,
               position: ["bottomCenter"],
-              pageSizeOptions: [2, 10, 20, 50],
+              pageSizeOptions: [10, 20, 50],
             }}
             scroll={{ y: "300px" }}
           />
@@ -280,9 +280,9 @@ const TableBook = (props) => {
           setDataUpdate={setDataUpdate}
           dataBook={dataBook}
         />
-        <BookImport 
-          isModalImportBook = {isModalImportBook}
-          setIsModalImportBook = {setIsModalImportBook}
+        <BookImport
+          isModalImportBook={isModalImportBook}
+          setIsModalImportBook={setIsModalImportBook}
         />
       </>
     );

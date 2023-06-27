@@ -9,6 +9,21 @@
 }
 .header-main {
     background-color: #ffffff;
+    @include xs {
+        position: fixed;
+        top: 0;
+        width: 100%;
+        z-index: 100;
+    }
+    @include sm {
+        position: fixed;
+        top: 0;
+        width: 100%;
+        z-index: 100;
+    }
+    @include lg {
+        position: relative;
+    }
     .container {
         .header-content {
             display: flex;
