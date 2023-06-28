@@ -92,6 +92,7 @@
 
     .carousel-homepage {
         background-color: rgb(255 255 255);
+        //background-color: red;
         .popular {
             @include xs {
                 display: none;
@@ -101,14 +102,15 @@
             @include xs {
                 display: none;
             }
+            position: relative;
             .wrapper {
+                background-color: rgb(255 255 255);
                 cursor: pointer;
                 display: block;
+
                 @include sm {
                     width: 25%;
                 }
-
-                background-color: rgb(255 255 255);
                 .thumbnail {
                     display: flex;
                     justify-content: center;
@@ -136,6 +138,52 @@
                     margin-left: 20px;
                 }
             }
+            .left-carousel {
+                @include sm {
+                    display: none;
+                }
+                @include md {
+                    display: flex;
+                }
+                position: absolute;
+                left: 5px;
+                top: 30%;
+                width: 30px;
+                height: 30px;
+                font-size: 20px;
+                color: #ccc;
+                border-radius: 50%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                &:hover {
+                    background: #ccc;
+                    color: black;
+                }
+            }
+            .right-carousel {
+                @include sm {
+                    display: none;
+                }
+                @include md {
+                    display: flex;
+                }
+                position: absolute;
+                right: 5px;
+                top: 30%;
+                width: 30px;
+                height: 30px;
+                font-size: 20px;
+                color: #ccc;
+                border-radius: 50%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                &:hover {
+                    background: #ccc;
+                    color: black;
+                }
+            }
         }
         .tabs {
             padding: 0 20px;
@@ -159,7 +207,13 @@
                 bottom: 30px;
             }
         }
+        ////////// =============responsive tab  ===========
         .tab-reponsive {
+            .text-tab {
+                &:hover {
+                    color: blue;
+                }
+            }
             @include sm {
                 display: none;
             }
@@ -174,24 +228,29 @@
     .home-list {
         display: flex;
         flex-wrap: wrap;
-        justify-content: space-between;
         background-color: rgb(245 245 250);
-
+        margin-top: 10px;
+        gap: calc(4% / 3);
         .column {
             @include xs {
-                width: 48%;
+                width: 49.25%;
+                margin-bottom: 5px;
             }
             @include sm {
-                width: 23%;
+                width: 24%;
+                margin-bottom: 8px;
             }
             @include md {
-                width: 23%;
+                width: 24%;
+                margin-bottom: 12px;
             }
             @include lg {
-                width: 23%;
+                width: 24%;
+                margin-bottom: 13px;
             }
             @include xl {
-                width: 220px !important;
+                width: 24%;
+                margin-bottom: 13px;
             }
 
             .wrapper {
@@ -199,27 +258,24 @@
                     padding-bottom: 5%; // padding-bottom: theo ti le % voi width = height
                     //height: 290px;
                     width: 100%;
-                    margin-bottom: 15px;
+                    //margin-bottom: 15px;
                 }
                 @include sm {
                     height: 250px;
                     width: 100%;
-                    margin-bottom: 10px;
                 }
                 @include md {
                     height: 270px;
                     max-width: 100%;
-                    margin-bottom: 20px;
                 }
                 @include lg {
                     height: 290px;
                     width: 100%;
-                    margin-bottom: 20px;
                 }
                 @include xl {
                     height: 300px;
                     width: 100%;
-                    margin-bottom: 20px;
+                    //margin-bottom: 20px;
                 }
 
                 background-color: rgb(255 255 255);

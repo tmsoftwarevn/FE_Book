@@ -9,6 +9,8 @@ import { Link, useLocation } from "react-router-dom";
 import { callGetDetailBook } from "../../services/api";
 import BookSkeleton from "./BookSkeleton";
 
+import { doAddBookAction } from "../../redux/cart/cartSlice";
+import { useDispatch, useSelector } from "react-redux";
 const BookPageDetail = (props) => {
   const [isOpenModalGallery, setIsOpenModalGallery] = useState(false);
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -18,8 +20,17 @@ const BookPageDetail = (props) => {
 
   const [images, setImage] = useState([]);
   const location = useLocation();
+  const refCount = useRef(1);
   const params = new URLSearchParams(location.search);
+  const dispatch = useDispatch();
+
+  const listCart = useSelector((state) => state.cart.listCart);
   let id = params.get("id");
+
+  console.log("list card", listCart);
+  window.onbeforeunload = function () {
+    window.scrollTo(0, 0);
+  };
   useEffect(() => {
     const getDetailBook = async () => {
       let res = await callGetDetailBook(id);
@@ -29,11 +40,13 @@ const BookPageDetail = (props) => {
       }
       setIsLoading(false);
     };
+    setTimeout(() => {
+      getDetailBook();
+    }, 200);
 
-    getDetailBook();
     window.scrollTo(0, 0);
   }, []);
-  console.log("<<<<images", images);
+
   const a = [
     {
       title: <Link to="/">Trang chủ</Link>,
@@ -77,10 +90,61 @@ const BookPageDetail = (props) => {
     setCurrentIndex(refGallery?.current?.getCurrentIndex() ?? 0);
   };
   const handleOnclickResponsive = () => {
-    //refGallery.current?.fullScreen();
+    setCurrentIndex(refGallery?.current?.getCurrentIndex() ?? 0);
   };
   const onChange = (value) => {
     console.log("changed", value);
+  };
+  const validKeyForPayment = [
+    "0",
+    "1",
+    "2",
+    "3",
+    "4",
+    "5",
+    "6",
+    "7",
+    "8",
+    "9",
+    "Backspace",
+  ];
+  const handleChangeQuantity = (type) => {
+    if (type === "minus" && refCount.current.value > 1) {
+      refCount.current.value -= 1;
+    }
+    if (type === "plus" && refCount.current.value < detailBook.quantity) {
+      refCount.current.value = +refCount.current.value + 1;
+    }
+  };
+
+  const handleAddToCart = () => {
+    let quantity = 1;
+    if (refCount.current.value) {
+      if (refCount.current.value > detailBook.quantity) {
+        refCount.current.value = detailBook.quantity;
+        quantity = detailBook.quantity;
+      } else quantity = refCount.current.value;
+    } else {
+      refCount.current.value = 1;
+      quantity = 1;
+    }
+    const dataAddBook = {
+      quantity: +quantity,
+      id: id,
+      detail: {
+        thumbnail: detailBook.thumbnail,
+        mainText: detailBook.mainText,
+        price: detailBook.price,
+        total: detailBook.quantity,
+      },
+    };
+    dispatch(doAddBookAction(dataAddBook));
+  };
+
+  const handleClickOutside = (e) => {
+    if (!e.target.value) refCount.current.value = 1;
+    if (e.target.value > detailBook.quantity)
+      refCount.current.value = detailBook.quantity;
   };
   if (isLoading === true) {
     return (
@@ -98,14 +162,7 @@ const BookPageDetail = (props) => {
               style={{ padding: "10px 0", fontSize: 16 }}
               items={a}
             />
-            <div
-              className="view-detail-book"
-              style={
-                {
-                  //minHeight: "calc(100vh - 130px)",
-                }
-              }
-            >
+            <div className="view-detail-book">
               <div
                 style={{
                   background: " rgb(255 255 255)",
@@ -142,8 +199,11 @@ const BookPageDetail = (props) => {
                       renderLeftNav={() => <></>} //left arrow === <> </>
                       renderRightNav={() => <></>} //right arrow === <> </>
                       slideOnThumbnailOver={true} //onHover => auto scroll images
-                      onClick={() => handleOnclickResponsive()}
+                      onSlide={() => handleOnclickResponsive()}
                     />
+                    <div className="page-total">
+                      {currentIndex + 1}/{detailBook.slider.length + 1}
+                    </div>
                   </Col>
 
                   <Col lg={14} sm={24} md={24} xs={24}>
@@ -181,17 +241,29 @@ const BookPageDetail = (props) => {
                       <div className="quantity">
                         <span className="leftt">Số lượng</span>
                         <span className="rightt">
-                          <button>
+                          <button onClick={() => handleChangeQuantity("minus")}>
                             <MinusOutlined />
                           </button>
-                          <input defaultValue={1} />
-                          <button>
+                          <input
+                            ref={refCount}
+                            defaultValue={1}
+                            onKeyDown={(e) => {
+                              if (!validKeyForPayment.includes(e.key)) {
+                                e.preventDefault();
+                              }
+                            }}
+                            onBlur={(e) => handleClickOutside(e)}
+                          />
+                          <button onClick={() => handleChangeQuantity("plus")}>
                             <PlusOutlined />
                           </button>
                         </span>
                       </div>
                       <div className="buy">
-                        <button className="cart">
+                        <button
+                          className="cart"
+                          onClick={() => handleAddToCart()}
+                        >
                           <BsCartPlus className="icon-cart" />
                           <span>Thêm vào giỏ hàng</span>
                         </button>
@@ -215,7 +287,10 @@ const BookPageDetail = (props) => {
               </div>
               <div className="add-item-res">
                 <div className="cart-res">
-                  <BsCartPlus className="icon-cart-res" />
+                  <BsCartPlus
+                    className="icon-cart-res"
+                    style={{ marginRight: 3 }}
+                  />
                   <p>Thêm vào giỏ hàng</p>
                 </div>
               </div>

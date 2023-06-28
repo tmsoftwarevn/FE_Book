@@ -97,7 +97,7 @@ const Header = () => {
                 <AiOutlineSearch className="icon-search" />
                 <input type="text" placeholder="Bạn tìm gì hôm nay " />
               </div>
-              <button>Tìm kiếm</button>
+              <button className="button">Tìm kiếm</button>
             </div>
           </div>
 

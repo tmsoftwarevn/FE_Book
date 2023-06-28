@@ -36,7 +36,7 @@ const ModalGallery = (props) => {
             startIndex={activeIndex} // start at current index
             showThumbnails={false} //hide thumbnail
             onSlide={(activeImgae) => setActiveIndex(activeImgae)}
-            slideDuration={1} //duration between slices
+            slideDuration={0} //duration between slices
           />
         </Col>
         <Col span={8}>

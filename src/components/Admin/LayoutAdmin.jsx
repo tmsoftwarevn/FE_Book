@@ -29,9 +29,7 @@ const items = [
     "/admin/dashboard",
     <AppstoreOutlined />
   ),
-  getItem(<Link to="/admin/user">User</Link>,
-  "/admin/user",
-  <TeamOutlined />),
+  getItem(<Link to="/admin/user">User</Link>, "/admin/user", <TeamOutlined />),
   getItem(
     <Link to="/admin/book">Manager Books</Link>,
     "/admin/book",

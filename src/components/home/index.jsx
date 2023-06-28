@@ -9,14 +9,13 @@ import {
   Rate,
   Tabs,
   Pagination,
-  Breadcrumb,
   Carousel,
   Drawer,
   Dropdown,
   Space,
 } from "antd";
 import "./home.scss";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { callFetchCategory, callGetListBook } from "../../services/api";
 import { AiFillFilter } from "react-icons/ai";
 import { GrPowerReset } from "react-icons/gr";
@@ -24,9 +23,8 @@ import { AiOutlineDown } from "react-icons/ai";
 import { AiOutlineUp } from "react-icons/ai";
 import { AiFillStar } from "react-icons/ai";
 import { useNavigate } from "react-router-dom";
-import ScaleLoader from "react-spinners/ScaleLoader";
 import HomeSkeleton from "./homeSkeleton";
-
+import { AiOutlineLeft, AiOutlineRight } from "react-icons/ai";
 const Home = () => {
   const [form] = Form.useForm();
 
@@ -53,15 +51,16 @@ const Home = () => {
   const [listCategory, setlistCategory] = useState([]);
   const [showMore, setShowMore] = useState(false);
   const [modalFilter, setModalFilter] = useState(false);
+  const refCarousel = useRef("");
 
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
-
+  window.onbeforeunload = function () {
+    window.scrollTo(0, 0);
+  };
   useEffect(() => {
     setIsLoading(true);
-    // setTimeout(() => {
-    //   getListBook();
-    // }, 3000);
+
     getListBook();
     window.scrollTo(0, 0);
   }, [current]);
@@ -75,6 +74,8 @@ const Home = () => {
     };
     getListCategory();
   }, []);
+
+  //console.log("render home page");
 
   const numberOfItems = showMore ? listCategory.length : 5;
 
@@ -485,7 +486,7 @@ const Home = () => {
                   Phổ biến
                 </div>
                 <div className="carousel">
-                  <Carousel autoplay>
+                  <Carousel ref={refCarousel} dots={true} autoplay>
                     <div>
                       <div
                         style={{
@@ -576,8 +577,19 @@ const Home = () => {
                       </div>
                     </div>
                   </Carousel>
-
-                  <Divider />
+                  <div
+                    className="left-carousel"
+                    onClick={() => refCarousel.current.prev()}
+                  >
+                    <AiOutlineLeft />
+                  </div>
+                  <div
+                    className="right-carousel"
+                    onClick={() => refCarousel.current.next()}
+                  >
+                    <AiOutlineRight />
+                  </div>
+                  <Divider style={{ borderColor: "grey" }} />
                 </div>
 
                 <div className="tabs">
@@ -589,8 +601,8 @@ const Home = () => {
                 </div>
                 {/* ---------Reponsive xs tabs -------- */}
                 <div className="tab-reponsive">
-                  <span>Phổ Biến</span>
-                  <span>Hàng Mới</span>
+                  <span className="text-tab">Phổ Biến</span>
+                  <span className="text-tab">Hàng Mới</span>
                   <span>
                     <Dropdown
                       menu={{
@@ -685,7 +697,7 @@ const Home = () => {
           headerStyle={{
             backgroundColor: "rgb(27 168 255)",
           }}
-          width={window.innerWidth > 1200 ? 800 : "auto"} ///responsive mobile
+          width={window.innerWidth > 576 ? "50%" : "100%"} ///responsive mobile
         >
           <Form
             className="homepage-left"

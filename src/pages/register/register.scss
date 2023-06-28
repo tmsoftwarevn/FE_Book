@@ -1,3 +1,6 @@
+@import '../../scss/reset';
+@import '../../scss/media';
+
 :root {
     --color-background-register: #accffe;
     --color-background-form: #fff;
@@ -34,6 +37,21 @@
         bottom: 0;
         left: 0;
         transform: translateX(-100%);
+        @include xs {
+            img {
+                display: none;
+            }
+        }
+        @include sm {
+            img {
+                display: none;
+            }
+        }
+        @include lg {
+            img {
+                display: block;
+            }
+        }
     }
     .text {
         margin-bottom: 20px;
@@ -53,11 +71,5 @@
         &:hover {
             color: blue;
         }
-    }
-}
-
-@media screen and (max-width: 768px) {
-    img {
-        display: none;
     }
 }

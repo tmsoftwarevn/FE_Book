@@ -31,6 +31,7 @@ const Layout = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const prevUrl = location.state?.from?.pathname.startsWith("/admin");
+
   useEffect(() => {
     if (role && role === "ADMIN" && prevUrl !== true) {
       navigate("/admin/dashboard");
