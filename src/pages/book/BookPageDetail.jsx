@@ -11,16 +11,20 @@ import BookSkeleton from "./BookSkeleton";
 
 import { doAddBookAction } from "../../redux/cart/cartSlice";
 import { useDispatch, useSelector } from "react-redux";
+import Child from "../cart/MessageCart";
 const BookPageDetail = (props) => {
   const [isOpenModalGallery, setIsOpenModalGallery] = useState(false);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
   const [detailBook, setDetailBook] = useState("");
   const refGallery = useRef(null);
+  const refMessage = useRef();
 
   const [images, setImage] = useState([]);
   const location = useLocation();
   const refCount = useRef(1);
+  const refCountResponsive = useRef(1);
+
   const params = new URLSearchParams(location.search);
   const dispatch = useDispatch();
 
@@ -108,26 +112,45 @@ const BookPageDetail = (props) => {
     "9",
     "Backspace",
   ];
-  const handleChangeQuantity = (type) => {
-    if (type === "minus" && refCount.current.value > 1) {
-      refCount.current.value -= 1;
+  const handleChangeQuantity = (type, name) => {
+    let count = 1;
+    if ((name = "lg")) {
+      count = refCount.current.value;
+      if (type === "minus" && count > 1) {
+        refCount.current.value -= 1;
+      }
+      if (type === "plus" && count < detailBook.quantity) {
+        refCount.current.value = +count + 1;
+      }
     }
-    if (type === "plus" && refCount.current.value < detailBook.quantity) {
-      refCount.current.value = +refCount.current.value + 1;
+    if ((name = "xs")) {
+      count = refCountResponsive.current.value;
+      if (type === "minus" && count > 1) {
+        refCountResponsive.current.value -= 1;
+      }
+      if (type === "plus" && count < detailBook.quantity) {
+        refCountResponsive.current.value = +count + 1;
+      }
     }
   };
 
-  const handleAddToCart = () => {
+  const handleAddToCart = (name) => {
     let quantity = 1;
-    if (refCount.current.value) {
-      if (refCount.current.value > detailBook.quantity) {
-        refCount.current.value = detailBook.quantity;
-        quantity = detailBook.quantity;
-      } else quantity = refCount.current.value;
+    if (name === "lg") {
+      quantity = refCount.current.value;
     } else {
-      refCount.current.value = 1;
-      quantity = 1;
+      quantity = refCountResponsive.current.value;
     }
+
+    // if (count) {
+    //   if (count > detailBook.quantity) {
+    //     refCount.current.value = detailBook.quantity;
+    //     quantity = detailBook.quantity;
+    //   } else quantity = refCount.current.value;
+    // } else {
+    //   refCount.current.value = 1;
+    //   quantity = 1;
+    // }
     const dataAddBook = {
       quantity: +quantity,
       id: id,
@@ -139,12 +162,20 @@ const BookPageDetail = (props) => {
       },
     };
     dispatch(doAddBookAction(dataAddBook));
+    refMessage.current.getAlert();
   };
 
-  const handleClickOutside = (e) => {
-    if (!e.target.value) refCount.current.value = 1;
-    if (e.target.value > detailBook.quantity)
-      refCount.current.value = detailBook.quantity;
+  const handleClickOutside = (e, name) => {
+    if (name === "lg") {
+      if (!e.target.value) refCount.current.value = 1;
+      if (e.target.value > detailBook.quantity)
+        refCount.current.value = detailBook.quantity;
+    }
+    if (name === "xs") {
+      if (!e.target.value) refCountResponsive.current.value = 1;
+      if (e.target.value > detailBook.quantity)
+        refCountResponsive.current.value = detailBook.quantity;
+    }
   };
   if (isLoading === true) {
     return (
@@ -241,7 +272,9 @@ const BookPageDetail = (props) => {
                       <div className="quantity">
                         <span className="leftt">Số lượng</span>
                         <span className="rightt">
-                          <button onClick={() => handleChangeQuantity("minus")}>
+                          <button
+                            onClick={() => handleChangeQuantity("minus", "lg")}
+                          >
                             <MinusOutlined />
                           </button>
                           <input
@@ -252,17 +285,20 @@ const BookPageDetail = (props) => {
                                 e.preventDefault();
                               }
                             }}
-                            onBlur={(e) => handleClickOutside(e)}
+                            onBlur={(e) => handleClickOutside(e, "lg")}
                           />
-                          <button onClick={() => handleChangeQuantity("plus")}>
+                          <button
+                            onClick={() => handleChangeQuantity("plus", "lg")}
+                          >
                             <PlusOutlined />
                           </button>
                         </span>
                       </div>
                       <div className="buy">
                         <button
+                          //ref={refMessage}
                           className="cart"
-                          onClick={() => handleAddToCart()}
+                          onClick={() => handleAddToCart("lg")}
                         >
                           <BsCartPlus className="icon-cart" />
                           <span>Thêm vào giỏ hàng</span>
@@ -278,11 +314,24 @@ const BookPageDetail = (props) => {
             <div className="responsive-cart">
               <div className="quantity-res">
                 <div className="count">
-                  <MinusOutlined />
+                  <MinusOutlined
+                    onClick={() => handleChangeQuantity("minus", "xs")}
+                  />
                 </div>
-                <input defaultValue={1} />
+                <input
+                  ref={refCountResponsive}
+                  defaultValue={1}
+                  onKeyDown={(e) => {
+                    if (!validKeyForPayment.includes(e.key)) {
+                      e.preventDefault();
+                    }
+                  }}
+                  onBlur={(e) => handleClickOutside(e, "xs")}
+                />
                 <div className="count">
-                  <PlusOutlined />
+                  <PlusOutlined
+                    onClick={() => handleChangeQuantity("plus", "xs")}
+                  />
                 </div>
               </div>
               <div className="add-item-res">
@@ -291,7 +340,7 @@ const BookPageDetail = (props) => {
                     className="icon-cart-res"
                     style={{ marginRight: 3 }}
                   />
-                  <p>Thêm vào giỏ hàng</p>
+                  <p onClick={() => handleAddToCart("xs")}>Thêm vào giỏ hàng</p>
                 </div>
               </div>
               <div className="now-res">
@@ -315,6 +364,8 @@ const BookPageDetail = (props) => {
               title={detailBook.mainText}
             />
           </div>
+
+          {/* <Child ref={refMessage} /> */}
         </div>
       </div>
     );
