@@ -79,7 +79,7 @@ export default function App() {
           element: <BookPageDetail />,
         },
         {
-          path: "cart",
+          path: "cart/*",
           element: (
             <ProtectedRoute>
               <Cart />

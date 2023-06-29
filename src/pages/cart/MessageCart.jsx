@@ -1,36 +1,29 @@
-// import { Button, message } from "antd";
-// const MessageCart = () => {
-//   const [messageApi, contextHolder] = message.useMessage();
-//   const success = () => {
-//     messageApi.open({
-//       type: "success",
-//       content: "This is a prompt message with custom className and style",
-//       className: "custom-class",
-//       style: {
-//         marginTop: "20vh",
-//       },
-//     });
-//   };
-//   return (
-//     <>
-//       {/* {contextHolder}
-//       <Button onClick={success}>Customized style</Button> */}
-//     </>
-//   );
-// };
-// export default MessageCart;
-
 import { message } from "antd";
-import { forwardRef, useImperativeHandle } from "react";
+import { forwardRef, useImperativeHandle, useState } from "react";
+import { TiTick } from "react-icons/ti";
 
-const Child = forwardRef((props, ref) => {
+const MessageCart = forwardRef((props, ref) => {
+  const [showPopup, setShowPopup] = useState(false);
+
   useImperativeHandle(ref, () => ({
-    getAlert() {
-      message.success("da them thanh cong");
+    onModalMessage() {
+      setShowPopup(true);
+      setTimeout(() => {
+        setShowPopup(false);
+      }, 1000);
     },
   }));
-
-  return <></>;
+  return (
+    <div
+      className="modal"
+      style={{ visibility: showPopup ? "visible" : "hidden" }}
+    >
+      <div className="icon">
+        <TiTick />
+      </div>
+      <div className="add">Đã thêm vào giỏ hàng</div>
+    </div>
+  );
 });
 
-export default Child;
+export default MessageCart;

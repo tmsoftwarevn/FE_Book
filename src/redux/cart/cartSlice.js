@@ -1,10 +1,15 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { message } from "antd";
 
 const initialState = {
   listCart: [],
 };
 
+export const getIdUser = createAsyncThunk(
+  "cart/getIdUser",
+  async (a, { getState }) => {
+    return getState().account?.user?.id;
+  }
+);
 export const cartSlice = createSlice({
   name: "cart",
   initialState,
@@ -21,11 +26,23 @@ export const cartSlice = createSlice({
           state.listCart[isBookExist].quantity = book.detail.total;
         }
       } else state.listCart.push(action.payload);
-      message.success("Dã thêm vào giỏ hàng");
     },
+    doSetListCartLogin: (state, action) => {
+      state.listCart = action.payload;
+    },
+    doRemoveCartLogout: (state, action) => {
+      state.listCart = [];
+    },
+  },
+  extraReducers: (builder) => {
+    builder.addCase(getIdUser.fulfilled, (state, action) => {
+      const json = JSON.stringify(state.listCart);
+      localStorage.setItem(`cart${action.payload}`, json);
+    });
   },
 });
 
-export const { doAddBookAction } = cartSlice.actions;
+export const { doAddBookAction, doSetListCartLogin, doRemoveCartLogout } =
+  cartSlice.actions;
 
 export default cartSlice.reducer;

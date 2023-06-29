@@ -5,33 +5,35 @@ import { useEffect, useRef, useState } from "react";
 import ModalGallery from "./ModalImageGallery";
 import { MinusOutlined, PlusOutlined } from "@ant-design/icons";
 import { BsCartPlus } from "react-icons/bs";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { callGetDetailBook } from "../../services/api";
 import BookSkeleton from "./BookSkeleton";
 
-import { doAddBookAction } from "../../redux/cart/cartSlice";
+import { doAddBookAction, getIdUser } from "../../redux/cart/cartSlice";
 import { useDispatch, useSelector } from "react-redux";
-import Child from "../cart/MessageCart";
+
+import MessageCart from "../cart/MessageCart";
 const BookPageDetail = (props) => {
   const [isOpenModalGallery, setIsOpenModalGallery] = useState(false);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
   const [detailBook, setDetailBook] = useState("");
+  const [images, setImage] = useState([]);
+
+  const refCount = useRef(1);
+  const refCountResponsive = useRef(1);
   const refGallery = useRef(null);
   const refMessage = useRef();
 
-  const [images, setImage] = useState([]);
   const location = useLocation();
-  const refCount = useRef(1);
-  const refCountResponsive = useRef(1);
-
   const params = new URLSearchParams(location.search);
-  const dispatch = useDispatch();
+  const isAuthenticated = useSelector((state) => state.account.isAuthenticated);
 
+  const dispatch = useDispatch();
   const listCart = useSelector((state) => state.cart.listCart);
+  const navigate = useNavigate();
   let id = params.get("id");
 
-  console.log("list card", listCart);
   window.onbeforeunload = function () {
     window.scrollTo(0, 0);
   };
@@ -135,6 +137,10 @@ const BookPageDetail = (props) => {
   };
 
   const handleAddToCart = (name) => {
+    if (isAuthenticated === false) {
+      navigate("/login");
+      return;
+    }
     let quantity = 1;
     if (name === "lg") {
       quantity = refCount.current.value;
@@ -142,15 +148,6 @@ const BookPageDetail = (props) => {
       quantity = refCountResponsive.current.value;
     }
 
-    // if (count) {
-    //   if (count > detailBook.quantity) {
-    //     refCount.current.value = detailBook.quantity;
-    //     quantity = detailBook.quantity;
-    //   } else quantity = refCount.current.value;
-    // } else {
-    //   refCount.current.value = 1;
-    //   quantity = 1;
-    // }
     const dataAddBook = {
       quantity: +quantity,
       id: id,
@@ -162,7 +159,9 @@ const BookPageDetail = (props) => {
       },
     };
     dispatch(doAddBookAction(dataAddBook));
-    refMessage.current.getAlert();
+    //success
+    refMessage.current.onModalMessage();
+    dispatch(getIdUser());
   };
 
   const handleClickOutside = (e, name) => {
@@ -177,6 +176,7 @@ const BookPageDetail = (props) => {
         refCountResponsive.current.value = detailBook.quantity;
     }
   };
+
   if (isLoading === true) {
     return (
       <div className="container">
@@ -365,7 +365,7 @@ const BookPageDetail = (props) => {
             />
           </div>
 
-          {/* <Child ref={refMessage} /> */}
+          <MessageCart ref={refMessage} />
         </div>
       </div>
     );

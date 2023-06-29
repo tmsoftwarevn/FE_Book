@@ -8,15 +8,33 @@ import { Dropdown, Badge, Space, message } from "antd";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { callGetAllUser, callLogout } from "../../services/api";
+import { callLogout } from "../../services/api";
 import { doLogoutAction } from "../../redux/account/accountSlice";
+import {
+  doRemoveCartLogout,
+  doSetListCartLogin,
+} from "../../redux/cart/cartSlice";
 const Header = () => {
   const isAuthenticated = useSelector((state) => state.account.isAuthenticated);
   const username = useSelector((state) => state.account.user.fullName);
   const userEmail = useSelector((state) => state.account.user.email);
   const role = useSelector((state) => state.account.user.role);
+  const countProduct = useSelector((state) =>
+    state.cart?.listCart ? state.cart.listCart : 0
+  );
+  const idUser = useSelector((state) => state.account?.user?.id);
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  useEffect(() => {
+    listItems();
+    if (localStorage.getItem(`cart${idUser}`)) {
+      const myArr = JSON.parse(localStorage.getItem(`cart${idUser}`));
+      console.log("cart user", myArr);
+      dispatch(doSetListCartLogin(myArr));
+    }
+  }, [isAuthenticated]);
+
   const [items, setItems] = useState([
     {
       label: <Link to="/login">Đăng nhập</Link>,
@@ -68,22 +86,17 @@ const Header = () => {
       ]);
     }
   };
-  useEffect(() => {
-    listItems();
-  }, [isAuthenticated]);
 
   const handleLogout = async () => {
     const res = await callLogout();
     if (res && res.data) {
       dispatch(doLogoutAction());
+      dispatch(doRemoveCartLogout());
       message.success("Đăng xuất thành công");
       navigate("/login");
     }
   };
-  const handleGetApi = async () => {
-    let res = await callGetAllUser();
-    console.log("res apii test");
-  };
+
   return (
     <div className="header-main">
       <div className="container">
@@ -110,7 +123,9 @@ const Header = () => {
             >
               <SlBasket />
               <Space size="middle" className="badge">
-                <Badge count={3}></Badge>
+                <Badge
+                  count={isAuthenticated === true ? countProduct.length : 0}
+                ></Badge>
               </Space>
             </div>
             <div className="home">

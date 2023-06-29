@@ -3,7 +3,7 @@ import "./login.scss";
 import { FacebookOutlined, GoogleOutlined } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
 import { ApiLogin } from "../../services/api";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { doLoginAction } from "../../redux/account/accountSlice";
 import { useEffect } from "react";
 const LoginPage = () => {
@@ -12,7 +12,7 @@ const LoginPage = () => {
 
   const onFinish = async (values) => {
     const { username, password } = values;
-    let res = await ApiLogin(username, password);    
+    let res = await ApiLogin(username, password);
     if (res?.data) {
       localStorage.setItem("access_token", res.data.access_token);
       dispatch(doLoginAction(res.data));
@@ -30,7 +30,7 @@ const LoginPage = () => {
     }
   };
   useEffect(() => {
-    if (localStorage.getItem('access_token')) return navigate("/");
+    if (localStorage.getItem("access_token")) return navigate("/");
   }, []);
   return (
     <div className="login-container">
@@ -88,7 +88,7 @@ const LoginPage = () => {
         <div className="group">
           <Divider
             style={{
-              borderColor: "black"
+              borderColor: "black",
             }}
           >
             Or Sign Up Using
@@ -102,7 +102,7 @@ const LoginPage = () => {
             </div>
           </div>
           <div className="home" onClick={() => navigate("/")}>
-          &#60;Home&#62;
+            &#60;Home&#62;
           </div>
         </div>
       </div>

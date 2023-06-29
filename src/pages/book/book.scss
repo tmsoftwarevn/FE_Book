@@ -72,6 +72,9 @@
     .title {
         font-weight: 400;
         line-height: 1.5;
+        @include xs {
+            font-size: 17px;
+        }
         @include sm {
             font-size: 18px;
         }
@@ -301,6 +304,7 @@
         }
     }
 }
+///    ==============      detail book
 .detail {
     margin-top: 20px;
     padding: 20px 20px 0 20px;
@@ -312,6 +316,7 @@
     }
 }
 
+/// ===========       css image
 .modal-gallery {
     .activeImgae {
         border: 3px solid #e67e22;
@@ -323,5 +328,24 @@
 
     .img-normal {
         cursor: pointer;
+    }
+}
+
+/////////// modal message cart
+
+.modal {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #2d3436;
+    padding: 30px;
+    text-align: center;
+    .icon {
+        font-size: 50px;
+        color: aqua;
+    }
+    .add {
+        color: white;
     }
 }
