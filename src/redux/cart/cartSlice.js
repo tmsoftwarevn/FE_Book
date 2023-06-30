@@ -4,8 +4,8 @@ const initialState = {
   listCart: [],
 };
 
-export const getIdUser = createAsyncThunk(
-  "cart/getIdUser",
+export const saveInfoCartUser = createAsyncThunk(
+  "cart/saveInfoCartUser",
   async (a, { getState }) => {
     return getState().account?.user?.id;
   }
@@ -35,7 +35,7 @@ export const cartSlice = createSlice({
     },
   },
   extraReducers: (builder) => {
-    builder.addCase(getIdUser.fulfilled, (state, action) => {
+    builder.addCase(saveInfoCartUser.fulfilled, (state, action) => {
       const json = JSON.stringify(state.listCart);
       localStorage.setItem(`cart${action.payload}`, json);
     });

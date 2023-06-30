@@ -14,6 +14,8 @@ import {
   doRemoveCartLogout,
   doSetListCartLogin,
 } from "../../redux/cart/cartSlice";
+import PreviewCart from "../../pages/cart/PreviewCart";
+
 const Header = () => {
   const isAuthenticated = useSelector((state) => state.account.isAuthenticated);
   const username = useSelector((state) => state.account.user.fullName);
@@ -30,7 +32,7 @@ const Header = () => {
     listItems();
     if (localStorage.getItem(`cart${idUser}`)) {
       const myArr = JSON.parse(localStorage.getItem(`cart${idUser}`));
-      console.log("cart user", myArr);
+
       dispatch(doSetListCartLogin(myArr));
     }
   }, [isAuthenticated]);
@@ -103,7 +105,12 @@ const Header = () => {
         <div className="header-content">
           <div className="header-left ">
             <div className="search-header">
-              <div className="icon-header">
+              <div
+                className="icon-header"
+                onClick={() => {
+                  navigate("/");
+                }}
+              >
                 <GiSpellBook />
               </div>
               <div className="group">
@@ -118,13 +125,19 @@ const Header = () => {
             <div
               className="basket"
               onClick={() => {
-                navigate("cart");
+                navigate("/cart");
               }}
             >
-              <SlBasket />
+              <div className="basket-sm">
+                <SlBasket />
+              </div>
+
+              <PreviewCart />
+
               <Space size="middle" className="badge">
                 <Badge
                   count={isAuthenticated === true ? countProduct.length : 0}
+                  showZero
                 ></Badge>
               </Space>
             </div>

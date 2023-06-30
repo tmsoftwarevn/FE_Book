@@ -1,0 +1,52 @@
+@import '../../scss/reset';
+@import '../../scss/media';
+.previewCart {
+    @include xs {
+        display: none;
+    }
+    @include sm {
+        display: none;
+    }
+    @include xl {
+        display: block;
+    }
+}
+
+.wrap {
+    justify-content: space-between;
+    margin-bottom: 20px;
+    @include xs {
+        display: none;
+    }
+    @include sm {
+        display: none;
+    }
+    @include xl {
+        display: flex;
+    }
+    .group {
+        display: flex;
+        .text {
+            width: 180px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            margin-right: 20px;
+            margin-left: 5px;
+        }
+    }
+}
+.btn-view {
+    background-color: #ee4d2d;
+    padding: 10px;
+    text-align: center;
+    text-transform: capitalize;
+    color: white;
+    cursor: pointer;
+}
+////// empty
+.cart-empty {
+    text-align: center;
+    padding: 50px 100px;
+    text-transform: capitalize;
+}

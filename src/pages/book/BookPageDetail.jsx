@@ -9,7 +9,7 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { callGetDetailBook } from "../../services/api";
 import BookSkeleton from "./BookSkeleton";
 
-import { doAddBookAction, getIdUser } from "../../redux/cart/cartSlice";
+import { doAddBookAction, saveInfoCartUser } from "../../redux/cart/cartSlice";
 import { useDispatch, useSelector } from "react-redux";
 
 import MessageCart from "../cart/MessageCart";
@@ -161,7 +161,7 @@ const BookPageDetail = (props) => {
     dispatch(doAddBookAction(dataAddBook));
     //success
     refMessage.current.onModalMessage();
-    dispatch(getIdUser());
+    dispatch(saveInfoCartUser());
   };
 
   const handleClickOutside = (e, name) => {
