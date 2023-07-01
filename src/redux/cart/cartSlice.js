@@ -15,6 +15,7 @@ export const cartSlice = createSlice({
   initialState,
 
   reducers: {
+    // add page book
     doAddBookAction: (state, action) => {
       const book = action.payload;
       let isBookExist = state.listCart.findIndex((i) => i.id === book.id);
@@ -33,6 +34,17 @@ export const cartSlice = createSlice({
     doRemoveCartLogout: (state, action) => {
       state.listCart = [];
     },
+    doUpdateBookPageCart: (state, action) => {
+      const book = action.payload;
+      let isBookExist = state.listCart.findIndex((i) => i.id === book.id);
+      if (isBookExist > -1) {
+        state.listCart[isBookExist] = action.payload;
+      }
+    },
+    doDeleteBook: (state, action) => {
+      let id = action.payload.id;
+      state.listCart = state.listCart.filter((item) => item.id != id);
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(saveInfoCartUser.fulfilled, (state, action) => {
@@ -42,7 +54,12 @@ export const cartSlice = createSlice({
   },
 });
 
-export const { doAddBookAction, doSetListCartLogin, doRemoveCartLogout } =
-  cartSlice.actions;
+export const {
+  doAddBookAction,
+  doSetListCartLogin,
+  doUpdateBookPageCart,
+  doRemoveCartLogout,
+  doDeleteBook,
+} = cartSlice.actions;
 
 export default cartSlice.reducer;

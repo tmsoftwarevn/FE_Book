@@ -5,7 +5,7 @@ import { useEffect, useRef, useState } from "react";
 import ModalGallery from "./ModalImageGallery";
 import { MinusOutlined, PlusOutlined } from "@ant-design/icons";
 import { BsCartPlus } from "react-icons/bs";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
 import { callGetDetailBook } from "../../services/api";
 import BookSkeleton from "./BookSkeleton";
 
@@ -30,7 +30,7 @@ const BookPageDetail = (props) => {
   const isAuthenticated = useSelector((state) => state.account.isAuthenticated);
 
   const dispatch = useDispatch();
-  const listCart = useSelector((state) => state.cart.listCart);
+
   const navigate = useNavigate();
   let id = params.get("id");
 

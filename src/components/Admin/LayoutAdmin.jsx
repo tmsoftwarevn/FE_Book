@@ -1,20 +1,19 @@
 import "./layoutAdmin.scss";
 import {
-  UserOutlined,
   AppstoreOutlined,
   TeamOutlined,
   ExceptionOutlined,
   DollarCircleOutlined,
 } from "@ant-design/icons";
-import { Breadcrumb, Layout, Menu, theme, message } from "antd";
+import { Layout, Menu, theme, message } from "antd";
 import { useEffect, useState } from "react";
 import { Link, Outlet, useLocation, useNavigate } from "react-router-dom";
 import { Dropdown, Space } from "antd";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { callLogout } from "../../services/api";
 import { doLogoutAction } from "../../redux/account/accountSlice";
 
-const { Header, Content, Footer, Sider } = Layout;
+const { Header, Content, Sider } = Layout;
 function getItem(label, key, icon, children) {
   return {
     key,
