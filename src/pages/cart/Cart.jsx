@@ -28,16 +28,16 @@ const Cart = () => {
   const listCart = useSelector((state) => state.cart.listCart);
   const refCount = useRef([]);
   const refCheckbox = useRef([]);
+
   const refSelectAll = useRef();
   const [renderPrice, setRenderPrice] = useState(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
-
+  console.log("ref cart", refCheckbox);
   let totalPrice = 0;
   let countProduct = 0;
   const onChangeSelectSingle = (e) => {
     setRenderPrice(!renderPrice);
-    console.log("ref check", refCheckbox);
     if (e.target.checked === false && refSelectAll.current.checked === true)
       refSelectAll.current.checked = false;
     let isChecked = refCheckbox.current.findIndex((item) => {

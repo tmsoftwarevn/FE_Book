@@ -138,6 +138,10 @@ export default function App() {
     return false;
   });
 
+  /// neu chua dang nhap va vao khac link tren thi ko cho vao, xoay => login
+  /// neu chua dang nhap va vao link chứa ở trên  => cho vao, ko ảnh hưởng
+  /// neu dang nhap r => lần đầu render khác link trên => xoay rồi vào
+  //=> cùng thì ko có gì
   if (isLoading === true && contains === false) {
     return (
       <>

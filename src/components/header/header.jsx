@@ -131,9 +131,7 @@ const Header = () => {
               <div className="basket-sm">
                 <SlBasket />
               </div>
-
               <PreviewCart />
-
               <Space size="middle" className="badge">
                 <Badge
                   count={isAuthenticated === true ? countProduct.length : 0}

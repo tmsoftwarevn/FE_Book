@@ -46,10 +46,7 @@ const BookPageDetail = (props) => {
       }
       setIsLoading(false);
     };
-    setTimeout(() => {
-      getDetailBook();
-    }, 200);
-
+    getDetailBook();
     window.scrollTo(0, 0);
   }, []);
 
