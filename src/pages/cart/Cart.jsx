@@ -1,7 +1,7 @@
-import { Checkbox, Divider, Image } from "antd";
+import { Divider, Image, Popconfirm } from "antd";
 import { useDispatch, useSelector } from "react-redux";
 import "./cart.scss";
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { AiOutlineMinus, AiOutlinePlus } from "react-icons/ai";
 import { useNavigate } from "react-router-dom";
 import {
@@ -23,6 +23,7 @@ const validKeyForPayment = [
   "9",
   "Backspace",
 ];
+const title = "Xác nhận xóa sách này ?";
 const Cart = () => {
   const listCart = useSelector((state) => state.cart.listCart);
   const refCount = useRef([]);
@@ -33,14 +34,17 @@ const Cart = () => {
   const navigate = useNavigate();
 
   let totalPrice = 0;
-
+  let countProduct = 0;
   const onChangeSelectSingle = (e) => {
     setRenderPrice(!renderPrice);
+    console.log("ref check", refCheckbox);
     if (e.target.checked === false && refSelectAll.current.checked === true)
       refSelectAll.current.checked = false;
-    let isChecked = refCheckbox.current.findIndex(
-      (item) => item.checked === false
-    );
+    let isChecked = refCheckbox.current.findIndex((item) => {
+      if (item != null) {
+        return item.checked === false;
+      }
+    });
     if (isChecked === -1) {
       refSelectAll.current.checked = true;
     }
@@ -187,12 +191,12 @@ const Cart = () => {
                 listCart.map((item, i) => {
                   if (refCheckbox.current[i]?.checked === true) {
                     totalPrice += item.quantity * item.detail.price;
+                    countProduct += 1;
                   }
-
                   return (
                     <div key={`iitemm-${i}`}>
                       <div className="roww">
-                        <div className="group">
+                        <div className="group-c">
                           <div className="check-box">
                             <input
                               type="checkbox"
@@ -205,8 +209,8 @@ const Cart = () => {
                             onClick={() => handleRedirectDetailBook(item)}
                           >
                             <Image
-                              width={100}
-                              height={100}
+                              width={80}
+                              height={80}
                               preview={false}
                               src={`${
                                 import.meta.env.VITE_BACKEND_URL
@@ -274,11 +278,16 @@ const Cart = () => {
                             currency: "VND",
                           }).format(item.quantity * item.detail.price)}
                         </div>
-                        <div
-                          className="delete"
-                          onClick={() => handleDeleteBook(item)}
-                        >
-                          Xóa
+                        <div className="delete">
+                          <Popconfirm
+                            placement="left"
+                            title={title}
+                            onConfirm={() => handleDeleteBook(item)}
+                            okText="Yes"
+                            cancelText="No"
+                          >
+                            Xóa
+                          </Popconfirm>
                         </div>
                       </div>
                       <Divider style={{ borderColor: "#ccc" }} />
@@ -288,14 +297,21 @@ const Cart = () => {
             </div>
             <div className="group-price">
               <div className="total-price">
-                {" "}
-                tổng thanh toán ({listCart.length} sản phẩm):{" "}
-                <span style={{ color: "#ee4d2d" }}>
+                <div>
+                  tổng tiền ({countProduct} sản phẩm):{" "}
+                  <span style={{ color: "#ee4d2d" }}>
+                    {new Intl.NumberFormat("vi-VN", {
+                      style: "currency",
+                      currency: "VND",
+                    }).format(totalPrice)}
+                  </span>
+                </div>
+                <div className="total-responsive">
                   {new Intl.NumberFormat("vi-VN", {
                     style: "currency",
                     currency: "VND",
                   }).format(totalPrice)}
-                </span>
+                </div>
               </div>
               <div className="buy">Mua hàng</div>
             </div>

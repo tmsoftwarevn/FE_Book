@@ -10,7 +10,7 @@ import LoginPage from "./pages/login/login";
 import ContactPage from "./pages/contact";
 import Header from "./components/Header/header";
 import Footer from "./components/Footer";
-import Home from "./components/Home";
+import Home from "./pages/Home/index";
 import RegisterPage from "./pages/register";
 import { useDispatch, useSelector } from "react-redux";
 import { callGetAccount } from "./services/api";

@@ -35,7 +35,7 @@ const LoginPage = () => {
   return (
     <div className="login-container">
       <div className="content">
-        <div className="title">Welcome to Dream Book</div>
+        <div className="title">Windy Book</div>
         <div className="form-content">
           <Form name="basic" onFinish={onFinish} autoComplete="off">
             <Form.Item
@@ -54,7 +54,7 @@ const LoginPage = () => {
 
             <Form.Item
               labelCol={{ span: 24 }}
-              label="Password"
+              label="Mật khẩu"
               name="password"
               rules={[
                 {
@@ -75,15 +75,15 @@ const LoginPage = () => {
                 htmlType="submit"
                 style={{ width: "100%" }}
               >
-                Login
+                Đăng nhập
               </Button>
             </Form.Item>
           </Form>
         </div>
 
         <div className="text">
-          <p onClick={() => navigate("/register")}>Sign Up</p>
-          <u>Forgot password ?</u>
+          <p onClick={() => navigate("/register")}>Đăng kí</p>
+          <u>Quên mật khẩu ?</u>
         </div>
         <div className="group">
           <Divider
@@ -102,7 +102,7 @@ const LoginPage = () => {
             </div>
           </div>
           <div className="home" onClick={() => navigate("/")}>
-            &#60;Home&#62;
+            &#60;Trang Chủ&#62;
           </div>
         </div>
       </div>

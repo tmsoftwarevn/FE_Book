@@ -1,4 +1,3 @@
-import { message } from "antd";
 import { forwardRef, useImperativeHandle, useState } from "react";
 import { TiTick } from "react-icons/ti";
 
@@ -13,6 +12,7 @@ const MessageCart = forwardRef((props, ref) => {
       }, 1000);
     },
   }));
+
   return (
     <div
       className="modal"

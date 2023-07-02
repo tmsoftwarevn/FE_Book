@@ -45,6 +45,7 @@ export const cartSlice = createSlice({
       let id = action.payload.id;
       state.listCart = state.listCart.filter((item) => item.id != id);
     },
+    doResetErrQuantity: (state, action) => {},
   },
   extraReducers: (builder) => {
     builder.addCase(saveInfoCartUser.fulfilled, (state, action) => {
@@ -60,6 +61,7 @@ export const {
   doUpdateBookPageCart,
   doRemoveCartLogout,
   doDeleteBook,
+  doResetErrQuantity,
 } = cartSlice.actions;
 
 export default cartSlice.reducer;

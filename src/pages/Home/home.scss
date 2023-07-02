@@ -88,7 +88,6 @@
 
     .carousel-homepage {
         background-color: rgb(255 255 255);
-        //background-color: red;
         .popular {
             @include xs {
                 display: none;
@@ -252,9 +251,7 @@
             .wrapper {
                 @include xs {
                     padding-bottom: 5%; // padding-bottom: theo ti le % voi width = height
-                    //height: 290px;
                     width: 100%;
-                    //margin-bottom: 15px;
                 }
                 @include sm {
                     height: 250px;

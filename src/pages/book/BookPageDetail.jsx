@@ -1,4 +1,4 @@
-import { Row, Col, Rate, Divider, Button, Breadcrumb } from "antd";
+import { Row, Col, Rate, Divider, Breadcrumb } from "antd";
 import "./book.scss";
 import ImageGallery from "react-image-gallery";
 import { useEffect, useRef, useState } from "react";
@@ -8,10 +8,12 @@ import { BsCartPlus } from "react-icons/bs";
 import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
 import { callGetDetailBook } from "../../services/api";
 import BookSkeleton from "./BookSkeleton";
-
-import { doAddBookAction, saveInfoCartUser } from "../../redux/cart/cartSlice";
+import {
+  doAddBookAction,
+  doResetErrQuantity,
+  saveInfoCartUser,
+} from "../../redux/cart/cartSlice";
 import { useDispatch, useSelector } from "react-redux";
-
 import MessageCart from "../cart/MessageCart";
 const BookPageDetail = (props) => {
   const [isOpenModalGallery, setIsOpenModalGallery] = useState(false);
@@ -28,9 +30,7 @@ const BookPageDetail = (props) => {
   const location = useLocation();
   const params = new URLSearchParams(location.search);
   const isAuthenticated = useSelector((state) => state.account.isAuthenticated);
-
   const dispatch = useDispatch();
-
   const navigate = useNavigate();
   let id = params.get("id");
 
@@ -58,7 +58,12 @@ const BookPageDetail = (props) => {
       title: <Link to="/">Trang chủ</Link>,
     },
     {
-      title: <Link to="/">{detailBook.category}</Link>,
+      // title: <Link to="/">{detailBook.category}</Link>,
+      title: (
+        <Link to={"/"} state={{ category: detailBook.category }}>
+          {detailBook.category}
+        </Link>
+      ),
     },
 
     {
@@ -159,7 +164,6 @@ const BookPageDetail = (props) => {
       },
     };
     dispatch(doAddBookAction(dataAddBook));
-    //success
     refMessage.current.onModalMessage();
     dispatch(saveInfoCartUser());
   };
@@ -239,7 +243,7 @@ const BookPageDetail = (props) => {
 
                   <Col lg={14} sm={24} md={24} xs={24}>
                     <Col span={24}>
-                      <div className="title">{detailBook.mainText}</div>
+                      <div className="title-name">{detailBook.mainText}</div>
                       <div className="rating">
                         <Rate
                           value={5}
@@ -296,7 +300,6 @@ const BookPageDetail = (props) => {
                       </div>
                       <div className="buy">
                         <button
-                          //ref={refMessage}
                           className="cart"
                           onClick={() => handleAddToCart("lg")}
                         >

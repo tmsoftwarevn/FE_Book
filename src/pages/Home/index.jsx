@@ -22,18 +22,20 @@ import { GrPowerReset } from "react-icons/gr";
 import { AiOutlineDown } from "react-icons/ai";
 import { AiOutlineUp } from "react-icons/ai";
 import { AiFillStar } from "react-icons/ai";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import HomeSkeleton from "./homeSkeleton";
 import { AiOutlineLeft, AiOutlineRight } from "react-icons/ai";
 const Home = () => {
   const [form] = Form.useForm();
-
   const [total, setTotal] = useState(0);
   const [current, setCurrent] = useState(1);
   const [pageSize, setPageSize] = useState(12);
   const [dataBook, setDataBook] = useState("");
   const [price, setPrice] = useState([]);
 
+  const location = useLocation();
+  console.log(" check location: ", location.state?.category);
+  let filterCategory = location.state?.category;
   const [activePrice, setactivePrice] = useState({
     a: false,
     b: false,
@@ -55,16 +57,17 @@ const Home = () => {
 
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
+  const refCheckbox = useRef([]);
+  const refCheckboxRes = useRef([]);
+
   window.onbeforeunload = function () {
     window.scrollTo(0, 0);
   };
   useEffect(() => {
     setIsLoading(true);
-
     getListBook();
     window.scrollTo(0, 0);
   }, [current]);
-
   useEffect(() => {
     const getListCategory = async () => {
       let res = await callFetchCategory();
@@ -75,10 +78,19 @@ const Home = () => {
     getListCategory();
   }, []);
 
-  //console.log("render home page");
+  useEffect(() => {
+    //findToFilterCategory();
+    //refCheckbox?.current[0]?.checked = true
+    console.log("ref", refCheckbox);
+  }, [filterCategory]);
+  // const findToFilterCategory = () => {
+  //   let indexCategory = listCategory.findIndex(
+  //     (item) => item === filterCategory
+  //   );
+
+  // };
 
   const numberOfItems = showMore ? listCategory.length : 5;
-
   const handleSelectPrice = (name, price) => {
     if (name === "a") {
       setactivePrice({
@@ -327,7 +339,17 @@ const Home = () => {
                                 className="category-group"
                                 key={`item-${index}`}
                               >
-                                <Checkbox value={item}>{item}</Checkbox>
+                                {/* <Checkbox value={item}>{item}</Checkbox> 
+
+                                ko su dung ref cho antd duoc */}
+                                <input
+                                  ref={(el) =>
+                                    (refCheckbox.current[index] = el)
+                                  }
+                                  type="checkbox"
+                                  style={{ marginRight: 10 }}
+                                ></input>
+                                {item}
                               </Col>
                             );
                           })}
@@ -383,12 +405,10 @@ const Home = () => {
                     >
                       Giá
                     </span>
-
                     <Button
                       onClick={() => {
                         handleSelectPrice("a", [40000]);
                       }}
-                      // className={activePrice.a === true ? "active" : ""}
                       type={activePrice.a === true ? "primary" : "default"}
                     >
                       Dưới 40.000
@@ -397,7 +417,6 @@ const Home = () => {
                       onClick={() => {
                         handleSelectPrice("b", [40000, 120000]);
                       }}
-                      // className={activePrice.b === true ? "active" : ""}
                       type={activePrice.b === true ? "primary" : "default"}
                     >
                       {" "}
@@ -407,7 +426,6 @@ const Home = () => {
                       onClick={() => {
                         handleSelectPrice("c", [120000, 300000]);
                       }}
-                      // className={activePrice.c === true ? "active" : ""}
                       type={activePrice.c === true ? "primary" : "default"}
                     >
                       {" "}
@@ -727,7 +745,15 @@ const Home = () => {
                           className="category-group"
                           key={`item-${index}`}
                         >
-                          <Checkbox value={item}>{item}</Checkbox>
+                          {/* <Checkbox value={item}>{item}</Checkbox> */}
+                          <input
+                            ref={(el) =>
+                              (refCheckboxRes.current[item.category] = el)
+                            }
+                            type="checkbox"
+                            style={{ marginRight: 10 }}
+                          ></input>
+                          {item}
                         </Col>
                       );
                     })}

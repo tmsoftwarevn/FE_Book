@@ -23,6 +23,7 @@ const BookSkeleton = () => {
           <Skeleton.Image active={true} />
         </div>
       </Col>
+
       <Col lg={14} sm={0} xs={0}>
         <Skeleton paragraph={{ rows: 3 }} active={true} />
         <br /> <br />
