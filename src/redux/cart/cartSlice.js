@@ -13,9 +13,7 @@ export const saveInfoCartUser = createAsyncThunk(
 export const cartSlice = createSlice({
   name: "cart",
   initialState,
-
   reducers: {
-    // add page book
     doAddBookAction: (state, action) => {
       const book = action.payload;
       let isBookExist = state.listCart.findIndex((i) => i.id === book.id);

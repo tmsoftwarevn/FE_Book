@@ -8,6 +8,7 @@ import { BsCartPlus } from "react-icons/bs";
 import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
 import { callGetDetailBook } from "../../services/api";
 import BookSkeleton from "./BookSkeleton";
+
 import {
   doAddBookAction,
   doResetErrQuantity,
@@ -15,6 +16,7 @@ import {
 } from "../../redux/cart/cartSlice";
 import { useDispatch, useSelector } from "react-redux";
 import MessageCart from "../cart/MessageCart";
+import ResponsiveBookDetail from "./responsiveBookDetail";
 const BookPageDetail = (props) => {
   const [isOpenModalGallery, setIsOpenModalGallery] = useState(false);
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -311,42 +313,13 @@ const BookPageDetail = (props) => {
               </div>
             </div>
             {/* ===========responsive buy =========== */}
-            <div className="responsive-cart">
-              <div className="quantity-res">
-                <div className="count">
-                  <MinusOutlined
-                    onClick={() => handleChangeQuantity("minus", "xs")}
-                  />
-                </div>
-                <input
-                  ref={refCountResponsive}
-                  defaultValue={1}
-                  onKeyDown={(e) => {
-                    if (!validKeyForPayment.includes(e.key)) {
-                      e.preventDefault();
-                    }
-                  }}
-                  onBlur={(e) => handleClickOutside(e, "xs")}
-                />
-                <div className="count">
-                  <PlusOutlined
-                    onClick={() => handleChangeQuantity("plus", "xs")}
-                  />
-                </div>
-              </div>
-              <div className="add-item-res">
-                <div className="cart-res">
-                  <BsCartPlus
-                    className="icon-cart-res"
-                    style={{ marginRight: 3 }}
-                  />
-                  <p onClick={() => handleAddToCart("xs")}>Thêm vào giỏ hàng</p>
-                </div>
-              </div>
-              <div className="now-res">
-                <span>Mua ngay</span>
-              </div>
-            </div>
+
+            <ResponsiveBookDetail
+              handleChangeQuantity={handleChangeQuantity}
+              refCountResponsive={refCountResponsive}
+              handleClickOutside={handleClickOutside}
+              handleAddToCart={handleAddToCart}
+            />
 
             <div className="detail">
               <div className="description">CHI TIẾT SẢN PHẨM</div>

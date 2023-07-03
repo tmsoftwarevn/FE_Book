@@ -50,12 +50,12 @@ const ViewBook = (props) => {
           status: "done",
           url: `${import.meta.env.VITE_BACKEND_URL}/images/book/${pic}`,
         });
-      });  
+      });
 
       setFileList(arr);
     }
   };
-  
+
   useEffect(() => {
     customData(dataBook);
   }, [dataBook[dataView?.action]]);
@@ -95,7 +95,6 @@ const ViewBook = (props) => {
           </Descriptions.Item>
           <Descriptions.Item label="Updated At">
             {dataView?.updatedAt}
-              
           </Descriptions.Item>
           <Descriptions.Item label="Số lượng">
             {/* <Badge status="processing"  /> */}
@@ -121,8 +120,7 @@ const ViewBook = (props) => {
           <img
             alt="example"
             style={{
-              width: "100%",            
-             
+              width: "100%",
             }}
             src={previewImage}
           />

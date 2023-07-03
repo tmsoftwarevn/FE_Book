@@ -2,7 +2,6 @@ import {
   Row,
   Col,
   Form,
-  Checkbox,
   Divider,
   InputNumber,
   Button,
@@ -10,7 +9,6 @@ import {
   Tabs,
   Pagination,
   Carousel,
-  Drawer,
   Dropdown,
   Space,
 } from "antd";
@@ -25,6 +23,9 @@ import { AiFillStar } from "react-icons/ai";
 import { useLocation, useNavigate } from "react-router-dom";
 import HomeSkeleton from "./homeSkeleton";
 import { AiOutlineLeft, AiOutlineRight } from "react-icons/ai";
+import ResponsiveHome from "./responsiveHome";
+import { convertSlug } from "../../utils/convertSlug";
+
 const Home = () => {
   const [form] = Form.useForm();
   const [total, setTotal] = useState(0);
@@ -44,6 +45,7 @@ const Home = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
+  const numberOfItems = showMore ? listCategory.length : 5;
   let filterCategory = location.state?.category;
   const [activePrice, setactivePrice] = useState({
     a: false,
@@ -73,7 +75,6 @@ const Home = () => {
       if (res && res.data) {
         setlistCategory(res.data);
       }
-      // setIsLoading(false);
     };
     getListCategory();
   }, []);
@@ -85,25 +86,41 @@ const Home = () => {
           if (index >= +numberOfItems) {
             setShowMore(true);
           }
+          // lần đầu chạy skeleton chưa render được, deps là listcategory
+          // chờ để hiển thị category more => để gán ref
           setTimeout(() => {
             refCheckbox.current[index].checked = true;
-          }, 500);
-          setIsLoading(false);
-          fetchSortDepsCategory(item);
+          }, 400);
+          callApiSortDepsCategory(item);
         }
       });
-      // setIsLoading(false);
+      setTimeout(() => {
+        setIsLoading(false);
+      }, 300);
     }
   }, [listCategory]);
-  const fetchSortDepsCategory = (category) => {
-    if (category) {
-      console.log("call api theo reffff", category);
-    } else console.log("calll api category");
+  const callApiSortDepsCategory = (filterCategory) => {
+    //add filtercate vao string api
+    if (filterCategory) {
+      console.log("goi api co category ", filterCategory);
+    }
   };
-  const handleSortDepsCategory = (e) => {
-    fetchSortDepsCategory();
+  const handleSortDepsCategory = (e, category) => {
+    // custom string api
+
+    //co chon thi add vao string, ko co thi ko add string=> goi
+
+    console.log("call api catrgory", category);
+    callApiSortDepsCategory();
   };
-  const numberOfItems = showMore ? listCategory.length : 5;
+
+  const getListBook = async () => {
+    let res = await callGetListBook(current, pageSize);
+    if (res && res.data) {
+      setDataBook(res.data.result);
+      setTotal(res.data.meta.total);
+    }
+  };
   const handleSelectPrice = (name, price) => {
     if (name === "a") {
       setactivePrice({
@@ -185,13 +202,6 @@ const Home = () => {
   const onClose = () => {
     setModalFilter(false);
   };
-  const getListBook = async () => {
-    let res = await callGetListBook(current, pageSize);
-    if (res && res.data) {
-      setDataBook(res.data.result);
-      setTotal(res.data.meta.total);
-    }
-  };
 
   const handleChangeFilter = (changedValues, values) => {
     //console.log(">>> check handleChangeFilter", changedValues, values);
@@ -200,6 +210,7 @@ const Home = () => {
   const onFinish = (values) => {
     console.log("check value", values);
     console.log("price", price);
+    console.log("star", activeStar);
     onClose();
   };
 
@@ -261,54 +272,11 @@ const Home = () => {
   const handleShowMore = () => {
     setShowMore(!showMore);
   };
-  const nonAccentVietnamese = (str) => {
-    str = str.replace(/A|Á|À|Ã|Ạ|Â|Ấ|Ầ|Ẫ|Ậ|Ă|Ắ|Ằ|Ẵ|Ặ/g, "A");
-    str = str.replace(/à|á|ạ|ả|ã|â|ầ|ấ|ậ|ẩ|ẫ|ă|ằ|ắ|ặ|ẳ|ẵ/g, "a");
-    str = str.replace(/E|É|È|Ẽ|Ẹ|Ê|Ế|Ề|Ễ|Ệ/, "E");
-    str = str.replace(/è|é|ẹ|ẻ|ẽ|ê|ề|ế|ệ|ể|ễ/g, "e");
-    str = str.replace(/I|Í|Ì|Ĩ|Ị/g, "I");
-    str = str.replace(/ì|í|ị|ỉ|ĩ/g, "i");
-    str = str.replace(/O|Ó|Ò|Õ|Ọ|Ô|Ố|Ồ|Ỗ|Ộ|Ơ|Ớ|Ờ|Ỡ|Ợ/g, "O");
-    str = str.replace(/ò|ó|ọ|ỏ|õ|ô|ồ|ố|ộ|ổ|ỗ|ơ|ờ|ớ|ợ|ở|ỡ/g, "o");
-    str = str.replace(/U|Ú|Ù|Ũ|Ụ|Ư|Ứ|Ừ|Ữ|Ự/g, "U");
-    str = str.replace(/ù|ú|ụ|ủ|ũ|ư|ừ|ứ|ự|ử|ữ/g, "u");
-    str = str.replace(/Y|Ý|Ỳ|Ỹ|Ỵ/g, "Y");
-    str = str.replace(/ỳ|ý|ỵ|ỷ|ỹ/g, "y");
-    str = str.replace(/Đ/g, "D");
-    str = str.replace(/đ/g, "d");
-    // Some system encode vietnamese combining accent as individual utf-8 characters
-    str = str.replace(/\u0300|\u0301|\u0303|\u0309|\u0323/g, ""); // Huyền sắc hỏi ngã nặng
-    str = str.replace(/\u02C6|\u0306|\u031B/g, ""); // Â, Ê, Ă, Ơ, Ư
-    return str;
-  };
-
-  const convertSlug = (str) => {
-    str = nonAccentVietnamese(str);
-    str = str.replace(/^\s+|\s+$/g, ""); // trim
-    str = str.toLowerCase();
-
-    // remove accents, swap ñ for n, etc
-    const from =
-      "ÁÄÂÀÃÅČÇĆĎÉĚËÈÊẼĔȆĞÍÌÎÏİŇÑÓÖÒÔÕØŘŔŠŞŤÚŮÜÙÛÝŸŽáäâàãåčçćďéěëèêẽĕȇğíìîïıňñóöòôõøðřŕšşťúůüùûýÿžþÞĐđßÆa·/_,:;";
-    const to =
-      "AAAAAACCCDEEEEEEEEGIIIIINNOOOOOORRSSTUUUUUYYZaaaaaacccdeeeeeeeegiiiiinnooooooorrsstuuuuuyyzbBDdBAa------";
-    for (let i = 0, l = from.length; i < l; i++) {
-      str = str.replace(new RegExp(from.charAt(i), "g"), to.charAt(i));
-    }
-
-    str = str
-      .replace(/[^a-z0-9 -]/g, "") // remove invalid chars
-      .replace(/\s+/g, "-") // collapse whitespace and replace by -
-      .replace(/-+/g, "-"); // collapse dashes
-
-    return str;
-  };
 
   const handleRedirectBook = (book) => {
     const slug = convertSlug(book.mainText);
     navigate(`/book/${slug}?id=${book._id}`);
   };
-
   if (isLoading === true) {
     return (
       <div className="container">
@@ -355,7 +323,9 @@ const Home = () => {
                                 ref={(el) => (refCheckbox.current[index] = el)}
                                 type="checkbox"
                                 style={{ marginRight: 10 }}
-                                onChange={(e) => handleSortDepsCategory(e)}
+                                onChange={(e) =>
+                                  handleSortDepsCategory(e, item)
+                                }
                               ></input>
                               {item}
                             </Col>
@@ -711,239 +681,27 @@ const Home = () => {
           </Row>
 
           {/* =============responsive============ */}
-          <Drawer
-            title="Bộ lọc sản phẩm"
-            placement="right"
+
+          <ResponsiveHome
             onClose={onClose}
-            open={modalFilter}
-            headerStyle={{
-              backgroundColor: "rgb(27 168 255)",
-            }}
-            width={window.innerWidth > 576 ? "50%" : "100%"} ///responsive mobile
-          >
-            <Form
-              className="homepage-left"
-              onFinish={onFinish}
-              form={form}
-              onValuesChange={(changedValues, values) =>
-                handleChangeFilter(changedValues, values)
-              }
-            >
-              <div
-                style={{
-                  fontWeight: 600,
-                  fontSize: 16,
-                  marginBottom: 20,
-                }}
-              >
-                Danh mục sản phẩm
-              </div>
-              <Form.Item name="category" labelCol={{ span: 24 }}>
-                <Checkbox.Group>
-                  <Row>
-                    {listCategory?.length > 0 &&
-                      listCategory
-                        .slice(0, numberOfItems)
-                        .map((item, index) => {
-                          return (
-                            <Col
-                              span={24}
-                              className="category-group"
-                              key={`item-${index}`}
-                            >
-                              {/* <Checkbox value={item}>{item}</Checkbox> */}
-                              <input
-                                ref={(el) =>
-                                  (refCheckboxRes.current[index] = el)
-                                }
-                                type="checkbox"
-                                style={{ marginRight: 10 }}
-                              ></input>
-                              {item}
-                            </Col>
-                          );
-                        })}
-                    {showMore === false ? (
-                      <div onClick={() => handleShowMore()} className="show">
-                        <p>Xem tất cả</p>
-                        <AiOutlineDown style={{ color: "rgb(13, 92, 182)" }} />
-                      </div>
-                    ) : (
-                      <div onClick={() => handleShowMore()} className="show">
-                        <p>Thu gọn</p>
-                        <AiOutlineUp style={{ color: "rgb(13, 92, 182)" }} />
-                      </div>
-                    )}
-                  </Row>
-                </Checkbox.Group>
-              </Form.Item>
-
-              <Divider />
-
-              <Form.Item>
-                <div style={{ lineHeight: 3 }}>
-                  <span
-                    style={{
-                      fontWeight: 600,
-                      fontSize: 16,
-                      display: "block",
-                    }}
-                  >
-                    Đánh giá
-                  </span>
-                  <Row gutter={10}>
-                    <Col span={8}>
-                      <div
-                        onClick={() => handleSelectStar("five")}
-                        className={activeStar?.five ? "active " : "default"}
-                      >
-                        <AiFillStar
-                          style={{ color: "#fadb14", marginRight: 5 }}
-                        />
-                        <span>5 sao</span>
-                      </div>
-                    </Col>
-
-                    <Col span={8}>
-                      <div
-                        onClick={() => handleSelectStar("four")}
-                        className={activeStar?.four ? "active" : "default"}
-                      >
-                        <AiFillStar
-                          style={{ color: "#fadb14", marginRight: 5 }}
-                        />
-                        <span>4 sao</span>
-                      </div>
-                    </Col>
-
-                    <Col span={8}>
-                      <div
-                        onClick={() => handleSelectStar("three")}
-                        className={activeStar?.three ? "active" : "default"}
-                      >
-                        <AiFillStar
-                          style={{ color: "#fadb14", marginRight: 5 }}
-                        />
-                        <span>3 sao</span>
-                      </div>
-                    </Col>
-                  </Row>
-                </div>
-              </Form.Item>
-              <Divider />
-
-              <Form.Item>
-                <div className="price" style={{ lineHeight: 3 }}>
-                  <span
-                    style={{
-                      fontWeight: 600,
-                      fontSize: 16,
-                      display: "block",
-                    }}
-                  >
-                    Giá
-                  </span>
-                  <Row gutter={[10, 10]}>
-                    <Col span={12}>
-                      <div
-                        onClick={() => {
-                          handleSelectPrice("a", [40000]);
-                        }}
-                        className={
-                          activePrice.a === true ? "active" : "default"
-                        }
-                      >
-                        Dưới 40.000
-                      </div>
-                    </Col>
-                    <Col span={12}>
-                      <div
-                        onClick={() => {
-                          handleSelectPrice("b", [40000, 120000]);
-                        }}
-                        className={
-                          activePrice.b === true ? "active" : "default"
-                        }
-                      >
-                        {" "}
-                        40.000 - 120.000
-                      </div>
-                    </Col>
-
-                    <Col span={12}>
-                      <div
-                        onClick={() => {
-                          handleSelectPrice("c", [120000, 300000]);
-                        }}
-                        className={
-                          activePrice.c === true ? "active" : "default"
-                        }
-                      >
-                        {" "}
-                        120.000 - 300.000
-                      </div>
-                    </Col>
-                    <Col span={12}>
-                      <div
-                        onClick={() => {
-                          handleSelectPrice("d", [300000]);
-                        }}
-                        className={
-                          activePrice.d === true ? "active" : "default"
-                        }
-                      >
-                        {" "}
-                        Trên 300.000
-                      </div>
-                    </Col>
-                  </Row>
-                </div>
-              </Form.Item>
-
-              <Form.Item label="Chọn khoảng giá từ" labelCol={{ span: 24 }}>
-                <div
-                  style={{
-                    display: "flex",
-                    justifyContent: "space-between",
-                  }}
-                >
-                  <Form.Item name="from">
-                    <InputNumber
-                      className="input-number"
-                      min={0}
-                      placeholder="đ"
-                      formatter={(value) =>
-                        `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-                      }
-                    />
-                  </Form.Item>
-                </div>
-
-                <div
-                  style={{
-                    gap: 20,
-                    display: "flex",
-                    alignItems: "center",
-                  }}
-                >
-                  <Button
-                    onClick={() => form.submit()}
-                    style={{ width: "70%" }}
-                    type="primary"
-                  >
-                    Áp dụng
-                  </Button>
-
-                  <Button
-                    onClick={() => handleReset()}
-                    style={{ width: "30%" }}
-                  >
-                    <GrPowerReset />
-                  </Button>
-                </div>
-              </Form.Item>
-            </Form>
-          </Drawer>
+            modalFilter={modalFilter}
+            onFinish={onFinish}
+            form={form}
+            handleChangeFilter={handleChangeFilter}
+            listCategory={listCategory}
+            showMore={showMore}
+            setShowMore={setShowMore}
+            handleShowMore={handleShowMore}
+            handleSelectStar={handleSelectStar}
+            activeStar={activeStar}
+            activePrice={activePrice}
+            handleSelectPrice={handleSelectPrice}
+            handleReset={handleReset}
+            filterCategory={filterCategory}
+            callApiSortDepsCategory={callApiSortDepsCategory}
+            setIsLoading={setIsLoading}
+            refCheckboxRes={refCheckboxRes}
+          />
         </div>
       </div>
     );
