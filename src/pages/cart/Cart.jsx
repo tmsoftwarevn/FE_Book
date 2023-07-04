@@ -1,9 +1,9 @@
 import { Divider, Image, Popconfirm } from "antd";
 import { useDispatch, useSelector } from "react-redux";
 import "./cart.scss";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { AiOutlineMinus, AiOutlinePlus } from "react-icons/ai";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import {
   doDeleteBook,
   doUpdateBookPageCart,
@@ -35,14 +35,41 @@ const Cart = () => {
   const [renderPrice, setRenderPrice] = useState(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
-
+  const location = useLocation();
+  const id_buyNow = location.state?.id_book;
   let totalPrice = 0;
   let countProduct = 0;
+
+  useEffect(() => {
+    const indexBuyNow = listCart.findIndex(
+      (item, index) => item.id === id_buyNow
+    );
+    if (indexBuyNow > -1) {
+      refCheckbox.current[indexBuyNow].checked = true;
+      setRenderPrice(!renderPrice);
+      if (listCart.length === 1) {
+        refSelectAll.current.checked = true;
+      }
+    }
+    displaySelectAll();
+  }, [listCart]);
+  const displaySelectAll = () => {
+    if (refSelectAll && refSelectAll.current) {
+      let checkAll = refCheckbox.current.findIndex((item, i) => {
+        if (item) {
+          return item.checked === false;
+        }
+      });
+      if (checkAll === -1) {
+        refSelectAll.current.checked = true;
+      }
+    }
+  };
   const onChangeSelectSingle = (e) => {
-    setRenderPrice(!renderPrice);
     if (e.target.checked === false && refSelectAll.current.checked === true)
       refSelectAll.current.checked = false;
     let isChecked = refCheckbox.current.findIndex((item) => {
+      // xoa roi ref van con == null
       if (item != null) {
         return item.checked === false;
       }
@@ -50,6 +77,8 @@ const Cart = () => {
     if (isChecked === -1) {
       refSelectAll.current.checked = true;
     }
+    // ep compomnent render de lay useref => calc price
+    setRenderPrice(!renderPrice);
   };
   const onChangeSelectAll = (e) => {
     setRenderPrice(!renderPrice);
@@ -83,8 +112,10 @@ const Cart = () => {
     dispatch(saveInfoCartUser());
   };
   const handleClickOutside = (e, total, index, item) => {
-    if (!e.target.value) refCount.current[index].value = 1;
+    if (+e.target.value === 0) refCount.current[index].value = 1;
     if (e.target.value > total) refCount.current[index].value = total;
+    if (e.target.value)
+      refCount.current[index].value = +refCount.current[index].value;
     const dataAddBook = {
       quantity: +refCount.current[index].value,
       id: item.id,
@@ -103,8 +134,20 @@ const Cart = () => {
     const slug = convertSlug(book.detail.mainText);
     navigate(`/book/${slug}?id=${book.id}`);
   };
-  const handleDeleteBook = (item) => {
-    dispatch(doDeleteBook(item));
+  const handleDeleteBook = (book) => {
+    // dich mang xuong 1, ref bi override
+    if (listCart) {
+      listCart.map((item, index) => {
+        if (item.id === book.id) {
+          for (let i = index; i < listCart.length; i++) {
+            refCheckbox.current[i].checked =
+              refCheckbox?.current[i + 1]?.checked;
+          }
+          return;
+        }
+      });
+    }
+    dispatch(doDeleteBook(book));
     dispatch(saveInfoCartUser());
   };
 
@@ -159,6 +202,7 @@ const Cart = () => {
                         <div className="group-c">
                           <div className="check-box">
                             <input
+                              id={`checkbox${i}`}
                               type="checkbox"
                               ref={(el) => (refCheckbox.current[i] = el)}
                               onChange={(e) => onChangeSelectSingle(e)}
@@ -273,7 +317,9 @@ const Cart = () => {
                   }).format(totalPrice)}
                 </div>
               </div>
-              <div className="buy">Mua hàng</div>
+              <div className="buy" onClick={() => navigate("/checkout")}>
+                Mua hàng
+              </div>
             </div>
           </div>
         </div>

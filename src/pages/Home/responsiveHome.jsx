@@ -19,7 +19,6 @@ const ResponsiveHome = (props) => {
     handleReset,
     filterCategory,
     callApiSortDepsCategory,
-    refCheckboxRes,
   } = props;
   const [showMore, setShowMore] = useState(false);
   const numberOfItems = showMore ? listCategory.length : 5;
@@ -36,7 +35,7 @@ const ResponsiveHome = (props) => {
           }
           setTimeout(() => {
             reftest.current[index].checked = true;
-          }, 0);
+          }, 200);
           // callApiSortDepsCategory(item);
         }
       });
@@ -47,6 +46,7 @@ const ResponsiveHome = (props) => {
     console.log("checked res", item);
     callApiSortDepsCategory();
   };
+
   return (
     <div>
       <Drawer
@@ -88,7 +88,6 @@ const ResponsiveHome = (props) => {
                     >
                       <input
                         ref={(el) => (reftest.current[index] = el)}
-                        //ref={(el) => (refCheckboxRes.current[index] = el)}
                         type="checkbox"
                         style={{ marginRight: 10 }}
                         onChange={(e) => handleSelectCategoryRes(e, item)}

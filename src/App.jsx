@@ -24,6 +24,7 @@ import Dashboard from "./pages/admin/dashboard/Dashboard";
 import ManagerBook from "./pages/admin/managerBook/ManagerBook";
 import BookPageDetail from "./pages/book/BookPageDetail";
 import Cart from "./pages/cart/Cart";
+import Checkout from "./pages/checkout/Chekout";
 
 const Layout = () => {
   const role = useSelector((state) => state.account?.user?.role);
@@ -78,10 +79,18 @@ export default function App() {
           element: <BookPageDetail />,
         },
         {
-          path: "cart/*",
+          path: "cart",
           element: (
             <ProtectedRoute>
               <Cart />
+            </ProtectedRoute>
+          ),
+        },
+        {
+          path: "checkout",
+          element: (
+            <ProtectedRoute>
+              <Checkout />
             </ProtectedRoute>
           ),
         },

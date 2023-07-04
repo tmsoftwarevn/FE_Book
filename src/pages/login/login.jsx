@@ -13,7 +13,9 @@ const LoginPage = () => {
   const onFinish = async (values) => {
     const { username, password } = values;
     let res = await ApiLogin(username, password);
+
     if (res?.data) {
+      console.log("api login");
       localStorage.setItem("access_token", res.data.access_token);
       dispatch(doLoginAction(res.data));
       message.success("Đăng nhập thành công");
@@ -35,7 +37,8 @@ const LoginPage = () => {
   return (
     <div className="login-container">
       <div className="content">
-        <div className="title">Windy Book</div>
+        <div className="title-login">Đăng Nhập</div>
+        <Divider />
         <div className="form-content">
           <Form name="basic" onFinish={onFinish} autoComplete="off">
             <Form.Item

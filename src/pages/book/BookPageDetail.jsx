@@ -1,4 +1,12 @@
-import { Row, Col, Rate, Divider, Breadcrumb } from "antd";
+import {
+  Row,
+  Col,
+  Rate,
+  Divider,
+  Breadcrumb,
+  notification,
+  message,
+} from "antd";
 import "./book.scss";
 import ImageGallery from "react-image-gallery";
 import { useEffect, useRef, useState } from "react";
@@ -32,6 +40,7 @@ const BookPageDetail = (props) => {
   const location = useLocation();
   const params = new URLSearchParams(location.search);
   const isAuthenticated = useSelector((state) => state.account.isAuthenticated);
+  const listCart = useSelector((state) => state.cart.listCart);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   let id = params.get("id");
@@ -162,24 +171,66 @@ const BookPageDetail = (props) => {
         total: detailBook.quantity,
       },
     };
-    dispatch(doAddBookAction(dataAddBook));
-    refMessage.current.onModalMessage();
-    dispatch(saveInfoCartUser());
+    let check = false;
+    listCart.map((item, index) => {
+      if (item.id === id && item.quantity === detailBook.quantity) {
+        check = true;
+        return;
+      }
+    });
+    if (check === true) message.error("Số lượng sản phẩm trong giỏ đã tối đa");
+    else {
+      dispatch(doAddBookAction(dataAddBook));
+      refMessage.current.onModalMessage();
+      dispatch(saveInfoCartUser());
+    }
   };
 
+  const handleBuyNow = (name) => {
+    if (isAuthenticated === false) {
+      navigate("/login");
+      return;
+    }
+    let quantity = 1;
+    if (name === "lg") {
+      quantity = refCount.current.value;
+    } else {
+      quantity = refCountResponsive.current.value;
+    }
+
+    const dataAddBook = {
+      quantity: +quantity,
+      id: id,
+      detail: {
+        thumbnail: detailBook.thumbnail,
+        mainText: detailBook.mainText,
+        price: detailBook.price,
+        total: detailBook.quantity,
+      },
+    };
+    dispatch(doAddBookAction(dataAddBook));
+    dispatch(saveInfoCartUser());
+    navigate("/cart", { state: { id_book: id } });
+  };
   const handleClickOutside = (e, name) => {
     if (name === "lg") {
-      if (!e.target.value) refCount.current.value = 1;
+      if (+e.target.value === 0) refCount.current.value = 1;
       if (e.target.value > detailBook.quantity)
         refCount.current.value = detailBook.quantity;
+      if (e.target.value) {
+        refCount.current.value = +refCount.current.value;
+      }
     }
     if (name === "xs") {
-      if (!e.target.value) refCountResponsive.current.value = 1;
+      // convert empty && 0
+      if (+e.target.value === 0) refCountResponsive.current.value = 1;
       if (e.target.value > detailBook.quantity)
         refCountResponsive.current.value = detailBook.quantity;
+      if (e.target.value) {
+        refCountResponsive.current.value = +refCountResponsive.current.value; //covert  089
+      }
     }
   };
-
   if (isLoading === true) {
     return (
       <div className="container">
@@ -305,7 +356,12 @@ const BookPageDetail = (props) => {
                           <BsCartPlus className="icon-cart" />
                           <span>Thêm vào giỏ hàng</span>
                         </button>
-                        <button className="now">Mua ngay</button>
+                        <button
+                          className="now"
+                          onClick={() => handleBuyNow("lg")}
+                        >
+                          Mua ngay
+                        </button>
                       </div>
                     </Col>
                   </Col>
@@ -319,6 +375,7 @@ const BookPageDetail = (props) => {
               refCountResponsive={refCountResponsive}
               handleClickOutside={handleClickOutside}
               handleAddToCart={handleAddToCart}
+              handleBuyNow={handleBuyNow}
             />
 
             <div className="detail">

@@ -7,6 +7,7 @@ const ResponsiveBookDetail = (props) => {
     refCountResponsive,
     handleClickOutside,
     handleAddToCart,
+    handleBuyNow,
   } = props;
   return (
     <div className="responsive-cart">
@@ -35,7 +36,7 @@ const ResponsiveBookDetail = (props) => {
         </div>
       </div>
       <div className="now-res">
-        <span>Mua ngay</span>
+        <span onClick={() => handleBuyNow("xs")}>Mua ngay</span>
       </div>
     </div>
   );

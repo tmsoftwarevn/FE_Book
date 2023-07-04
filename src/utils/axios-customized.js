@@ -1,7 +1,13 @@
 import axios from "axios";
 import axiosRetry from "axios-retry";
-
+import NProgress from "nprogress";
 const baseURL = import.meta.env.VITE_BACKEND_URL;
+
+// NProgress.configure({
+//   showSpinner: false,
+//   easing: "ease",
+//   speed: 1000,
+// });
 
 const instance = axios.create({
   baseURL: baseURL,
@@ -31,7 +37,7 @@ instance.interceptors.request.use(
     if (user) {
       config.headers.Authorization = `Bearer ${user}`;
     }
-
+    // NProgress.start();
     return config;
   },
   function (error) {
@@ -43,9 +49,11 @@ const NO_RETRY_HEADER = "x-no-retry";
 
 instance.interceptors.response.use(
   function (response) {
+    NProgress.done();
     return response && response.data ? response.data : response;
   },
   async function (error) {
+    // NProgress.done();
     if (
       error.config &&
       error.response &&

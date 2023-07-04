@@ -40,7 +40,6 @@ const Home = () => {
 
   const refCarousel = useRef("");
   const refCheckbox = useRef([]);
-  const refCheckboxRes = useRef([]);
 
   const navigate = useNavigate();
   const location = useLocation();
@@ -95,7 +94,7 @@ const Home = () => {
         }
       });
       setTimeout(() => {
-        setIsLoading(false);
+        setIsLoading(false); // skeleton hien , doi load xong ref
       }, 300);
     }
   }, [listCategory]);
@@ -700,7 +699,6 @@ const Home = () => {
             filterCategory={filterCategory}
             callApiSortDepsCategory={callApiSortDepsCategory}
             setIsLoading={setIsLoading}
-            refCheckboxRes={refCheckboxRes}
           />
         </div>
       </div>
