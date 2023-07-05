@@ -10,6 +10,7 @@ const initialState = {
     role: "",
     avatar: "",
     id: "",
+    address: "",
   },
 };
 
@@ -49,21 +50,18 @@ export const accountSlice = createSlice({
         id: "",
       };
     },
+    doUpdateAddressUser: (state, action) => {
+      let info = action.payload;
+      state.user.address = info;
+    },
   },
-
-  //   extraReducers: (builder) => {
-  //     builder
-  //       .addCase(incrementAsync.pending, (state) => {
-  //         state.status = "loading";
-  //       })
-  //       .addCase(incrementAsync.fulfilled, (state, action) => {
-  //         state.status = "idle";
-  //         state.value += action.payload;
-  //       });
-  //   },
 });
 
-export const { doLoginAction, doGetAccountAction, doLogoutAction } =
-  accountSlice.actions;
+export const {
+  doLoginAction,
+  doGetAccountAction,
+  doLogoutAction,
+  doUpdateAddressUser,
+} = accountSlice.actions;
 
 export default accountSlice.reducer;

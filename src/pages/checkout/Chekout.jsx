@@ -1,14 +1,56 @@
-import { Button, Col, Divider, Form, Image, Input, Modal, Row } from "antd";
+import {
+  Badge,
+  Button,
+  Col,
+  Descriptions,
+  Divider,
+  Form,
+  Image,
+  Input,
+  Modal,
+  Row,
+} from "antd";
 import "./checkout.scss";
-import { useSelector } from "react-redux";
-import { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useEffect, useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
+import { doUpdateAddressUser } from "../../redux/account/accountSlice";
+import {
+  doRemoveAfterOrder,
+  saveInfoCartUser,
+} from "../../redux/cart/cartSlice";
 
 const { TextArea } = Input;
+const validKeyForPayment = [
+  "0",
+  "1",
+  "2",
+  "3",
+  "4",
+  "5",
+  "6",
+  "7",
+  "8",
+  "9",
+  "Backspace",
+];
 const Checkout = () => {
-  const listProduct = useSelector((state) => state.cart.listCart);
-  const address = useSelector((state) => state.account?.address);
+  let listCart = useSelector((state) => state.cart.listCart);
+  const address = useSelector((state) => state.account?.user?.address);
   const [form] = Form.useForm();
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const location = useLocation();
+  const navigate = useNavigate();
+  const listProductBuy = location.state?.listBook;
+  const dispatch = useDispatch();
+  let totalPriceProduct = 0;
+  let totalFinal = 0;
+
+  useEffect(() => {
+    if (!listProductBuy) {
+      navigate("/cart");
+    }
+  }, [listProductBuy]);
   const showModal = () => {
     setIsModalOpen(true);
   };
@@ -19,8 +61,13 @@ const Checkout = () => {
     setIsModalOpen(false);
   };
   const onFinish = (values) => {
-    const { username, phone, address } = values;
-    console.log("name", values);
+    dispatch(doUpdateAddressUser(values));
+  };
+  const handleOrderProduct = () => {
+    // call api dat hang
+    dispatch(doRemoveAfterOrder(listProductBuy));
+    dispatch(saveInfoCartUser());
+    navigate("/order", { state: { isCheckout: true } });
   };
   return (
     <div className="checkout">
@@ -44,25 +91,38 @@ const Checkout = () => {
                   <div
                     style={{
                       marginRight: 30,
-                      maxWidth: "70%",
                     }}
+                    className="address-text"
                   >
-                    <span style={{ fontWeight: 600, color: "#222" }}>
+                    <span
+                      style={{
+                        fontWeight: 500,
+                        marginRight: 30,
+                      }}
+                    >
                       {" "}
-                      name sodienthoai{" "}
+                      {address.username} <Divider type="vertical" />
+                      {address.phone}
                     </span>
-                    dia cho chi tiet
+                    {address.address}
                   </div>
                 </>
               ) : (
                 <>
                   <div style={{ marginRight: 20 }}>
-                    Xin Nhập thông tin giao hàng...
+                    Chưa Nhập thông tin giao hàng...
                   </div>
                 </>
               )}
 
-              <div style={{ color: "blue", cursor: "pointer" }}>
+              <div
+                style={{
+                  color: "blue",
+                  cursor: "pointer",
+                  width: 150,
+                  textAlign: "center",
+                }}
+              >
                 <span onClick={showModal}>Thay đổi</span>
                 <Modal
                   title="Địa chỉ nhận hàng"
@@ -71,7 +131,8 @@ const Checkout = () => {
                     form.submit(), handleOk();
                   }}
                   onCancel={handleCancel}
-                  width={"50vw"}
+                  width={window.innerWidth > 576 ? "70%" : "100%"}
+                  maskClosable={false}
                 >
                   <Form
                     name="basic"
@@ -100,6 +161,11 @@ const Checkout = () => {
                           labelCol={{ span: 24 }}
                           label="Số Điện Thoại"
                           name="phone"
+                          onKeyDown={(e) => {
+                            if (!validKeyForPayment.includes(e.key)) {
+                              e.preventDefault();
+                            }
+                          }}
                           rules={[
                             {
                               required: true,
@@ -129,47 +195,54 @@ const Checkout = () => {
               </div>
             </div>
           </div>
+
           <div className="row-header">
             <div className="text-product">tất cả sản phẩm </div>
             <span className="text-price">đơn giá</span>
             <span className="text-count">số lượng</span>
+            <span className="text-count-res">SL</span>
             <span className="text-total">thành tiền</span>
           </div>
-
           <div className="list-product">
-            {listProduct &&
-              listProduct.map((item, index) => {
-                return (
-                  <>
-                    <div className="group">
-                      <div className="thumbnail">
-                        <Image
-                          width={80}
-                          height={80}
-                          preview={false}
-                          src={`${
-                            import.meta.env.VITE_BACKEND_URL
-                          }/images/book/${item.detail.thumbnail}`}
-                        />
+            {listCart.length > 0 &&
+              listProductBuy?.length > 0 &&
+              listCart.map((item, index) => {
+                return listProductBuy.map((idBuy, i) => {
+                  if (item.id === idBuy) {
+                    totalPriceProduct += item.quantity * item.detail.price;
+                    return (
+                      <div key={`buyid${i}`} className="parent">
+                        <div className="group">
+                          <div className="thumbnail">
+                            <Image
+                              width={80}
+                              height={80}
+                              preview={false}
+                              src={`${
+                                import.meta.env.VITE_BACKEND_URL
+                              }/images/book/${item.detail.thumbnail}`}
+                            />
+                          </div>
+                          <div className="name">{item.detail.mainText}</div>
+                        </div>
+                        <div className="price">
+                          {new Intl.NumberFormat("vi-VN", {
+                            style: "currency",
+                            currency: "VND",
+                          }).format(item.detail.price)}
+                        </div>
+                        <div className="quantity">{item.quantity}</div>
+                        <div className="total-price">
+                          {new Intl.NumberFormat("vi-VN", {
+                            style: "currency",
+                            currency: "VND",
+                          }).format(item.quantity * item.detail.price)}
+                        </div>
+                        <Divider />
                       </div>
-                      <div className="name">{item.detail.mainText}</div>
-                    </div>
-                    <div className="price">
-                      {new Intl.NumberFormat("vi-VN", {
-                        style: "currency",
-                        currency: "VND",
-                      }).format(item.detail.price)}
-                    </div>
-                    <div className="quantity">{item.quantity}</div>
-                    <div className="total-price">
-                      {new Intl.NumberFormat("vi-VN", {
-                        style: "currency",
-                        currency: "VND",
-                      }).format(item.quantity * item.detail.price)}
-                    </div>
-                    <Divider />
-                  </>
-                );
+                    );
+                  }
+                });
               })}
           </div>
 
@@ -183,17 +256,37 @@ const Checkout = () => {
                     width: 200,
                     marginBottom: 10,
                   }}
+                  className="text-res"
                 >
-                  Vận chuyển: &nbsp;
-                </span>{" "}
+                  Vận chuyển:
+                </span>
+                <Descriptions.Item label="Status">
+                  <Badge status="processing" style={{ marginRight: 10 }} />
+                </Descriptions.Item>
+                Miễn phí vận chuyển
+              </div>
+              <div className="delivery-res">
+                {" "}
+                <Descriptions.Item label="Status">
+                  <Badge status="processing" style={{ marginRight: 10 }} />
+                </Descriptions.Item>
                 Miễn phí vận chuyển
               </div>
               <div className="payment ">
                 <span
                   style={{ color: "blue", display: "inline-block", width: 200 }}
                 >
-                  Phương thức thanh toán: &nbsp;
-                </span>{" "}
+                  Phương thức thanh toán:
+                </span>
+                <Descriptions.Item label="Status">
+                  <Badge status="processing" style={{ marginRight: 10 }} />
+                </Descriptions.Item>
+                Thanh toán khi nhận hàng
+              </div>
+              <div className="payment-res">
+                <Descriptions.Item label="Status">
+                  <Badge status="processing" style={{ marginRight: 10 }} />
+                </Descriptions.Item>
                 Thanh toán khi nhận hàng
               </div>
             </div>
@@ -204,48 +297,38 @@ const Checkout = () => {
                 lineHeight: 2,
               }}
             >
-              <div
-                style={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                }}
-              >
-                <span>Tổng tiền hàng:</span>
+              <div className="tienhang">
+                <span>Tổng tiền hàng: </span>
                 <span>
                   {new Intl.NumberFormat("vi-VN", {
                     style: "currency",
                     currency: "VND",
-                  }).format(11111111)}
+                  }).format(totalPriceProduct)}
                 </span>
               </div>
 
-              <div
-                style={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                }}
-              >
-                <span>Phí vận chuyển:</span>
+              <div className="phivanchuyen">
+                <span>Phí vận chuyển: </span>
                 <span>0 đ</span>
               </div>
 
-              <div
-                style={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                }}
-              >
+              <div className="tongthanhtoan">
                 <span>Tổng thanh toán: &nbsp;</span>
                 <span style={{ color: "#ee4d2d" }}>
                   {" "}
                   {new Intl.NumberFormat("vi-VN", {
                     style: "currency",
                     currency: "VND",
-                  }).format(32434344)}
+                  }).format(totalPriceProduct)}
                 </span>
               </div>
 
-              <button className="btn-order">Đặt hàng (3)</button>
+              <button
+                className="btn-order"
+                onClick={() => handleOrderProduct()}
+              >
+                Đặt hàng ({listProductBuy && listProductBuy?.length})
+              </button>
             </div>
           </div>
         </div>

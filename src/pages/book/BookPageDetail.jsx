@@ -17,11 +17,7 @@ import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
 import { callGetDetailBook } from "../../services/api";
 import BookSkeleton from "./BookSkeleton";
 
-import {
-  doAddBookAction,
-  doResetErrQuantity,
-  saveInfoCartUser,
-} from "../../redux/cart/cartSlice";
+import { doAddBookAction, saveInfoCartUser } from "../../redux/cart/cartSlice";
 import { useDispatch, useSelector } from "react-redux";
 import MessageCart from "../cart/MessageCart";
 import ResponsiveBookDetail from "./responsiveBookDetail";

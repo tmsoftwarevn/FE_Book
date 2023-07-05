@@ -1,4 +1,4 @@
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice, current } from "@reduxjs/toolkit";
 
 const initialState = {
   listCart: [],
@@ -43,7 +43,12 @@ export const cartSlice = createSlice({
       let id = action.payload.id;
       state.listCart = state.listCart.filter((item) => item.id != id);
     },
-    doResetErrQuantity: (state, action) => {},
+    doRemoveAfterOrder: (state, action) => {
+      let arr = action.payload;
+      state.listCart = state.listCart.filter((item) => {
+        return !arr.includes(item.id);
+      });
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(saveInfoCartUser.fulfilled, (state, action) => {
@@ -59,7 +64,7 @@ export const {
   doUpdateBookPageCart,
   doRemoveCartLogout,
   doDeleteBook,
-  doResetErrQuantity,
+  doRemoveAfterOrder,
 } = cartSlice.actions;
 
 export default cartSlice.reducer;

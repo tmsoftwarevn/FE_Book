@@ -7,7 +7,6 @@ import {
 } from "react-router-dom";
 import { Outlet } from "react-router-dom";
 import LoginPage from "./pages/login/login";
-import ContactPage from "./pages/contact";
 import Header from "./components/Header/header";
 import Footer from "./components/Footer";
 import Home from "./pages/Home/index";
@@ -25,6 +24,8 @@ import ManagerBook from "./pages/admin/managerBook/ManagerBook";
 import BookPageDetail from "./pages/book/BookPageDetail";
 import Cart from "./pages/cart/Cart";
 import Checkout from "./pages/checkout/Chekout";
+import ManagerOrder from "./pages/admin/order/managerOrder";
+import PageOrder from "./pages/order/order";
 
 const Layout = () => {
   const role = useSelector((state) => state.account?.user?.role);
@@ -70,10 +71,7 @@ export default function App() {
       errorElement: <Notfound />,
       children: [
         { index: true, element: <Home /> },
-        {
-          path: "contact/*",
-          element: <ContactPage />,
-        },
+
         {
           path: "book/:slug",
           element: <BookPageDetail />,
@@ -91,6 +89,14 @@ export default function App() {
           element: (
             <ProtectedRoute>
               <Checkout />
+            </ProtectedRoute>
+          ),
+        },
+        {
+          path: "order",
+          element: (
+            <ProtectedRoute>
+              <PageOrder />
             </ProtectedRoute>
           ),
         },
@@ -128,7 +134,7 @@ export default function App() {
         },
         {
           path: "order",
-          element: <ContactPage />,
+          element: <ManagerOrder />,
         },
       ],
     },

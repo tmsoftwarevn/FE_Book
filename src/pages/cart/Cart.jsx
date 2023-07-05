@@ -1,4 +1,4 @@
-import { Divider, Image, Popconfirm } from "antd";
+import { Divider, Image, Popconfirm, message } from "antd";
 import { useDispatch, useSelector } from "react-redux";
 import "./cart.scss";
 import { useEffect, useRef, useState } from "react";
@@ -33,12 +33,14 @@ const Cart = () => {
 
   const refSelectAll = useRef();
   const [renderPrice, setRenderPrice] = useState(false);
+  const [isEmptyBuy, setIsEmptyBuy] = useState(true);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const location = useLocation();
   const id_buyNow = location.state?.id_book;
   let totalPrice = 0;
   let countProduct = 0;
+  let arrSelect = [];
 
   useEffect(() => {
     const indexBuyNow = listCart.findIndex(
@@ -53,9 +55,20 @@ const Cart = () => {
     }
     displaySelectAll();
   }, [listCart]);
+  useEffect(() => {
+    let checkEmpty = refCheckbox.current.findIndex((item, i) => {
+      if (item) {
+        return item.checked === true;
+      }
+    });
+    if (checkEmpty > -1) setIsEmptyBuy(false);
+    else setIsEmptyBuy(true);
+  }, [renderPrice]);
+
   const displaySelectAll = () => {
     if (refSelectAll && refSelectAll.current) {
       let checkAll = refCheckbox.current.findIndex((item, i) => {
+        //not null
         if (item) {
           return item.checked === false;
         }
@@ -69,7 +82,6 @@ const Cart = () => {
     if (e.target.checked === false && refSelectAll.current.checked === true)
       refSelectAll.current.checked = false;
     let isChecked = refCheckbox.current.findIndex((item) => {
-      // xoa roi ref van con == null
       if (item != null) {
         return item.checked === false;
       }
@@ -77,7 +89,6 @@ const Cart = () => {
     if (isChecked === -1) {
       refSelectAll.current.checked = true;
     }
-    // ep compomnent render de lay useref => calc price
     setRenderPrice(!renderPrice);
   };
   const onChangeSelectAll = (e) => {
@@ -150,7 +161,15 @@ const Cart = () => {
     dispatch(doDeleteBook(book));
     dispatch(saveInfoCartUser());
   };
-
+  const handleBuyProduct = () => {
+    if (isEmptyBuy === true) {
+      message.error("Bạn chưa chọn sản phẩm nào");
+    } else {
+      navigate("/checkout", {
+        state: { listBook: arrSelect },
+      });
+    }
+  };
   if (listCart.length < 1) {
     return (
       <div className="container">
@@ -195,6 +214,7 @@ const Cart = () => {
                   if (refCheckbox.current[i]?.checked === true) {
                     totalPrice += item.quantity * item.detail.price;
                     countProduct += 1;
+                    arrSelect.push(item.id);
                   }
                   return (
                     <div key={`iitemm-${i}`}>
@@ -317,7 +337,7 @@ const Cart = () => {
                   }).format(totalPrice)}
                 </div>
               </div>
-              <div className="buy" onClick={() => navigate("/checkout")}>
+              <div className="buy" onClick={() => handleBuyProduct()}>
                 Mua hàng
               </div>
             </div>
