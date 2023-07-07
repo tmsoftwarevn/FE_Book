@@ -7,11 +7,11 @@ const PageOrder = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const isCheckout = location.state?.isCheckout;
-  // chan ko cho quay lai
-  history.pushState(null, null, location.href);
-  window.onpopstate = function (event) {
-    history.go(1);
-  };
+  //ko cho quay lai
+  history.pushState(null, document.title, location.href);
+  window.addEventListener("popstate", function (event) {
+    history.pushState(null, document.title, location.href);
+  });
   useEffect(() => {
     if (!isCheckout) {
       navigate("/cart");

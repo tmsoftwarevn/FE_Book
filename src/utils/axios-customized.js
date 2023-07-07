@@ -1,6 +1,7 @@
 import axios from "axios";
 import axiosRetry from "axios-retry";
 import NProgress from "nprogress";
+
 const baseURL = import.meta.env.VITE_BACKEND_URL;
 
 // NProgress.configure({

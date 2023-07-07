@@ -20,7 +20,7 @@ import { GrPowerReset } from "react-icons/gr";
 import { AiOutlineDown } from "react-icons/ai";
 import { AiOutlineUp } from "react-icons/ai";
 import { AiFillStar } from "react-icons/ai";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate, useOutletContext } from "react-router-dom";
 import HomeSkeleton from "./homeSkeleton";
 import { AiOutlineLeft, AiOutlineRight } from "react-icons/ai";
 import ResponsiveHome from "./responsiveHome";
@@ -40,9 +40,9 @@ const Home = () => {
 
   const refCarousel = useRef("");
   const refCheckbox = useRef([]);
-
   const navigate = useNavigate();
   const location = useLocation();
+  const [searchBook, setSearchBook] = useOutletContext();
 
   const numberOfItems = showMore ? listCategory.length : 5;
   let filterCategory = location.state?.category;
@@ -67,7 +67,7 @@ const Home = () => {
   useEffect(() => {
     getListBook();
     window.scrollTo(0, 0);
-  }, [current]);
+  }, [current, searchBook]);
   useEffect(() => {
     const getListCategory = async () => {
       let res = await callFetchCategory();
@@ -267,6 +267,8 @@ const Home = () => {
       four: false,
       three: false,
     });
+    //reset search header
+    setSearchBook("");
   };
   const handleShowMore = () => {
     setShowMore(!showMore);

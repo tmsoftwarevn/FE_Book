@@ -32,7 +32,7 @@ const Layout = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const prevUrl = location.state?.from?.pathname.startsWith("/admin");
-
+  const [searchBook, setSearchBook] = useState("");
   useEffect(() => {
     if (role && role === "ADMIN" && prevUrl !== true) {
       navigate("/admin/dashboard");
@@ -41,8 +41,8 @@ const Layout = () => {
 
   return (
     <div className="layout-app">
-      <Header />
-      <Outlet />
+      <Header searchBook={searchBook} setSearchBook={setSearchBook} />
+      <Outlet context={[searchBook, setSearchBook]} />
       <Footer />
     </div>
   );

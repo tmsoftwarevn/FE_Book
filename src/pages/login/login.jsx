@@ -14,6 +14,7 @@ const LoginPage = () => {
     const { username, password } = values;
     let res = await ApiLogin(username, password);
 
+    console.log("check login", res);
     if (res?.data) {
       console.log("api login");
       localStorage.setItem("access_token", res.data.access_token);
