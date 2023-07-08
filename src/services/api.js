@@ -9,9 +9,9 @@ export const RegisterUser = (fullName, email, password, phone) => {
   });
 };
 
-export const ApiLogin = (username, password) => {
+export const ApiLogin = (email, password) => {
   return axios.post("/api/v1/auth/login", {
-    username,
+    email,
     password,
   });
 };

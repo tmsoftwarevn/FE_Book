@@ -27,8 +27,9 @@ axiosRetry(instance, {
 
 const handleRefreshToken = async () => {
   const res = await instance.get("/api/v1/auth/refresh");
-  if (res && res.data) return res.data.access_token;
-  else return null;
+  if (res && res.data) {
+    return res.data.access_token;
+  } else return null;
 };
 
 instance.interceptors.request.use(

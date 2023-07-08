@@ -11,13 +11,10 @@ const LoginPage = () => {
   const dispatch = useDispatch();
 
   const onFinish = async (values) => {
-    const { username, password } = values;
-    let res = await ApiLogin(username, password);
-
-    console.log("check login", res);
+    const { email, password } = values;
+    let res = await ApiLogin(email, password);
     if (res?.data) {
-      console.log("api login");
-      localStorage.setItem("access_token", res.data.access_token);
+      localStorage.setItem("access_token", res.access_token);
       dispatch(doLoginAction(res.data));
       message.success("Đăng nhập thành công");
       navigate("/");
@@ -45,7 +42,7 @@ const LoginPage = () => {
             <Form.Item
               labelCol={{ span: 24 }}
               label="Email"
-              name="username"
+              name="email"
               rules={[
                 {
                   required: true,

@@ -8,7 +8,7 @@ const initialState = {
     phone: "",
     fullName: "",
     role: "",
-    avatar: "",
+    //avatar: "",
     id: "",
     address: "",
   },
@@ -30,12 +30,12 @@ export const accountSlice = createSlice({
     doLoginAction: (state, action) => {
       state.isAuthenticated = true;
       state.isLoading = false;
-      state.user = action.payload.user;
+      state.user = action.payload;
     },
     doGetAccountAction: (state, action) => {
       state.isAuthenticated = true;
       state.isLoading = false;
-      state.user = action.payload.user;
+      state.user = action.payload;
     },
     doLogoutAction: (state, action) => {
       localStorage.removeItem("access_token");
