@@ -5,10 +5,9 @@ const initialState = {
   isLoading: true,
   user: {
     email: "",
-    phone: "",
     fullName: "",
     role: "",
-    //avatar: "",
+    type: "",
     id: "",
     address: "",
   },
@@ -43,11 +42,11 @@ export const accountSlice = createSlice({
       state.isLoading = true;
       state.user = {
         email: "",
-        phone: "",
         fullName: "",
         role: "",
-        avatar: "",
+        type: "",
         id: "",
+        address: "",
       };
     },
     doUpdateAddressUser: (state, action) => {

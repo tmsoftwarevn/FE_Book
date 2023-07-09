@@ -1,8 +1,8 @@
-import { Button, Modal, message, notification } from "antd";
+import { Modal, message, notification } from "antd";
 import { Form, Input } from "antd";
-import { callCreateUser } from "../../../services/api";
+import { RegisterUser } from "../../../services/api";
 const AddUser = (props) => {
-  const { isModalAddUser, setIsModalAddUser } = props;
+  const { isModalAddUser, setIsModalAddUser, getListUser } = props;
   const [form] = Form.useForm();
   const handleOk = () => {
     setIsModalAddUser(false);
@@ -10,19 +10,21 @@ const AddUser = (props) => {
   const handleCancel = () => {
     setIsModalAddUser(false);
   };
-  
-  const onFinish = async(values) => {
-    const {fullName, email, phone, password} = values;
-    let res = await callCreateUser(fullName, email, password, phone)
-    if(res && res.data){
-        message.success('Tạo thành công user')
-    }
-    else{
-        notification.error('Có lỗi xảy ra')
+
+  const onFinish = async (values) => {
+    const { fullName, email, password } = values;
+    let res = await RegisterUser(fullName, email, password);
+    if (res?.data?.user) {
+      message.success("Thêm mới tài khoản thành công!");
+    } else {
+      notification.error({
+        message: "Có lỗi xảy ra",
+        description: res.message,
+        duration: 4,
+      });
     }
     form.resetFields();
-    handleOk()
-   
+    handleOk();
   };
 
   return (
@@ -73,20 +75,6 @@ const AddUser = (props) => {
             ]}
           >
             <Input.Password />
-          </Form.Item>
-
-          <Form.Item
-            labelCol={{ span: 24 }}
-            label="Phone"
-            name="phone"
-            rules={[
-              {
-                required: true,
-                message: "Please input your phone!",
-              },
-            ]}
-          >
-            <Input />
           </Form.Item>
         </Form>
       </Modal>

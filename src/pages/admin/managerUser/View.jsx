@@ -1,11 +1,11 @@
 import { Button, Drawer, Space } from "antd";
 import { useEffect, useState } from "react";
 import { Badge, Descriptions } from "antd";
-import moment from 'moment';
+import moment from "moment";
 
-const ViewUser = (props) => {  
+const ViewUser = (props) => {
   const { view, setView, dataView } = props;
- 
+
   const onClose = () => {
     setView(false);
   };
@@ -26,19 +26,23 @@ const ViewUser = (props) => {
           </Space>
         }
       >
-        <Descriptions  bordered column={2}>
+        <Descriptions bordered column={2}>
           <Descriptions.Item label="Email">{dataView.email}</Descriptions.Item>
-          <Descriptions.Item label="Tên hiển thị">{dataView.fullName}</Descriptions.Item>
-          <Descriptions.Item label="Created At" >
-          {dataView?.createdAt}
+          <Descriptions.Item label="Tên hiển thị">
+            {dataView.fullName}
           </Descriptions.Item>
-          <Descriptions.Item label="Updated At" >
+          <Descriptions.Item label="Created At">
+            {dataView?.createdAt}
+          </Descriptions.Item>
+          <Descriptions.Item label="Updated At">
             {dataView?.updatedAt}
           </Descriptions.Item>
-          <Descriptions.Item label="Role" span={2}>
-            <Badge status="processing" text="User" />
+          <Descriptions.Item label="Role">
+            <Badge status="processing" text={dataView?.role} />
           </Descriptions.Item>
-          
+          <Descriptions.Item label="Type">
+            <Badge status="processing" text={dataView?.type} />
+          </Descriptions.Item>
         </Descriptions>
       </Drawer>
     </>

@@ -1,11 +1,10 @@
 import axios from "../utils/axios-customized";
 
-export const RegisterUser = (fullName, email, password, phone) => {
+export const RegisterUser = (fullName, email, password) => {
   return axios.post("/api/v1/user/register", {
     fullName,
     email,
     password,
-    phone,
   });
 };
 
@@ -28,14 +27,11 @@ export const callGetAllUser = () => {
   return axios.get("/api/v1/user");
 };
 
-export const callGetListUser = (current, pageSize, fullName, email, sort) => {
+export const callGetListUser = (current, pageSize, sort, search) => {
+  console.log("search api", search);
   return axios.get(
-    `/api/v1/user?current=${current}&pageSize=${pageSize}&fullName=${fullName}&email=${email}&sort=${sort}`
+    `/api/v1/user?current=${current}&pageSize=${pageSize}${sort}${search}`
   );
-};
-
-export const callCreateUser = (fullName, email, password, phone) => {
-  return axios.post("/api/v1/user", { fullName, email, password, phone });
 };
 
 export const callDeleteUser = (id) => {

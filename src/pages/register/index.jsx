@@ -4,21 +4,24 @@ import bgRegister from "../../images/bgRegister.webp";
 import { RegisterUser } from "../../services/api";
 import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
-import { useSelector } from "react-redux";
 
 const RegisterPage = () => {
   const navigate = useNavigate();
   const [isSubmit, setIsSubmit] = useState(false);
-  const isAuthenticated = useSelector((state) => state.account.isAuthenticated);
-
   useEffect(() => {
     if (localStorage.getItem("access_token")) return navigate("/");
   }, []);
   const onFinish = async (values) => {
-    const { fullName, email, password, phone } = values;
+    const { fullName, email, password, rePassword } = values;
+    if (password != rePassword) {
+      notification.error({
+        message: "Mật khẩu không giống nhau. Hãy kiểm tra lại",
+      });
+      return;
+    }
     setIsSubmit(true);
-    let res = await RegisterUser(fullName, email, password, phone);
-    if (res?.data?._id) {
+    let res = await RegisterUser(fullName, email, password);
+    if (res?.data?.user) {
       message.success("Đăng ký tài khoản thành công!");
       setIsSubmit(false);
       navigate("/login");
@@ -26,10 +29,7 @@ const RegisterPage = () => {
       setIsSubmit(false);
       notification.error({
         message: "Có lỗi xảy ra",
-        description:
-          res.message && Array.isArray(res.message)
-            ? res.message[0]
-            : res.message,
+        description: res.message,
         duration: 4,
       });
     }
@@ -48,7 +48,7 @@ const RegisterPage = () => {
               rules={[
                 {
                   required: true,
-                  message: "Please input your fullname!",
+                  message: "Tên không được để trống!",
                 },
               ]}
             >
@@ -61,7 +61,7 @@ const RegisterPage = () => {
               rules={[
                 {
                   required: true,
-                  message: "Please input your email!",
+                  message: "Email không được để trống!",
                 },
               ]}
             >
@@ -75,7 +75,7 @@ const RegisterPage = () => {
               rules={[
                 {
                   required: true,
-                  message: "Please input your password!",
+                  message: "Password không được để trống!",
                 },
               ]}
             >
@@ -84,16 +84,16 @@ const RegisterPage = () => {
 
             <Form.Item
               labelCol={{ span: 24 }}
-              label="Phone"
-              name="phone"
+              label="Xác nhận mật khẩu"
+              name="rePassword"
               rules={[
                 {
                   required: true,
-                  message: "Please input your phone!",
+                  message: "Xác nhận lại mật khẩu!",
                 },
               ]}
             >
-              <Input />
+              <Input.Password />
             </Form.Item>
             <Form.Item>
               <Button

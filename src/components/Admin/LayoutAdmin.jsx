@@ -59,16 +59,16 @@ const AccountAdmin = () => {
       key: "account",
     },
     {
-      label: <p onClick={() => handleLogout()}>Đăng xuất</p>,
-      key: "logout",
-    },
-    {
       label: (
         <p onClick={() => navigate("/", { state: { from: location } })}>
           Trang chủ
         </p>
       ),
       key: "home",
+    },
+    {
+      label: <p onClick={() => handleLogout()}>Đăng xuất</p>,
+      key: "logout",
     },
   ];
   return (

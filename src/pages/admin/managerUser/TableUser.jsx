@@ -3,7 +3,6 @@ import { useEffect, useState } from "react";
 import { callDeleteUser, callGetListUser } from "../../../services/api";
 import Loading from "../../../components/Loading/loading";
 import { AiFillDelete } from "react-icons/ai";
-
 import ViewUser from "./View";
 import moment from "moment";
 import AddUser from "./AddUser";
@@ -13,19 +12,34 @@ const TableUser = (props) => {
   const [current, setCurrent] = useState(1);
   const [pageSize, setPageSize] = useState(5);
   const [isLoading, setIsLoading] = useState(false);
-  const [sort, setSort] = useState("");
   const [view, setView] = useState(false);
   const [dataView, setDataView] = useState("");
   const [isModalAddUser, setIsModalAddUser] = useState(false);
-
+  const [sort, setSort] = useState(`&field=createdAt&sort=DESC`);
+  const [search, setSearch] = useState(`&searchName=&searchEmail=`);
   const { searchData } = props;
 
   useEffect(() => {
+    // tach ra, bi loi khi dat cung 1 useffect
     setCurrent(1);
+    let searchName = searchData.fullName;
+    let searchEmail = searchData.email;
+    setSearch(`&searchName=${searchName}&searchEmail=${searchEmail}`);
   }, [searchData]);
+
   useEffect(() => {
     getListUser();
-  }, [searchData, current, pageSize, sort]);
+  }, [search, current, pageSize, sort]);
+
+  const getListUser = async () => {
+    setIsLoading(true);
+    let res = await callGetListUser(current, pageSize, sort, search);
+    if (res && res.data) {
+      setTotal(res.data.meta.total);
+      customListUser(res.data.result);
+      setIsLoading(false);
+    }
+  };
 
   const title = "Xác nhận xóa người dùng này ?";
   const confirm = async (id) => {
@@ -40,36 +54,27 @@ const TableUser = (props) => {
       });
     }
   };
-  const onChange = (pagination, filters, sorter, extra) => {
-    //console.log("params", sorter);
+  const onChange = async (pagination, filters, sorter, extra) => {
+    customSort(sorter.field, sorter.order);
     setCurrent(pagination.current);
     setPageSize(pagination.pageSize);
-    customSort(sorter.field, sorter.order);
   };
   const customSort = (field, order) => {
-    if (order === "ascend") {
-      setSort(field);
+    let string = "";
+    if (!field && !order) return;
+    if (field === "fullName" && order === "descend") {
+      string = `&field=${field}&sort=DESC`;
     }
-    if (order === "descend") {
-      setSort(`-${field}`);
+    if (field === "fullName" && order === "ascend") {
+      string = `&field=${field}&sort=ASC`;
     }
-  };
-
-  const getListUser = async () => {
-    setIsLoading(true);
-    let res = await callGetListUser(
-      current,
-      pageSize,
-      searchData?.fullName,
-      searchData?.email,
-      sort
-    );
-
-    if (res && res.data) {
-      setTotal(res.data.meta.total);
-      customListUser(res.data.result);
-      setIsLoading(false);
+    if (field === "updatedAt" && order === "descend") {
+      string = `&field=${field}&sort=DESC`;
     }
+    if (field === "updatedAt" && order === "ascend") {
+      string = `&field=${field}&sort=ASC`;
+    }
+    setSort(string);
   };
 
   const customListUser = (listUser) => {
@@ -81,10 +86,12 @@ const TableUser = (props) => {
         arr.push({
           key: `item-${index}`,
           stt: index + 1,
-          id: item._id,
+          id: item.id,
           fullName: item.fullName,
           email: item.email,
           action: index + 1,
+          type: item.type,
+          role: item.role,
           createdAt: moment(item?.createdAt).format("DD-MM-YY hh:mm:ss"),
           updatedAt: moment(item?.updatedAt).format("DD-MM-YY hh:mm:ss"),
         });
@@ -109,7 +116,6 @@ const TableUser = (props) => {
     {
       title: "Email",
       dataIndex: "email",
-      sorter: true,
     },
     {
       title: "Ngày cập nhật",
@@ -120,9 +126,11 @@ const TableUser = (props) => {
       title: "Action",
       dataIndex: "action",
       render: (text, record, index) => {
-        //console.log(text, record, index)
         return (
-          <div className="container" style={{display: 'flex', gap: 20, cursor: "pointer",}}>
+          <div
+            className="container"
+            style={{ display: "flex", gap: 20, cursor: "pointer" }}
+          >
             <div
               style={{
                 cursor: "pointer",
@@ -145,7 +153,9 @@ const TableUser = (props) => {
               <Popconfirm
                 placement="left"
                 title={title}
-                onConfirm={() =>{confirm(record?.id)}}
+                onConfirm={() => {
+                  confirm(record?.id);
+                }}
                 okText="Yes"
                 cancelText="No"
               >
@@ -200,7 +210,7 @@ const TableUser = (props) => {
               current: current,
               showSizeChanger: true,
               position: ["bottomCenter"],
-              pageSizeOptions: [2, 10, 20, 50],
+              pageSizeOptions: [5, 10, 20, 50],
             }}
             scroll={{ y: "300px" }}
           />
@@ -209,6 +219,7 @@ const TableUser = (props) => {
         <AddUser
           isModalAddUser={isModalAddUser}
           setIsModalAddUser={setIsModalAddUser}
+          getListUser={getListUser}
         />
       </>
     );

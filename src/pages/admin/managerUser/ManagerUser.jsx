@@ -1,35 +1,29 @@
 import { Button, Input, message } from "antd";
 import TableUser from "./TableUser";
 import { useEffect, useRef, useState } from "react";
-import {FiRefreshCcw} from 'react-icons/fi'
+import { FiRefreshCcw } from "react-icons/fi";
 const ManagerUser = () => {
   const nameref = useRef("");
   const emailRef = useRef("");
-  
+
   const [reset, setReset] = useState(false);
   const [searchData, setSearchData] = useState({
     fullName: "",
     email: "",
-  
   });
-  
-  useEffect(() =>{
-    if(reset === true){setReset(false)}
-  },[reset])
+
+  useEffect(() => {
+    if (reset === true) {
+      setReset(false);
+    }
+  }, [reset]);
 
   const handleSearchUser = () => {
-    if (
-      nameref.current.input.value ||
-      emailRef.current.input.value    
-    ) {
+    if (nameref.current.input.value || emailRef.current.input.value) {
       setSearchData({
         ...searchData,
-        fullName: nameref.current.input.value
-          ? `/${nameref.current.input.value}/`
-          : "",
-        email: emailRef.current.input.value
-          ? `/${emailRef.current.input.value}/`
-          : ""     
+        fullName: nameref.current.input.value,
+        email: emailRef.current.input.value,
       });
     } else {
       message.error("Nhập vào tên or email để tìm kiếm");
@@ -39,10 +33,9 @@ const ManagerUser = () => {
   const handleReset = () => {
     nameref.current.input.value = "";
     emailRef.current.input.value = "";
- 
-    setReset(true)  
+    setReset(true);
   };
-  
+
   return (
     <div className="admin-main">
       <div
@@ -54,10 +47,10 @@ const ManagerUser = () => {
       >
         <div
           style={{
-            justifyContent: 'start',
+            justifyContent: "start",
             display: "flex",
             marginBottom: "10px",
-            gap:100
+            gap: 100,
           }}
         >
           <div style={{ width: "30%" }}>Name</div>
@@ -65,15 +58,14 @@ const ManagerUser = () => {
         </div>
 
         {reset === true ? (
-          <div style={{ justifyContent: "start", display: "flex",gap: 100 }}>
-            
+          <div style={{ justifyContent: "start", display: "flex", gap: 100 }}>
             <Input
               placeholder="Input Name"
               style={{ width: "30%" }}
               ref={nameref}
               value=""
-            />           
-            
+            />
+
             <Input
               placeholder="Input Email"
               style={{ width: "30%" }}
@@ -82,7 +74,7 @@ const ManagerUser = () => {
             />
           </div>
         ) : (
-          <div style={{ justifyContent: "start", display: "flex" ,gap: 100}}>
+          <div style={{ justifyContent: "start", display: "flex", gap: 100 }}>
             <Input
               placeholder="Input Name"
               style={{ width: "30%" }}
@@ -92,10 +84,10 @@ const ManagerUser = () => {
               placeholder="Input Email"
               style={{ width: "30%" }}
               ref={emailRef}
-            />          
+            />
           </div>
         )}
-        
+
         <div
           className="btn"
           style={{
@@ -112,11 +104,11 @@ const ManagerUser = () => {
                 fullName: "",
                 email: "",
               });
-              setReset(true)
+              setReset(true);
             }}
             type="primary"
           >
-            <FiRefreshCcw style={{marginRight: 5}}/>
+            <FiRefreshCcw style={{ marginRight: 5 }} />
             Danh sách ban đầu
           </Button>
           <Button
