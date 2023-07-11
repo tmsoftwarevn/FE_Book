@@ -13,6 +13,7 @@ import { doLogoutAction } from "../../redux/account/accountSlice";
 import {
   doRemoveCartLogout,
   doSetListCartLogin,
+  resetCart,
 } from "../../redux/cart/cartSlice";
 import PreviewCart from "../../pages/cart/PreviewCart";
 
@@ -32,7 +33,6 @@ const Header = () => {
     listItems();
     if (localStorage.getItem(`cart${idUser}`)) {
       const myArr = JSON.parse(localStorage.getItem(`cart${idUser}`));
-
       dispatch(doSetListCartLogin(myArr));
     }
   }, [isAuthenticated]);
@@ -95,8 +95,8 @@ const Header = () => {
       dispatch(doLogoutAction());
       dispatch(doRemoveCartLogout());
       message.success("Đăng xuất thành công");
-      navigate("/login");
     }
+    window.open("http://localhost:8086/api/v1/social/logout", "_self");
   };
 
   return (

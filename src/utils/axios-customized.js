@@ -48,7 +48,6 @@ instance.interceptors.request.use(
 );
 
 const NO_RETRY_HEADER = "x-no-retry";
-
 instance.interceptors.response.use(
   function (response) {
     NProgress.done();
@@ -80,7 +79,6 @@ instance.interceptors.response.use(
       localStorage.removeItem("access_token");
       window.location.href = "/login";
     }
-
     return error?.response?.data ?? Promise.reject(error);
   }
 );

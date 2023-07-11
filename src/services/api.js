@@ -118,3 +118,7 @@ export const callDeleteBook = (id) => {
 export const callGetDetailBook = (id) => {
   return axios.get(`/api/v1/book/${id}`);
 };
+
+export const callGetSocial = () => {
+  return axios.get("/api/v1/login/success");
+};

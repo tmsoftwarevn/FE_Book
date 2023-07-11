@@ -2,6 +2,7 @@ import { createAsyncThunk, createSlice, current } from "@reduxjs/toolkit";
 
 const initialState = {
   listCart: [],
+  isLoginSocial: false, // der redux persirt save value
 };
 
 export const saveInfoCartUser = createAsyncThunk(
@@ -49,6 +50,13 @@ export const cartSlice = createSlice({
         return !arr.includes(item.id);
       });
     },
+    doLoginSocialFalse: (state, action) => {
+      state.isLoginSocial = false;
+    },
+    resetCart: () => initialState,
+    doLoginSocialTrue: (state, action) => {
+      state.isLoginSocial = true;
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(saveInfoCartUser.fulfilled, (state, action) => {
@@ -65,6 +73,9 @@ export const {
   doRemoveCartLogout,
   doDeleteBook,
   doRemoveAfterOrder,
+  doLoginSocialFalse,
+  resetCart,
+  doLoginSocialTrue,
 } = cartSlice.actions;
 
 export default cartSlice.reducer;

@@ -12,8 +12,11 @@ import Footer from "./components/Footer";
 import Home from "./pages/Home/index";
 import RegisterPage from "./pages/register";
 import { useDispatch, useSelector } from "react-redux";
-import { callGetAccount } from "./services/api";
-import { doGetAccountAction } from "./redux/account/accountSlice";
+import { callGetAccount, callGetSocial } from "./services/api";
+import {
+  doGetAccountAction,
+  doLoginAction,
+} from "./redux/account/accountSlice";
 import Loading from "./components/Loading/loading";
 import Notfound from "./components/Notfound";
 import ManagerUser from "./pages/admin/managerUser/ManagerUser";
@@ -26,6 +29,8 @@ import Cart from "./pages/cart/Cart";
 import Checkout from "./pages/checkout/Chekout";
 import ManagerOrder from "./pages/admin/order/managerOrder";
 import PageOrder from "./pages/order/order";
+import { message } from "antd";
+import { doLoginSocialFalse } from "./redux/cart/cartSlice";
 
 const Layout = () => {
   const role = useSelector((state) => state.account?.user?.role);
@@ -33,6 +38,7 @@ const Layout = () => {
   const location = useLocation();
   const prevUrl = location.state?.from?.pathname.startsWith("/admin");
   const [searchBook, setSearchBook] = useState("");
+
   useEffect(() => {
     if (role && role === "ADMIN" && prevUrl !== true) {
       navigate("/admin/dashboard");
@@ -51,13 +57,49 @@ const Layout = () => {
 export default function App() {
   const dispatch = useDispatch();
   const isLoading = useSelector((state) => state.account.isLoading);
+  const isLoginSocial = useSelector((state) => state.cart.isLoginSocial);
   const getAccount = async () => {
     let res = await callGetAccount();
     if (res && res.data) {
       dispatch(doGetAccountAction(res.data));
     }
   };
-
+  console.log("check social", isLoginSocial);
+  useEffect(() => {
+    if (isLoginSocial === true) {
+      let user = "";
+      const getUser = async () => {
+        await fetch("http://localhost:8086/api/v1/login/success", {
+          method: "GET",
+          credentials: "include",
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Credentials": true,
+          },
+        })
+          // .then((response) => {
+          //   if (response.status === 200) return response.json();
+          //   throw new Error("authentication has been failed!");
+          // })
+          .then((response) => response.json())
+          .then((resObject) => {
+            user = resObject;
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+        console.log(user);
+        if (user && user.data) {
+          localStorage.setItem("access_token", user?.access_token);
+          dispatch(doLoginAction(user?.data));
+          message.success("Đăng nhập thành công");
+          dispatch(doLoginSocialFalse());
+        }
+      };
+      getUser();
+    }
+  }, []);
   useEffect(() => {
     if (localStorage.getItem("access_token")) {
       getAccount();
@@ -141,7 +183,7 @@ export default function App() {
   ]);
 
   // cho phep vao route, ko check quyen
-  const permissionPath = ["/login", "/register", "/book", "/contact"];
+  const permissionPath = ["/login", "/register", "/book", "/code"];
 
   const str = window.location.pathname;
 

@@ -6,9 +6,20 @@ import { ApiLogin } from "../../services/api";
 import { useDispatch, useSelector } from "react-redux";
 import { doLoginAction } from "../../redux/account/accountSlice";
 import { useEffect } from "react";
+import {
+  doLoginSocialFalse,
+  doLoginSocialTrue,
+} from "../../redux/cart/cartSlice";
+
 const LoginPage = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const isLoginSocial = useSelector((state) => state.cart.isLoginSocial);
+  //////////////////
+  history.pushState(null, document.title, location.href);
+  window.addEventListener("popstate", function (event) {
+    history.pushState(null, document.title, location.href);
+  });
 
   const onFinish = async (values) => {
     const { email, password } = values;
@@ -29,9 +40,19 @@ const LoginPage = () => {
       });
     }
   };
+
   useEffect(() => {
     if (localStorage.getItem("access_token")) return navigate("/");
+    dispatch(doLoginSocialFalse());
   }, []);
+  console.log("loginnnnnn", isLoginSocial);
+  const handleLoginWithGoogle = () => {
+    window.open("http://localhost:8086/api/v1/auth/google", "_self");
+    dispatch(doLoginSocialTrue());
+  };
+  const handleLoginWithFacebook = () => {
+    window.open("http://localhost:8086/api/v1/auth/facebook", "_self");
+  };
   return (
     <div className="login-container">
       <div className="content">
@@ -66,10 +87,6 @@ const LoginPage = () => {
             >
               <Input.Password />
             </Form.Item>
-            {/* <Form.Item>
-                <div className="text">Forgot password ?</div>
-              </Form.Item> */}
-
             <Form.Item>
               <Button
                 type="primary"
@@ -95,10 +112,10 @@ const LoginPage = () => {
             Or Sign Up Using
           </Divider>
           <div className="login-with">
-            <div className="google">
+            <div className="google" onClick={() => handleLoginWithGoogle()}>
               <GoogleOutlined />
             </div>
-            <div className="faceBook">
+            <div className="faceBook" onClick={handleLoginWithFacebook}>
               <FacebookOutlined />
             </div>
           </div>

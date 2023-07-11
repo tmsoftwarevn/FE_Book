@@ -49,8 +49,8 @@ const AccountAdmin = () => {
     if (res && res.data) {
       dispatch(doLogoutAction());
       message.success("Đăng xuất thành công");
-      navigate("/login");
     }
+    window.open("http://localhost:8086/api/v1/social/logout", "_self");
   };
   const location = useLocation();
   const items = [

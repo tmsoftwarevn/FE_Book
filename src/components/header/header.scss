@@ -166,12 +166,24 @@
                     .badge {
                         @include xs {
                             position: absolute;
-                            bottom: 20px;
+                            bottom: 17px;
                             left: 60%;
                         }
-                        position: absolute;
-                        bottom: 20px;
-                        left: 15px;
+                        @include sm {
+                            position: absolute;
+                            bottom: 17px;
+                            left: 15px;
+                        }
+                        @include md {
+                            position: absolute;
+                            bottom: 17px;
+                            left: 15px;
+                        }
+                        @include lg {
+                            position: absolute;
+                            bottom: 20px;
+                            left: 15px;
+                        }
                     }
                 }
 
@@ -214,8 +226,13 @@
                             @include xs {
                                 display: none;
                             }
+                            @include sm {
+                                max-width: 80px;
+                            }
+                            @include md {
+                                max-width: 100px;
+                            }
                             white-space: nowrap;
-                            max-width: 80px;
                             overflow: hidden;
                             text-overflow: ellipsis;
                             font-family: 'Times New Roman', Times, serif;
