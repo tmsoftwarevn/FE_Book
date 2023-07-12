@@ -57,49 +57,13 @@ const Layout = () => {
 export default function App() {
   const dispatch = useDispatch();
   const isLoading = useSelector((state) => state.account.isLoading);
-  const isLoginSocial = useSelector((state) => state.cart.isLoginSocial);
   const getAccount = async () => {
     let res = await callGetAccount();
     if (res && res.data) {
       dispatch(doGetAccountAction(res.data));
     }
   };
-  console.log("check social", isLoginSocial);
-  useEffect(() => {
-    if (isLoginSocial === true) {
-      let user = "";
-      const getUser = async () => {
-        await fetch("http://localhost:8086/api/v1/login/success", {
-          method: "GET",
-          credentials: "include",
-          headers: {
-            Accept: "application/json",
-            "Content-Type": "application/json",
-            "Access-Control-Allow-Credentials": true,
-          },
-        })
-          // .then((response) => {
-          //   if (response.status === 200) return response.json();
-          //   throw new Error("authentication has been failed!");
-          // })
-          .then((response) => response.json())
-          .then((resObject) => {
-            user = resObject;
-          })
-          .catch((err) => {
-            console.log(err);
-          });
-        console.log(user);
-        if (user && user.data) {
-          localStorage.setItem("access_token", user?.access_token);
-          dispatch(doLoginAction(user?.data));
-          message.success("Đăng nhập thành công");
-          dispatch(doLoginSocialFalse());
-        }
-      };
-      getUser();
-    }
-  }, []);
+
   useEffect(() => {
     if (localStorage.getItem("access_token")) {
       getAccount();

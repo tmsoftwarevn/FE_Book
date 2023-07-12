@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { ApiLogin } from "../../services/api";
 import { useDispatch, useSelector } from "react-redux";
 import { doLoginAction } from "../../redux/account/accountSlice";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import {
   doLoginSocialFalse,
   doLoginSocialTrue,
@@ -40,12 +40,42 @@ const LoginPage = () => {
       });
     }
   };
-
   useEffect(() => {
     if (localStorage.getItem("access_token")) return navigate("/");
-    dispatch(doLoginSocialFalse());
   }, []);
-  console.log("loginnnnnn", isLoginSocial);
+  useEffect(() => {
+    if (isLoginSocial === true) {
+      let user = "";
+      const getUser = async () => {
+        await fetch("http://localhost:8086/api/v1/login/success", {
+          method: "GET",
+          credentials: "include",
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Credentials": true,
+          },
+          cache: "no-cache",
+        })
+          .then((response) => response.json())
+          .then((resObject) => {
+            user = resObject;
+            console.log(resObject);
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+        if (user && user.data) {
+          localStorage.setItem("access_token", user?.access_token);
+          dispatch(doLoginAction(user?.data));
+          message.success("Đăng nhập thành công");
+          dispatch(doLoginSocialFalse());
+          navigate("/");
+        }
+      };
+      getUser();
+    }
+  }, []);
   const handleLoginWithGoogle = () => {
     window.open("http://localhost:8086/api/v1/auth/google", "_self");
     dispatch(doLoginSocialTrue());
