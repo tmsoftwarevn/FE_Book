@@ -14,7 +14,7 @@ import {
 } from "antd";
 import "./home.scss";
 import { useEffect, useRef, useState } from "react";
-import { callFetchCategory, callGetListBook } from "../../services/api";
+import { callFetchCategory, callGetListBookHome } from "../../services/api";
 import { AiFillFilter } from "react-icons/ai";
 import { GrPowerReset } from "react-icons/gr";
 import { AiOutlineDown } from "react-icons/ai";
@@ -77,11 +77,10 @@ const Home = () => {
     };
     getListCategory();
   }, []);
-
   useEffect(() => {
     if (listCategory) {
       listCategory.map((item, index) => {
-        if (item === filterCategory) {
+        if (item.category === filterCategory) {
           if (index >= +numberOfItems) {
             setShowMore(true);
           }
@@ -114,7 +113,7 @@ const Home = () => {
   };
 
   const getListBook = async () => {
-    let res = await callGetListBook(current, pageSize);
+    let res = await callGetListBookHome(current, pageSize);
     if (res && res.data) {
       setDataBook(res.data.result);
       setTotal(res.data.meta.total);
@@ -276,7 +275,7 @@ const Home = () => {
 
   const handleRedirectBook = (book) => {
     const slug = convertSlug(book.mainText);
-    navigate(`/book/${slug}?id=${book._id}`);
+    navigate(`/book/${slug}?id=${book.id}`);
   };
   if (isLoading === true) {
     return (
@@ -316,7 +315,7 @@ const Home = () => {
                             <Col
                               span={24}
                               className="category-group"
-                              key={`item-${index}`}
+                              key={`itemcategory-${index}`}
                             >
                               {/* <Checkbox value={item}>{item}</Checkbox> 
                                 ko su dung ref cho antd duoc */}
@@ -328,7 +327,7 @@ const Home = () => {
                                   handleSortDepsCategory(e, item)
                                 }
                               ></input>
-                              {item}
+                              {item.category}
                             </Col>
                           );
                         })}
@@ -495,7 +494,7 @@ const Home = () => {
                             return (
                               <div
                                 className="wrapper"
-                                key={`item-${item._id}`}
+                                key={`itemcarosel-${index}`}
                                 onClick={() => handleRedirectBook(item)}
                               >
                                 <div className="thumbnail">
@@ -509,16 +508,33 @@ const Home = () => {
 
                                 <div className="text">{item.mainText}</div>
                                 <div
-                                  className="price-carousel"
+                                  className="price-sold"
                                   style={{
-                                    color: "rgb(255 66 78)",
-                                    fontWeight: 600,
+                                    display: "flex",
+                                    justifyContent: "space-between",
                                   }}
                                 >
-                                  {new Intl.NumberFormat("vi-VN", {
-                                    style: "currency",
-                                    currency: "VND",
-                                  }).format(item.price)}
+                                  <div
+                                    className="price-carousel"
+                                    style={{
+                                      color: "rgb(255 66 78)",
+                                      fontWeight: 600,
+                                    }}
+                                  >
+                                    {new Intl.NumberFormat("vi-VN", {
+                                      style: "currency",
+                                      currency: "VND",
+                                    }).format(item.price)}
+                                  </div>
+                                  <div
+                                    className="sold-carousel"
+                                    style={{
+                                      marginRight: 20,
+                                      color: "#535c68",
+                                    }}
+                                  >
+                                    Đã bán ({item.sold}){" "}
+                                  </div>
                                 </div>
                               </div>
                             );
@@ -540,7 +556,7 @@ const Home = () => {
                             return (
                               <div
                                 className="wrapper"
-                                key={`item-${item._id}`}
+                                key={`itemcaro-${item.id}`}
                                 onClick={() => handleRedirectBook(item)}
                               >
                                 <div className="thumbnail">
@@ -554,16 +570,33 @@ const Home = () => {
 
                                 <div className="text">{item.mainText}</div>
                                 <div
-                                  className="price-carousel"
+                                  className="price-sold"
                                   style={{
-                                    color: "rgb(255 66 78)",
-                                    fontWeight: 600,
+                                    display: "flex",
+                                    justifyContent: "space-between",
                                   }}
                                 >
-                                  {new Intl.NumberFormat("vi-VN", {
-                                    style: "currency",
-                                    currency: "VND",
-                                  }).format(item.price)}
+                                  <div
+                                    className="price-carousel"
+                                    style={{
+                                      color: "rgb(255 66 78)",
+                                      fontWeight: 600,
+                                    }}
+                                  >
+                                    {new Intl.NumberFormat("vi-VN", {
+                                      style: "currency",
+                                      currency: "VND",
+                                    }).format(item.price)}
+                                  </div>
+                                  <div
+                                    className="sold-carousel"
+                                    style={{
+                                      marginRight: 20,
+                                      color: "#535c68",
+                                    }}
+                                  >
+                                    Đã bán ({item.sold}){" "}
+                                  </div>
                                 </div>
                               </div>
                             );
@@ -623,7 +656,7 @@ const Home = () => {
                     return (
                       <div
                         className="column"
-                        key={`item-${index}`}
+                        key={`itemlist-${index}`}
                         onClick={() => handleRedirectBook(item)}
                       >
                         <div className="wrapper">
@@ -659,7 +692,7 @@ const Home = () => {
                                 style={{ display: "inline-block" }}
                                 className="sold"
                               >
-                                Đã bán {item.quantity}
+                                Đã bán {item.sold}
                               </span>
                             </div>
                           </div>

@@ -29,7 +29,7 @@ const ResponsiveHome = (props) => {
   useEffect(() => {
     if (modalFilter === true) {
       listCategory.map((item, index) => {
-        if (item === filterCategory) {
+        if (item.category === filterCategory) {
           if (index >= +numberOfItems) {
             setShowMore(true);
           }
@@ -84,7 +84,7 @@ const ResponsiveHome = (props) => {
                     <Col
                       span={24}
                       className="category-group"
-                      key={`item-${index}`}
+                      key={`itemres-${item}`}
                     >
                       <input
                         ref={(el) => (reftest.current[index] = el)}
@@ -92,7 +92,7 @@ const ResponsiveHome = (props) => {
                         style={{ marginRight: 10 }}
                         onChange={(e) => handleSelectCategoryRes(e, item)}
                       ></input>
-                      {item}
+                      {item.category}
                     </Col>
                   );
                 })}

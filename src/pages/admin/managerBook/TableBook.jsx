@@ -1,6 +1,6 @@
 import { Button, Popconfirm, Table, message, notification } from "antd";
 import { useEffect, useState } from "react";
-import { callDeleteBook, callGetListBook } from "../../../services/api";
+import { callDeleteBook, callGetListBookAdmin } from "../../../services/api";
 import Loading from "../../../components/Loading/loading";
 import moment from "moment";
 import ViewBook from "./ViewBook";
@@ -16,9 +16,9 @@ const TableBook = (props) => {
   const [data, setDataTable] = useState([]);
   const [total, setTotal] = useState(0);
   const [current, setCurrent] = useState(1);
-  const [pageSize, setPageSize] = useState(5);
+  const [pageSize, setPageSize] = useState(10);
   const [isLoading, setIsLoading] = useState(false);
-  const [sort, setSort] = useState("");
+
   const [view, setView] = useState(false);
   const [dataView, setDataView] = useState("");
   const [dataUpdate, setDataUpdate] = useState("");
@@ -27,8 +27,8 @@ const TableBook = (props) => {
   const [isModalUpdateBook, setIsModalUpdateBook] = useState(false);
 
   const [isModalImportBook, setIsModalImportBook] = useState(false);
-
   const { searchData } = props;
+  const [sort, setSort] = useState(`&field=updatedAt&sort=DESC`);
 
   const title = "Xác nhận xóa sách này ?";
   const confirm = async (id) => {
@@ -47,44 +47,44 @@ const TableBook = (props) => {
   useEffect(() => {
     setCurrent(1);
   }, [searchData]);
+
   useEffect(() => {
     getListBook();
   }, [searchData, current, pageSize, sort]);
 
   const onChange = (pagination, filters, sorter, extra) => {
-    //console.log("params", sorter);
     setCurrent(pagination.current);
     setPageSize(pagination.pageSize);
-    customSort(sorter.field, sorter.order);
-  };
-  const customSort = (field, order) => {
-    if (order === "ascend") {
-      setSort(field);
-    }
-    if (order === "descend") {
-      setSort(`-${field}`);
-    }
   };
 
   const getListBook = async () => {
     setIsLoading(true);
-    let res = await callGetListBook(
-      current,
-      pageSize
-      // searchData?.name,
-      // searchData?.author,
-      // searchData?.category,
-      // sort
-    );
-
+    let d = "";
+    if (searchData.author) {
+      d = `&author=${searchData.author}`;
+    }
+    if (searchData.price) {
+      d += `&price=${searchData.price}`;
+    }
+    if (searchData.category) {
+      d += `&category=${searchData.category}`;
+    }
+    if (!d) {
+      d = `&author=&price=&category=`;
+    }
+    let res = await callGetListBookAdmin(current, pageSize, sort, d);
+    console.log("bbbbbb", d, "sort", sort);
     if (res && res.data) {
+      console.log("dddd", res.data);
+      let a = res.data.result.map((item) => {
+        item.slider = JSON.parse(item.slider);
+      });
       setDataBook(res.data.result);
       setTotal(res.data.meta.total);
       customListBook(res.data.result);
       setIsLoading(false);
     }
   };
-
   const customListBook = (list) => {
     // fake data
     if (list && list.length > 0) {
@@ -93,13 +93,14 @@ const TableBook = (props) => {
       list.map((item, index) => {
         arr.push({
           key: `item-${index}`,
-          id: item._id,
+          id: item.id,
           stt: index + 1,
           name: item.mainText,
           category: item.category,
           author: item.author,
           price: `${item.price}`.replace(/\B(?=(\d{3})+(?!\d))/g, ","),
           sold: item.sold,
+          rate: item.rate,
           quantity: item.quantity,
           action: index,
           createdAt: moment(item?.createdAt).format("DD-MM-YY hh:mm:ss"),
@@ -117,7 +118,6 @@ const TableBook = (props) => {
     const worksheet = XLSX.utils.json_to_sheet(dataBook);
     const workbook = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(workbook, worksheet, "Sheet1");
-
     XLSX.writeFile(workbook, "exportBook.csv");
   };
   const columns = [
@@ -128,12 +128,10 @@ const TableBook = (props) => {
     {
       title: "Tên sách",
       dataIndex: "name",
-      sorter: true,
     },
     {
       title: "Thể loại",
       dataIndex: "category",
-      sorter: true,
     },
     {
       title: "Tác giả",
@@ -147,7 +145,6 @@ const TableBook = (props) => {
     {
       title: "Ngày cập nhật",
       dataIndex: "updatedAt",
-      sorter: true,
     },
     {
       title: "Action",

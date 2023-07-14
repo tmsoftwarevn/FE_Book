@@ -67,7 +67,7 @@ const Header = () => {
           key: "account",
         },
         {
-          label: <Link to="/admin/dashboard">Trang quản trị</Link>,
+          label: <Link to="/admin/book">Trang quản trị</Link>,
           key: "admin",
         },
         {

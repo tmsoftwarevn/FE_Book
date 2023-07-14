@@ -29,8 +29,6 @@ import Cart from "./pages/cart/Cart";
 import Checkout from "./pages/checkout/Chekout";
 import ManagerOrder from "./pages/admin/order/managerOrder";
 import PageOrder from "./pages/order/order";
-import { message } from "antd";
-import { doLoginSocialFalse } from "./redux/cart/cartSlice";
 
 const Layout = () => {
   const role = useSelector((state) => state.account?.user?.role);
@@ -41,7 +39,7 @@ const Layout = () => {
 
   useEffect(() => {
     if (role && role === "ADMIN" && prevUrl !== true) {
-      navigate("/admin/dashboard");
+      navigate("/admin/book");
     }
   }, []);
 
@@ -127,16 +125,12 @@ export default function App() {
       children: [
         {
           index: true,
-          path: "dashboard",
-          element: <Dashboard />,
+          path: "book",
+          element: <ManagerBook />,
         },
         {
           path: "user",
           element: <ManagerUser />,
-        },
-        {
-          path: "book",
-          element: <ManagerBook />,
         },
         {
           path: "order",
@@ -147,7 +141,7 @@ export default function App() {
   ]);
 
   // cho phep vao route, ko check quyen
-  const permissionPath = ["/login", "/register", "/book", "/code"];
+  const permissionPath = ["/login", "/register", "/book"];
 
   const str = window.location.pathname;
 

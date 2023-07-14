@@ -128,8 +128,11 @@
                     overflow: hidden;
                     text-overflow: ellipsis;
                 }
-                .price-carousel {
+                .price-sold {
                     margin-left: 20px;
+                    margin-top: 2px;
+                    .price-carousel {
+                    }
                 }
             }
             .left-carousel {

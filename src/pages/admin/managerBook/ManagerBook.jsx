@@ -1,53 +1,46 @@
-import { Button, Input, message } from "antd";
+import { Button, Form, Input, InputNumber, Select, message } from "antd";
 import { useEffect, useRef, useState } from "react";
 import TableBook from "./TableBook";
-import {FiRefreshCcw} from 'react-icons/fi'
+import { FiRefreshCcw } from "react-icons/fi";
+import { callFetchCategory } from "../../../services/api";
 
 const ManagerBook = () => {
   const nameRef = useRef("");
   const authorRef = useRef("");
   const categoryRef = useRef("");
   const [reset, setReset] = useState(false);
+  const [listCategory, setListCategory] = useState([]);
+  const [form] = Form.useForm();
+
   const [searchData, setSearchData] = useState({
-    name: "",
     author: "",
+    price: "",
     category: "",
   });
-  
-  useEffect(() =>{
-    if(reset === true){setReset(false)}
-  },[reset])
 
+  useEffect(() => {
+    const fetchCategory = async () => {
+      const res = await callFetchCategory();
+      if (res && res.data) {
+        const d = res.data.map((item) => {
+          return { label: item.category, value: item.id };
+        });
+        setListCategory(d);
+      }
+    };
+    fetchCategory();
+  }, []);
   const handleSearchBook = () => {
-    if (
-      nameRef.current.input.value ||
-      authorRef.current.input.value ||
-      categoryRef.current.input.value
-    ) {
-      setSearchData({
-        ...searchData,
-        name: nameRef.current.input.value
-          ? `/${nameRef.current.input.value}/`
-          : "",
-        author: authorRef.current.input.value
-          ? `/${authorRef.current.input.value}/`
-          : "",
-        category: categoryRef.current.input.value
-          ? `/${categoryRef.current.input.value}/`
-          : "",
-      });
-    } else {
-      message.error("Vui lòng nhập vào input");
-      setSearchData({ ...searchData, name: "", author: "", category: "" });
-    }
+    form.submit();
   };
   const handleReset = () => {
-    nameRef.current.input.value = "";
-    authorRef.current.input.value = "";
-    categoryRef.current.input.value = "";  
-    setReset(true)  
+    form.resetFields();
   };
-  
+  const onFinish = async (values) => {
+    const { author, price, category } = values;
+    setSearchData({ ...searchData, author, price, category });
+  };
+
   return (
     <div className="manager-book">
       <div
@@ -57,59 +50,42 @@ const ManagerBook = () => {
           backgroundColor: "#f5f5f5",
         }}
       >
-        <div
-          style={{
-            justifyContent: "space-between",
-            display: "flex",
-            marginBottom: "10px",
-          }}
-        >
-          <div style={{ width: "30%" }}>Tên sách</div>
-          <div style={{ width: "30%" }}>Tác giả</div>
-          <div style={{ width: "30%" }}>Thể loại</div>
+        <div>
+          <Form
+            name="basic"
+            onFinish={onFinish}
+            autoComplete="off"
+            form={form}
+            style={{ justifyContent: "space-between", display: "flex" }}
+          >
+            <Form.Item
+              labelCol={{ span: 0 }}
+              label="Tên sách"
+              name="author"
+              style={{ width: 300 }}
+            >
+              <Input />
+            </Form.Item>
+            <Form.Item labelCol={{ span: 0 }} label="Giá tiền từ " name="price">
+              <InputNumber
+                min={0}
+                formatter={(value) =>
+                  `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                }
+                addonAfter="VND"
+              />
+            </Form.Item>
+            <Form.Item
+              labelCol={{ span: 0 }}
+              style={{ width: 350 }}
+              label="Thể loại"
+              name="category"
+            >
+              <Select ref={categoryRef} showSearch options={listCategory} />
+            </Form.Item>
+          </Form>
         </div>
 
-        {reset === true ? (
-          <div style={{ justifyContent: "space-between", display: "flex" }}>
-            <Input
-              placeholder="Nhập tên sách"
-              style={{ width: "30%" }}
-              ref={nameRef}
-              value=""
-            />
-            <Input
-              placeholder="Nhập tác giả"
-              style={{ width: "30%" }}
-              ref={authorRef}
-              value=""
-            />
-            <Input
-              placeholder="Nhập thể loại"
-              style={{ width: "30%" }}
-              ref={categoryRef}
-              value=""
-            />
-          </div>
-        ) : (
-          <div style={{ justifyContent: "space-between", display: "flex" }}>
-            <Input
-              placeholder="Nhập tên sách"
-              style={{ width: "30%" }}
-              ref={nameRef}
-            />
-            <Input
-              placeholder="Nhập tác giả"
-              style={{ width: "30%" }}
-              ref={authorRef}
-            />
-            <Input
-              placeholder="Nhập thể loại"
-              style={{ width: "30%" }}
-              ref={categoryRef}
-            />
-          </div>
-        )}
-        
         <div
           className="btn"
           style={{
@@ -119,19 +95,18 @@ const ManagerBook = () => {
             marginTop: "1rem",
           }}
         >
-         <Button
+          <Button
             onClick={() => {
               setSearchData({
-                ...searchData,
-                fullName: "",
-                email: "",
-                phone: "",
+                author: "",
+                price: "",
+                category: "",
               });
-              setReset(true)
+              form.resetFields();
             }}
             type="primary"
           >
-            <FiRefreshCcw style={{marginRight: 5}}/>
+            <FiRefreshCcw style={{ marginRight: 5 }} />
             Danh sách ban đầu
           </Button>
           <Button
@@ -152,8 +127,7 @@ const ManagerBook = () => {
         </div>
       </div>
       <div className="table-book" style={{ marginTop: "30px" }}>
-        <TableBook 
-        searchData = {searchData}/>
+        <TableBook searchData={searchData} />
       </div>
     </div>
   );

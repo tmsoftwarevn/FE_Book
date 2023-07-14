@@ -1,11 +1,11 @@
 import { Button, Divider, Form, Input, message, notification } from "antd";
 import "./login.scss";
-import { FacebookOutlined, GoogleOutlined } from "@ant-design/icons";
+import { GrFacebook, GrGoogle } from "react-icons/gr";
 import { useNavigate } from "react-router-dom";
 import { ApiLogin } from "../../services/api";
 import { useDispatch, useSelector } from "react-redux";
 import { doLoginAction } from "../../redux/account/accountSlice";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import {
   doLoginSocialFalse,
   doLoginSocialTrue,
@@ -16,10 +16,6 @@ const LoginPage = () => {
   const dispatch = useDispatch();
   const isLoginSocial = useSelector((state) => state.cart.isLoginSocial);
   //////////////////
-  history.pushState(null, document.title, location.href);
-  window.addEventListener("popstate", function (event) {
-    history.pushState(null, document.title, location.href);
-  });
 
   const onFinish = async (values) => {
     const { email, password } = values;
@@ -65,11 +61,11 @@ const LoginPage = () => {
           .catch((err) => {
             console.log(err);
           });
+        dispatch(doLoginSocialFalse());
         if (user && user.data) {
           localStorage.setItem("access_token", user?.access_token);
           dispatch(doLoginAction(user?.data));
           message.success("Đăng nhập thành công");
-          dispatch(doLoginSocialFalse());
           navigate("/");
         }
       };
@@ -82,6 +78,7 @@ const LoginPage = () => {
   };
   const handleLoginWithFacebook = () => {
     window.open("http://localhost:8086/api/v1/auth/facebook", "_self");
+    dispatch(doLoginSocialTrue());
   };
   return (
     <div className="login-container">
@@ -139,14 +136,14 @@ const LoginPage = () => {
               borderColor: "black",
             }}
           >
-            Or Sign Up Using
+            Or Login Using
           </Divider>
           <div className="login-with">
             <div className="google" onClick={() => handleLoginWithGoogle()}>
-              <GoogleOutlined />
+              <GrGoogle />
             </div>
             <div className="faceBook" onClick={handleLoginWithFacebook}>
-              <FacebookOutlined />
+              <GrFacebook />
             </div>
           </div>
           <div className="home" onClick={() => navigate("/")}>

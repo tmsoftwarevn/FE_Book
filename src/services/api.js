@@ -1,3 +1,4 @@
+import { current } from "@reduxjs/toolkit";
 import axios from "../utils/axios-customized";
 
 export const RegisterUser = (fullName, email, password) => {
@@ -23,12 +24,7 @@ export const callLogout = () => {
   return axios.post("/api/v1/auth/logout");
 };
 
-export const callGetAllUser = () => {
-  return axios.get("/api/v1/user");
-};
-
 export const callGetListUser = (current, pageSize, sort, search) => {
-  console.log("search api", search);
   return axios.get(
     `/api/v1/user?current=${current}&pageSize=${pageSize}${sort}${search}`
   );
@@ -38,15 +34,13 @@ export const callDeleteUser = (id) => {
   return axios.delete(`/api/v1/user/${id}`);
 };
 
-export const callGetListBook = (
-  current,
-  pageSize
-  // name,
-  // author,
-  // category,
-  // sort
-) => {
-  return axios.get(`/api/v1/book?current=${current}&pageSize=${pageSize}`);
+export const callGetListBookAdmin = (current, pageSize, sort, d) => {
+  return axios.get(
+    `/api/v1/book?current=${current}&pageSize=${pageSize}${sort}${d}`
+  );
+};
+export const callGetListBookHome = (current, pageSize) => {
+  return axios.get(`/api/v1/home/book?current=${current}&pageSize=${pageSize}`);
 };
 export const callFetchCategory = () => {
   return axios.get("/api/v1/database/category");
@@ -74,7 +68,8 @@ export const callCreateBook = (
   price,
   sold,
   quantity,
-  category
+  rate,
+  idCategory
 ) => {
   return axios.post("/api/v1/book", {
     thumbnail,
@@ -84,7 +79,8 @@ export const callCreateBook = (
     price,
     sold,
     quantity,
-    category,
+    rate,
+    idCategory,
   });
 };
 
@@ -95,9 +91,8 @@ export const callUpdateBook = (
   mainText,
   author,
   price,
-  sold,
   quantity,
-  category
+  idCategory
 ) => {
   return axios.put(`/api/v1/book/${id_book}`, {
     thumbnail,
@@ -105,14 +100,13 @@ export const callUpdateBook = (
     mainText,
     author,
     price,
-    sold,
     quantity,
-    category,
+    idCategory,
   });
 };
 
 export const callDeleteBook = (id) => {
-  return axios.delete(`/api/v1/book/${id}`);
+  return axios.delete(`/api/v1/book/delete/${id}`);
 };
 
 export const callGetDetailBook = (id) => {

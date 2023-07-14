@@ -4,7 +4,7 @@ import moment from "moment";
 import { Modal, Upload } from "antd";
 import { useEffect, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
-
+import { AiFillStar } from "react-icons/ai";
 const ViewBook = (props) => {
   const { view, setView, dataView, dataBook, setDataView } = props;
   const [previewOpen, setPreviewOpen] = useState(false);
@@ -65,7 +65,7 @@ const ViewBook = (props) => {
       <Drawer
         title="Thông tin chi tiết Book"
         placement={"top"}
-        height={500}
+        height={550}
         onClose={onClose}
         open={view}
         extra={
@@ -101,6 +101,9 @@ const ViewBook = (props) => {
             {dataView.quantity}
           </Descriptions.Item>
           <Descriptions.Item label="Đã bán">{dataView.sold}</Descriptions.Item>
+          <Descriptions.Item label="Đánh giá">
+            {dataView.rate} <AiFillStar style={{ color: "yellow" }} />
+          </Descriptions.Item>
         </Descriptions>
         <Divider>Ảnh Book</Divider>
         <Upload

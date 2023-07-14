@@ -62,7 +62,6 @@ const BookPageDetail = (props) => {
       title: <Link to="/">Trang chủ</Link>,
     },
     {
-      // title: <Link to="/">{detailBook.category}</Link>,
       title: (
         <Link to={"/"} state={{ category: detailBook.category }}>
           {detailBook.category}
@@ -87,6 +86,7 @@ const BookPageDetail = (props) => {
       thumbnailClass: "thumbnail-image",
     };
     arr.push(obj);
+    detailBook.slider = JSON.parse(detailBook.slider);
     detailBook?.slider.map((item) => {
       obj = {
         original: `${import.meta.env.VITE_BACKEND_URL}/images/book/${item}`,

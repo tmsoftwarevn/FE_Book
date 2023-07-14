@@ -1,6 +1,5 @@
 import "./layoutAdmin.scss";
 import {
-  AppstoreOutlined,
   TeamOutlined,
   ExceptionOutlined,
   DollarCircleOutlined,
@@ -24,11 +23,10 @@ function getItem(label, key, icon, children) {
 }
 const items = [
   getItem(
-    <Link to="/admin/dashboard">Dashboard</Link>,
-    "/admin/dashboard",
-    <AppstoreOutlined />
+    <Link to="/admin/user">Manager User</Link>,
+    "/admin/user",
+    <TeamOutlined />
   ),
-  getItem(<Link to="/admin/user">User</Link>, "/admin/user", <TeamOutlined />),
   getItem(
     <Link to="/admin/book">Manager Books</Link>,
     "/admin/book",
@@ -89,7 +87,7 @@ const AccountAdmin = () => {
   );
 };
 const LayoutAdmin = () => {
-  const [keyActive, setKeyActive] = useState("/admin/dashboard");
+  const [keyActive, setKeyActive] = useState("/admin/book");
   const [collapsed, setCollapsed] = useState(false);
   const location = useLocation();
   useEffect(() => {

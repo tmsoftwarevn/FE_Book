@@ -36,6 +36,7 @@ const UpdateBook = (props) => {
 
   const [dataThumbnail, setDataThumbnail] = useState([]);
   const [dataSlider, setDataSlider] = useState([]);
+  const [idCategory, setIdCategory] = useState("");
 
   const [previewOpen, setPreviewOpen] = useState(false);
   const [previewImage, setPreviewImage] = useState("");
@@ -53,6 +54,19 @@ const UpdateBook = (props) => {
     form.resetFields();
   };
   useEffect(() => {
+    const fetchCategory = async () => {
+      const res = await callFetchCategory();
+      if (res && res.data) {
+        const d = res.data.map((item) => {
+          if (item.category === dataUpdate.category) setIdCategory(item.id);
+          return { label: item.category, value: item.id };
+        });
+        setListCategory(d);
+      }
+    };
+    fetchCategory();
+  }, [dataUpdate]);
+  useEffect(() => {
     let data = dataBook[+dataUpdate?.action];
     let arrThumbnail = [];
     let arrSlider = [];
@@ -66,7 +80,6 @@ const UpdateBook = (props) => {
         }`,
       });
     }
-
     if (data && data.slider) {
       data.slider.map((pic, index) => {
         arrSlider.push({
@@ -81,18 +94,18 @@ const UpdateBook = (props) => {
     setDataSlider(arrSlider);
 
     const init = {
-      _id: dataUpdate?._id,
+      id: dataUpdate?.id,
       name: dataUpdate?.name,
       author: dataUpdate?.author,
       price: dataUpdate?.price,
       category: dataUpdate?.category,
       quantity: dataUpdate?.quantity,
-      sold: dataUpdate?.sold,
       thumbnail: { fileList: arrThumbnail },
       slider: { fileList: arrSlider },
     };
     setInitForm(init);
     form.setFieldsValue(init);
+    // reset dung return
     return () => {
       form.resetFields();
     };
@@ -124,9 +137,8 @@ const UpdateBook = (props) => {
       name,
       author,
       +newprice,
-      sold,
       quantity,
-      category
+      idCategory
     );
     if (res && res.data) {
       setDataSlider([]), setDataThumbnail([]);
@@ -218,18 +230,9 @@ const UpdateBook = (props) => {
       );
     });
   };
-  useEffect(() => {
-    const fetchCategory = async () => {
-      const res = await callFetchCategory();
-      if (res && res.data) {
-        const d = res.data.map((item) => {
-          return { label: item, value: item };
-        });
-        setListCategory(d);
-      }
-    };
-    fetchCategory();
-  }, []);
+  const handleSelectCategory = (value) => {
+    setIdCategory(value);
+  };
 
   return (
     <>
@@ -278,7 +281,7 @@ const UpdateBook = (props) => {
               </Form.Item>
             </Col>
 
-            <Col span={6}>
+            <Col span={8}>
               <Form.Item
                 labelCol={{ span: 24 }}
                 label="Giá tiền"
@@ -299,7 +302,7 @@ const UpdateBook = (props) => {
                 />
               </Form.Item>
             </Col>
-            <Col span={6}>
+            <Col span={8}>
               <Form.Item
                 labelCol={{ span: 24 }}
                 label="Thể loại"
@@ -310,10 +313,17 @@ const UpdateBook = (props) => {
                   },
                 ]}
               >
-                <Select showSearch allowClear options={listCategory} />
+                <Select
+                  showSearch
+                  allowClear
+                  options={listCategory}
+                  onChange={(value) => {
+                    handleSelectCategory(value);
+                  }}
+                />
               </Form.Item>
             </Col>
-            <Col span={6}>
+            <Col span={8}>
               <Form.Item
                 labelCol={{ span: 24 }}
                 label="Số lượng"
@@ -327,20 +337,7 @@ const UpdateBook = (props) => {
                 <InputNumber min={0} style={{ width: "100%" }} />
               </Form.Item>
             </Col>
-            <Col span={6}>
-              <Form.Item
-                labelCol={{ span: 24 }}
-                label="Đã bán"
-                name="sold"
-                rules={[
-                  {
-                    required: true,
-                  },
-                ]}
-              >
-                <InputNumber min={0} style={{ width: "100%" }} />
-              </Form.Item>
-            </Col>
+
             {/* upload */}
             <Col span={12}>
               <Form.Item
@@ -390,7 +387,7 @@ const UpdateBook = (props) => {
                 // noStyle
               >
                 <Upload
-                 accept="image/*"
+                  accept="image/*"
                   multiple
                   listType="picture-card"
                   className="avatar-uploader"

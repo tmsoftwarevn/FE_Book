@@ -28,6 +28,7 @@ const AddNewBook = (props) => {
 
   const [dataThumbnail, setDataThumbnail] = useState([]);
   const [dataSlider, setDataSlider] = useState([]);
+  const [idCategory, setIdCategory] = useState("");
 
   const [previewOpen, setPreviewOpen] = useState(false);
   const [previewImage, setPreviewImage] = useState("");
@@ -40,23 +41,26 @@ const AddNewBook = (props) => {
     setIsModalAddBook(false);
     form.resetFields();
   };
+  const handleSelectCategory = (value) => {
+    setIdCategory(value);
+  };
   const onFinish = async (values) => {
-    const { name, author, category, price, quantity, sold } = values;
-    
+    const { name, author, price, quantity, sold, rate } = values;
+    console.log("ffffffffff", values);
     if (dataThumbnail.length === 0) {
       notification.error({
         description: "Hãy upload ảnh thumbnail",
       });
       return;
     }
-    if (dataSlider.length === 0) {
-      notification.error({
-        description: "Hãy upload ảnh slider",
-      });
-      return;
-    }
+    // if (dataSlider.length === 0) {
+    //   notification.error({
+    //     description: "Hãy upload ảnh slider",
+    //   });
+    //   return;
+    // }
     const slider = dataSlider.map((item) => item.name);
-   
+
     let res = await callCreateBook(
       dataThumbnail[0]?.name,
       slider,
@@ -65,9 +69,10 @@ const AddNewBook = (props) => {
       price,
       sold,
       quantity,
-      category
+      rate,
+      idCategory
     );
-   
+
     if (res && res.data) {
       setDataSlider([]), setDataThumbnail([]);
       message.success("Thêm mới thành công book");
@@ -78,7 +83,7 @@ const AddNewBook = (props) => {
     }
     getListBook();
     form.resetFields();
-     handleOk();
+    handleOk();
   };
   ///upload
   const getBase64 = (img, callback) => {
@@ -86,16 +91,6 @@ const AddNewBook = (props) => {
     reader.addEventListener("load", () => callback(reader.result));
     reader.readAsDataURL(img);
   };
-  const beforeUpload = (file) => {
-    
-    const isJpgOrPng = file.type === "image/jpeg" || file.type === "image/png";
-    if (!isJpgOrPng) {
-      message.error("You can only upload JPG/PNG file!");
-    }
-
-    return isJpgOrPng;
-  };
-
   const handleChange = (info, type) => {
     if (info.file.status === "uploading") {
       type ? setLoadingSlider(true) : setLoading(true);
@@ -124,8 +119,8 @@ const AddNewBook = (props) => {
       onError("Đã có lỗi khi upload file");
     }
   };
-// up load anh len server khi status done
-  const handleUploadFileSlider = async ({ file, onSuccess, onError }) => { 
+  // up load anh len server khi status done
+  const handleUploadFileSlider = async ({ file, onSuccess, onError }) => {
     const res = await callUploadBookImg(file);
     if (res && res.data) {
       //copy previous state => upload multiple images
@@ -164,7 +159,7 @@ const AddNewBook = (props) => {
       const res = await callFetchCategory();
       if (res && res.data) {
         const d = res.data.map((item) => {
-          return { label: item, value: item };
+          return { label: item.category, value: item.id };
         });
         setListCategory(d);
       }
@@ -215,7 +210,7 @@ const AddNewBook = (props) => {
               </Form.Item>
             </Col>
 
-            <Col span={6}>
+            <Col span={5}>
               <Form.Item
                 labelCol={{ span: 24 }}
                 label="Giá tiền"
@@ -236,7 +231,7 @@ const AddNewBook = (props) => {
                 />
               </Form.Item>
             </Col>
-            <Col span={6}>
+            <Col span={7}>
               <Form.Item
                 labelCol={{ span: 24 }}
                 label="Thể loại"
@@ -250,12 +245,14 @@ const AddNewBook = (props) => {
                 <Select
                   showSearch
                   allowClear
-                  //  onChange={handleChange}
                   options={listCategory}
+                  onChange={(value) => {
+                    handleSelectCategory(value);
+                  }}
                 />
               </Form.Item>
             </Col>
-            <Col span={6}>
+            <Col span={4}>
               <Form.Item
                 labelCol={{ span: 24 }}
                 label="Số lượng"
@@ -270,11 +267,26 @@ const AddNewBook = (props) => {
                 <InputNumber min={0} style={{ width: "100%" }} />
               </Form.Item>
             </Col>
-            <Col span={6}>
+            <Col span={4}>
               <Form.Item
                 labelCol={{ span: 24 }}
                 label="Đã bán"
                 name="sold"
+                rules={[
+                  {
+                    required: true,
+                  },
+                ]}
+                initialValue={0}
+              >
+                <InputNumber min={0} style={{ width: "100%" }} />
+              </Form.Item>
+            </Col>
+            <Col span={4}>
+              <Form.Item
+                labelCol={{ span: 24 }}
+                label="Đánh giá"
+                name="rate"
                 rules={[
                   {
                     required: true,
@@ -302,7 +314,7 @@ const AddNewBook = (props) => {
                 noStyle
               >
                 <Upload
-                 accept="image/*"
+                  accept="image/*"
                   name="thumbnail"
                   listType="picture-card"
                   className="avatar-uploader"
@@ -336,7 +348,7 @@ const AddNewBook = (props) => {
                 noStyle
               >
                 <Upload
-                 accept="image/*"
+                  accept="image/*"
                   multiple
                   name="slider"
                   listType="picture-card"
