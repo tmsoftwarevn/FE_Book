@@ -55,7 +55,6 @@ export const callUploadBookImg = (fileImg) => {
     data: bodyFormData,
     headers: {
       "Content-Type": "multipart/form-data",
-      "upload-type": "book",
     },
   });
 };
@@ -115,4 +114,16 @@ export const callGetDetailBook = (id) => {
 
 export const callGetSocial = () => {
   return axios.get("/api/v1/login/success");
+};
+
+export const callCreateDelivery = (delivery) => {
+  return axios.post("/api/v1/delivery", delivery);
+};
+
+export const callGetInfoDelivery = (id) => {
+  return axios.get(`/api/v1/delivery/${id}`);
+};
+
+export const callUpdateInfoDelivery = (id, up) => {
+  return axios.put(`/api/v1/delivery/${id}`, up);
 };

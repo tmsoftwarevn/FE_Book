@@ -25,7 +25,7 @@ const validKeyForPayment = [
   "9",
   "Backspace",
 ];
-const title = "Xác nhận xóa sách này ?";
+const title = "Xác nhận xóa khỏi giỏ hàng ?";
 const Cart = () => {
   const listCart = useSelector((state) => state.cart.listCart);
   const refCount = useRef([]);
@@ -153,7 +153,9 @@ const Cart = () => {
           for (let i = index; i < listCart.length; i++) {
             refCheckbox.current[i].checked =
               refCheckbox?.current[i + 1]?.checked;
+            refCount.current[i].value = refCount?.current[i + 1]?.value;
           }
+          setRenderPrice(!renderPrice);
           return;
         }
       });

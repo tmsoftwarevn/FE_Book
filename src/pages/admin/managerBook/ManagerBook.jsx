@@ -5,15 +5,11 @@ import { FiRefreshCcw } from "react-icons/fi";
 import { callFetchCategory } from "../../../services/api";
 
 const ManagerBook = () => {
-  const nameRef = useRef("");
-  const authorRef = useRef("");
-  const categoryRef = useRef("");
-  const [reset, setReset] = useState(false);
   const [listCategory, setListCategory] = useState([]);
   const [form] = Form.useForm();
 
   const [searchData, setSearchData] = useState({
-    author: "",
+    mainText: "",
     price: "",
     category: "",
   });
@@ -37,8 +33,8 @@ const ManagerBook = () => {
     form.resetFields();
   };
   const onFinish = async (values) => {
-    const { author, price, category } = values;
-    setSearchData({ ...searchData, author, price, category });
+    const { mainText, price, category } = values;
+    setSearchData({ ...searchData, mainText, price, category });
   };
 
   return (
@@ -61,7 +57,7 @@ const ManagerBook = () => {
             <Form.Item
               labelCol={{ span: 0 }}
               label="Tên sách"
-              name="author"
+              name="mainText"
               style={{ width: 300 }}
             >
               <Input />
@@ -81,7 +77,7 @@ const ManagerBook = () => {
               label="Thể loại"
               name="category"
             >
-              <Select ref={categoryRef} showSearch options={listCategory} />
+              <Select showSearch options={listCategory} />
             </Form.Item>
           </Form>
         </div>
@@ -98,7 +94,7 @@ const ManagerBook = () => {
           <Button
             onClick={() => {
               setSearchData({
-                author: "",
+                mainText: "",
                 price: "",
                 category: "",
               });

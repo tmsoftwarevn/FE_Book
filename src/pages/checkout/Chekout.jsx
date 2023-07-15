@@ -9,6 +9,7 @@ import {
   Input,
   Modal,
   Row,
+  message,
 } from "antd";
 import "./checkout.scss";
 import { useDispatch, useSelector } from "react-redux";
@@ -19,6 +20,11 @@ import {
   doRemoveAfterOrder,
   saveInfoCartUser,
 } from "../../redux/cart/cartSlice";
+import {
+  callCreateDelivery,
+  callGetInfoDelivery,
+  callUpdateInfoDelivery,
+} from "../../services/api";
 
 const { TextArea } = Input;
 const validKeyForPayment = [
@@ -36,22 +42,38 @@ const validKeyForPayment = [
 ];
 const Checkout = () => {
   let listCart = useSelector((state) => state.cart.listCart);
-  const address = useSelector((state) => state.account?.user?.address);
+  const delivery = useSelector((state) => state.account?.delivery);
+  const user = useSelector((state) => state.account?.user);
   const [form] = Form.useForm();
   const [isModalOpen, setIsModalOpen] = useState(false);
+
   const location = useLocation();
   const navigate = useNavigate();
   const listProductBuy = location.state?.listBook;
   const dispatch = useDispatch();
-  let totalPriceProduct = 0;
-  let totalFinal = 0;
 
+  let totalPriceProduct = 0;
   useEffect(() => {
     if (!listProductBuy) {
       navigate("/cart");
     }
   }, [listProductBuy]);
+  useEffect(() => {
+    const getInfoDelivery = async () => {
+      let res = await callGetInfoDelivery(user.id);
+      if (res && res.data[0]) {
+        dispatch(doUpdateAddressUser(res.data[0]));
+      }
+    };
+    getInfoDelivery();
+  }, []);
   const showModal = () => {
+    const init = {
+      fullname: delivery.fullname,
+      phone: delivery.phone,
+      address: delivery.address,
+    };
+    form.setFieldsValue(init);
     setIsModalOpen(true);
   };
   const handleOk = () => {
@@ -60,15 +82,34 @@ const Checkout = () => {
   const handleCancel = () => {
     setIsModalOpen(false);
   };
-  const onFinish = (values) => {
-    dispatch(doUpdateAddressUser(values));
+  const onFinish = async (values) => {
+    values.idUser = user.id;
+    if (delivery.phone) {
+      let up = await callUpdateInfoDelivery(delivery.id, values);
+      if (up && up.data) {
+        let res = await callGetInfoDelivery(user.id);
+        if (res && res.data) {
+          dispatch(doUpdateAddressUser(res.data[0]));
+        }
+      }
+    } else {
+      let res = await callCreateDelivery(values);
+      if (res && res.data) {
+        dispatch(doUpdateAddressUser(res.data));
+      }
+    }
   };
   const handleOrderProduct = () => {
     // call api dat hang
-    dispatch(doRemoveAfterOrder(listProductBuy));
-    dispatch(saveInfoCartUser());
-    navigate("/order", { state: { isCheckout: true } });
+    if (delivery.address) {
+      dispatch(doRemoveAfterOrder(listProductBuy));
+      dispatch(saveInfoCartUser());
+      navigate("/order", { state: { isCheckout: true } });
+    } else {
+      message.error("Bạn chưa điền thông tin giao hàng");
+    }
   };
+
   return (
     <div className="checkout">
       <div className="container">
@@ -86,7 +127,7 @@ const Checkout = () => {
               địa chỉ nhận hàng
             </div>
             <div style={{ display: "flex" }}>
-              {address ? (
+              {delivery?.phone ? (
                 <>
                   <div
                     style={{
@@ -101,10 +142,10 @@ const Checkout = () => {
                       }}
                     >
                       {" "}
-                      {address.username} <Divider type="vertical" />
-                      {address.phone}
+                      {delivery.fullname} <Divider type="vertical" />
+                      (+84) {delivery.phone}
                     </span>
-                    {address.address}
+                    {delivery.address}
                   </div>
                 </>
               ) : (
@@ -123,7 +164,16 @@ const Checkout = () => {
                   textAlign: "center",
                 }}
               >
-                <span onClick={showModal}>Thay đổi</span>
+                {delivery?.phone ? (
+                  <>
+                    <span onClick={showModal}>Thay đổi</span>
+                  </>
+                ) : (
+                  <>
+                    <span onClick={showModal}>Thêm mới</span>
+                  </>
+                )}
+
                 <Modal
                   title="Địa chỉ nhận hàng"
                   open={isModalOpen}
@@ -145,7 +195,7 @@ const Checkout = () => {
                         <Form.Item
                           labelCol={{ span: 24 }}
                           label="Tên người nhận"
-                          name="username"
+                          name="fullname"
                           rules={[
                             {
                               required: true,

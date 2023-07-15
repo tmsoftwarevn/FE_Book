@@ -479,7 +479,7 @@ const Home = () => {
                   Phổ biến
                 </div>
                 <div className="carousel">
-                  <Carousel ref={refCarousel} dots={true} autoplay>
+                  <Carousel ref={refCarousel} dots={false} autoplay>
                     <div>
                       <div
                         style={{

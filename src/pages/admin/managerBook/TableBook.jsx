@@ -53,15 +53,27 @@ const TableBook = (props) => {
   }, [searchData, current, pageSize, sort]);
 
   const onChange = (pagination, filters, sorter, extra) => {
+    customSort(sorter.field, sorter.order);
     setCurrent(pagination.current);
     setPageSize(pagination.pageSize);
+  };
+  const customSort = (field, order) => {
+    let string = "";
+    if (!field && !order) return;
+    if (field === "price" && order === "descend") {
+      string = `&field=${field}&sort=DESC`;
+    }
+    if (field === "price" && order === "ascend") {
+      string = `&field=${field}&sort=ASC`;
+    }
+    setSort(string);
   };
 
   const getListBook = async () => {
     setIsLoading(true);
     let d = "";
-    if (searchData.author) {
-      d = `&author=${searchData.author}`;
+    if (searchData.mainText) {
+      d = `&mainText=${searchData.mainText}`;
     }
     if (searchData.price) {
       d += `&price=${searchData.price}`;
@@ -70,12 +82,11 @@ const TableBook = (props) => {
       d += `&category=${searchData.category}`;
     }
     if (!d) {
-      d = `&author=&price=&category=`;
+      d = `&mainText=&price=&category=`;
     }
     let res = await callGetListBookAdmin(current, pageSize, sort, d);
-    console.log("bbbbbb", d, "sort", sort);
+
     if (res && res.data) {
-      console.log("dddd", res.data);
       let a = res.data.result.map((item) => {
         item.slider = JSON.parse(item.slider);
       });

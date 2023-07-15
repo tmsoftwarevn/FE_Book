@@ -9,7 +9,12 @@ const initialState = {
     role: "",
     type: "",
     id: "",
+  },
+  delivery: {
+    fullName: "",
+    phone: "",
     address: "",
+    id: "",
   },
 };
 
@@ -46,12 +51,16 @@ export const accountSlice = createSlice({
         role: "",
         type: "",
         id: "",
+      };
+      state.delivery = {
+        fullName: "",
+        phone: "",
         address: "",
+        id: "",
       };
     },
     doUpdateAddressUser: (state, action) => {
-      let info = action.payload;
-      state.user.address = info;
+      state.delivery = action.payload;
     },
   },
 });
