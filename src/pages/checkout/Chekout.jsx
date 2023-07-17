@@ -22,7 +22,12 @@ import {
 } from "../../redux/cart/cartSlice";
 import {
   callCreateDelivery,
+  callCreateOrder,
+  callCreateOrderDetail,
+  callGetAccount,
+  callGetDetailBook,
   callGetInfoDelivery,
+  callUpdateBookAfterOrder,
   callUpdateInfoDelivery,
 } from "../../services/api";
 
@@ -46,12 +51,11 @@ const Checkout = () => {
   const user = useSelector((state) => state.account?.user);
   const [form] = Form.useForm();
   const [isModalOpen, setIsModalOpen] = useState(false);
-
+  const [checkQuantity, setCheckQuantity] = useState(true);
   const location = useLocation();
   const navigate = useNavigate();
   const listProductBuy = location.state?.listBook;
   const dispatch = useDispatch();
-
   let totalPriceProduct = 0;
   useEffect(() => {
     if (!listProductBuy) {
@@ -59,6 +63,7 @@ const Checkout = () => {
     }
   }, [listProductBuy]);
   useEffect(() => {
+    checkQuantityDatabase();
     const getInfoDelivery = async () => {
       let res = await callGetInfoDelivery(user.id);
       if (res && res.data[0]) {
@@ -99,17 +104,73 @@ const Checkout = () => {
       }
     }
   };
-  const handleOrderProduct = () => {
-    // call api dat hang
+  const updateBookAfterOrder = async (id, count) => {
+    await callUpdateBookAfterOrder(id, count);
+  };
+  const fetchDetailBook = async (idBook) => {
+    let res = await callGetDetailBook(idBook);
+    if (res && res.data) {
+      return res.data.quantity;
+    }
+  };
+  const checkQuantityDatabase = () => {
+    let listOrder = listCart.filter((item) => {
+      return listProductBuy.includes(item.id);
+    });
+    listOrder.map(async (item) => {
+      let check = await fetchDetailBook(item.id);
+      if (check < item.quantity) {
+        setCheckQuantity(false);
+      }
+    });
+  };
+  const createOrderDetail = async (orderId) => {
+    let listOrder = listCart.filter((item) => {
+      return listProductBuy.includes(item.id);
+    });
+    let arr = [];
+    listOrder.map((item) => {
+      updateBookAfterOrder(item.id, item.quantity);
+      let detail = {
+        totalPrice: item.quantity * item.detail.price,
+        quantity: item.quantity,
+        idOrder: orderId,
+        idBook: item.id,
+      };
+      arr.push(detail);
+    });
+    await callCreateOrderDetail(arr);
+  };
+  const handleOrderProduct = async () => {
+    let order = {
+      totalProduct: listProductBuy.length,
+      total: totalPriceProduct,
+      idInfoDelivery: delivery.id,
+      payment: "Thanh toán khi nhận hàng",
+      idUser: user.id,
+      idStatus: 1,
+    };
     if (delivery.address) {
-      dispatch(doRemoveAfterOrder(listProductBuy));
-      dispatch(saveInfoCartUser());
-      navigate("/order", { state: { isCheckout: true } });
+      if (checkQuantity === false) {
+        message.error(
+          "Số lượng trong kho không đủ. Vui lòng thêm lại sản phẩm vào giỏ"
+        );
+        return;
+      } else {
+        let d = await callCreateOrder(order);
+        if (d && d.data) {
+          createOrderDetail(d.data.id);
+          dispatch(doRemoveAfterOrder(listProductBuy));
+          dispatch(saveInfoCartUser());
+          navigate("/order", { state: { isCheckout: true } });
+        } else {
+          message.error("Có lỗi. Hãy thử lại");
+        }
+      }
     } else {
       message.error("Bạn chưa điền thông tin giao hàng");
     }
   };
-
   return (
     <div className="checkout">
       <div className="container">

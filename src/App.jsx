@@ -29,6 +29,7 @@ import Cart from "./pages/cart/Cart";
 import Checkout from "./pages/checkout/Chekout";
 import ManagerOrder from "./pages/admin/order/managerOrder";
 import PageOrder from "./pages/order/order";
+import OrderHistory from "./pages/order history/OrderHistory";
 
 const Layout = () => {
   const role = useSelector((state) => state.account?.user?.role);
@@ -101,6 +102,14 @@ export default function App() {
           element: (
             <ProtectedRoute>
               <PageOrder />
+            </ProtectedRoute>
+          ),
+        },
+        {
+          path: "orderHistory",
+          element: (
+            <ProtectedRoute>
+              <OrderHistory />
             </ProtectedRoute>
           ),
         },

@@ -130,6 +130,7 @@
                     justify-content: center;
                 }
                 @include lg {
+                    width: 30%;
                     display: flex;
                     align-items: center;
                     justify-content: space-between;
@@ -197,11 +198,10 @@
                     @include lg {
                         display: flex;
                         align-items: center;
-                        padding: 10px;
-                        border-radius: 10px;
+                        padding: 7px;
+                        border-radius: 5px;
                         font-size: 18px;
                         color: grey;
-                        margin-right: 10px;
                     }
                     &:hover {
                         cursor: pointer;
@@ -209,8 +209,8 @@
                     }
                 }
                 .account {
-                    padding: 10px 5px;
-                    border-radius: 10px;
+                    padding: 5px;
+                    border-radius: 5px;
                     display: flex;
                     justify-content: center;
                     &:hover {

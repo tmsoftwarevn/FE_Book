@@ -1,4 +1,3 @@
-import { current } from "@reduxjs/toolkit";
 import axios from "../utils/axios-customized";
 
 export const RegisterUser = (fullName, email, password) => {
@@ -126,4 +125,22 @@ export const callGetInfoDelivery = (id) => {
 
 export const callUpdateInfoDelivery = (id, up) => {
   return axios.put(`/api/v1/delivery/${id}`, up);
+};
+
+export const callCreateOrder = (order) => {
+  return axios.post("/api/v1/order", order);
+};
+
+export const callCreateOrderDetail = (detail) => {
+  return axios.post("/api/v1/orderDetail", detail);
+};
+
+export const callUpdateBookAfterOrder = (id, count) => {
+  return axios.put("/api/v1/updateBook", { id, count });
+};
+
+export const callOrderHistoryUser = (id, current, pageSize) => {
+  return axios.get(
+    `/api/v1/user/orderHistory/${id}?current=${current}&pageSize=${pageSize}`
+  );
 };

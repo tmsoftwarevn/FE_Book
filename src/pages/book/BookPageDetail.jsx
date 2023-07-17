@@ -87,7 +87,7 @@ const BookPageDetail = (props) => {
     };
     arr.push(obj);
     detailBook.slider = JSON.parse(detailBook.slider);
-    detailBook?.slider.map((item) => {
+    detailBook?.slider.map((item, i) => {
       obj = {
         original: `${import.meta.env.VITE_BACKEND_URL}/images/book/${item}`,
         thumbnail: `${import.meta.env.VITE_BACKEND_URL}/images/book/${item}`,
@@ -100,9 +100,9 @@ const BookPageDetail = (props) => {
     setImage(arr);
   };
 
-  const handleOnClickImage = () => {
+  const handleOnClickImage = (e, index) => {
     setIsOpenModalGallery(true);
-    setCurrentIndex(refGallery?.current?.getCurrentIndex() ?? 0);
+    setCurrentIndex(index);
   };
   const handleOnclickResponsive = () => {
     setCurrentIndex(refGallery?.current?.getCurrentIndex() ?? 0);
@@ -261,7 +261,9 @@ const BookPageDetail = (props) => {
                       renderLeftNav={() => <></>} //left arrow === <> </>
                       renderRightNav={() => <></>} //right arrow === <> </>
                       slideOnThumbnailOver={true} //onHover => auto scroll images
-                      onClick={() => handleOnClickImage()}
+                      onThumbnailClick={(e, index) =>
+                        handleOnClickImage(e, index)
+                      }
                     />
                   </Col>
                   <Col
@@ -346,6 +348,13 @@ const BookPageDetail = (props) => {
                       </div>
                       <div className="buy">
                         <button
+                          disabled={detailBook.quantity > 0 ? false : true}
+                          style={{
+                            cursor:
+                              detailBook.quantity > 0
+                                ? "pointer"
+                                : "not-allowed",
+                          }}
                           className="cart"
                           onClick={() => handleAddToCart("lg")}
                         >
@@ -353,6 +362,13 @@ const BookPageDetail = (props) => {
                           <span>Thêm vào giỏ hàng</span>
                         </button>
                         <button
+                          disabled={detailBook.quantity > 0 ? false : true}
+                          style={{
+                            cursor:
+                              detailBook.quantity > 0
+                                ? "pointer"
+                                : "not-allowed",
+                          }}
                           className="now"
                           onClick={() => handleBuyNow("lg")}
                         >
