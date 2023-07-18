@@ -25,6 +25,7 @@ import HomeSkeleton from "./homeSkeleton";
 import { AiOutlineLeft, AiOutlineRight } from "react-icons/ai";
 import ResponsiveHome from "./responsiveHome";
 import { convertSlug } from "../../utils/convertSlug";
+import { LazyLoadImage } from "react-lazy-load-image-component";
 
 const Home = () => {
   const [form] = Form.useForm();
@@ -317,8 +318,6 @@ const Home = () => {
                               className="category-group"
                               key={`itemcategory-${index}`}
                             >
-                              {/* <Checkbox value={item}>{item}</Checkbox> 
-                                ko su dung ref cho antd duoc */}
                               <input
                                 ref={(el) => (refCheckbox.current[index] = el)}
                                 type="checkbox"
@@ -661,6 +660,13 @@ const Home = () => {
                       >
                         <div className="wrapper">
                           <div className="thumbnail">
+                            {/* <LazyLoadImage
+                              effect="blur"
+                              src={`${
+                                import.meta.env.VITE_BACKEND_URL
+                              }/images/book/${item?.thumbnail}`}
+                              alt="thumbnail book"
+                            /> */}
                             <img
                               src={`${
                                 import.meta.env.VITE_BACKEND_URL

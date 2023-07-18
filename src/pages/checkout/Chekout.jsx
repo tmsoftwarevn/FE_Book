@@ -132,7 +132,7 @@ const Checkout = () => {
     listOrder.map((item) => {
       updateBookAfterOrder(item.id, item.quantity);
       let detail = {
-        totalPrice: item.quantity * item.detail.price,
+        price: item.detail.price,
         quantity: item.quantity,
         idOrder: orderId,
         idBook: item.id,
@@ -145,8 +145,10 @@ const Checkout = () => {
     let order = {
       totalProduct: listProductBuy.length,
       total: totalPriceProduct,
-      idInfoDelivery: delivery.id,
       payment: "Thanh toán khi nhận hàng",
+      fullname: delivery.fullname,
+      phone: delivery.phone,
+      address: delivery.address,
       idUser: user.id,
       idStatus: 1,
     };

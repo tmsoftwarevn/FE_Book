@@ -30,6 +30,7 @@ import Checkout from "./pages/checkout/Chekout";
 import ManagerOrder from "./pages/admin/order/managerOrder";
 import PageOrder from "./pages/order/order";
 import OrderHistory from "./pages/order history/OrderHistory";
+import DetailOrderById from "./pages/Order detail/OrderDetailById";
 
 const Layout = () => {
   const role = useSelector((state) => state.account?.user?.role);
@@ -110,6 +111,14 @@ export default function App() {
           element: (
             <ProtectedRoute>
               <OrderHistory />
+            </ProtectedRoute>
+          ),
+        },
+        {
+          path: "orderHistory/:id",
+          element: (
+            <ProtectedRoute>
+              <DetailOrderById />
             </ProtectedRoute>
           ),
         },

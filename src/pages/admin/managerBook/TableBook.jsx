@@ -118,7 +118,6 @@ const TableBook = (props) => {
           updatedAt: moment(item?.updatedAt).format("DD-MM-YY hh:mm:ss"),
         });
       });
-      // setTotal(arr.length);
       setDataTable(arr);
     } else {
       setTotal(0);

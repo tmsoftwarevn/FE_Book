@@ -18,7 +18,7 @@ const instance = axios.create({
 axiosRetry(instance, {
   retries: 2,
   retryCondition: (error) => {
-    return error.response.status === 401;
+    return error.response?.status == 401;
   },
   retryDelay: (retryCount, error) => {
     return retryCount * 100;
@@ -34,7 +34,6 @@ const handleRefreshToken = async () => {
 
 instance.interceptors.request.use(
   function (config) {
-    // config khi login ban dau, khoi tao lai header, save outside not auto save
     const user = localStorage.getItem("access_token");
     if (user) {
       config.headers.Authorization = `Bearer ${user}`;

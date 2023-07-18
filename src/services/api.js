@@ -131,10 +131,6 @@ export const callCreateOrder = (order) => {
   return axios.post("/api/v1/order", order);
 };
 
-export const callCreateOrderDetail = (detail) => {
-  return axios.post("/api/v1/orderDetail", detail);
-};
-
 export const callUpdateBookAfterOrder = (id, count) => {
   return axios.put("/api/v1/updateBook", { id, count });
 };
@@ -143,4 +139,12 @@ export const callOrderHistoryUser = (id, current, pageSize) => {
   return axios.get(
     `/api/v1/user/orderHistory/${id}?current=${current}&pageSize=${pageSize}`
   );
+};
+
+export const callCreateOrderDetail = (detail) => {
+  return axios.post("/api/v1/orderDetail", detail);
+};
+
+export const callGetDetailOrderWithId = (id) => {
+  return axios.get(`/api/v1/orderDetail/${id}`);
 };

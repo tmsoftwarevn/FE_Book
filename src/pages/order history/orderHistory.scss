@@ -29,33 +29,10 @@
     .history-row {
         padding: 10px 20px;
         background-color: var(--color-background-row);
-        .tab-1 {
-            margin-top: 20px;
-            .row-tab1 {
-                display: flex;
-                &__title {
-                    color: #333;
-                    font-weight: 500;
-                    text-align: center;
-                    width: 20%;
-                }
-            }
-            .order-list {
-                margin-bottom: 20px;
-                display: flex;
-                &__info {
-                    text-align: center;
-                    width: 20%;
-                }
-                &__detail {
-                    text-align: center;
-                    text-decoration: underline;
-                    width: 20%;
-                    &:hover {
-                        cursor: pointer;
-                        color: blue;
-                    }
-                }
+        .action-order {
+            cursor: pointer;
+            &:hover {
+                color: blue;
             }
         }
     }

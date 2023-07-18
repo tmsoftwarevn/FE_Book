@@ -34,7 +34,11 @@ const PageOrder = () => {
               />
             }
             title="Đơn hàng được đặt thành công!"
-            extra={<Button type="primary">Lịch sử mua hàng</Button>}
+            extra={
+              <Button type="primary" onClick={() => navigate("/orderHistory")}>
+                Lịch sử mua hàng
+              </Button>
+            }
           />
         </div>
       </div>
