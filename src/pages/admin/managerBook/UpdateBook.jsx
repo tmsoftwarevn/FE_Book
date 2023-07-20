@@ -122,12 +122,7 @@ const UpdateBook = (props) => {
       });
       return;
     }
-    // if (dataSlider.length === 0) {
-    //   notification.error({
-    //     description: "Hãy upload ảnh slider",
-    //   });
-    //   return;
-    // }
+
     const slider = dataSlider.map((item) => item.name);
 
     let res = await callUpdateBook(

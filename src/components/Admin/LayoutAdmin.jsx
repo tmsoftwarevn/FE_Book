@@ -8,7 +8,7 @@ import { Layout, Menu, theme, message } from "antd";
 import { useEffect, useState } from "react";
 import { Link, Outlet, useLocation, useNavigate } from "react-router-dom";
 import { Dropdown, Space } from "antd";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { callLogout } from "../../services/api";
 import { doLogoutAction } from "../../redux/account/accountSlice";
 
@@ -42,13 +42,14 @@ const items = [
 const AccountAdmin = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const idUser = useSelector((state) => state.account?.user?.id);
   const handleLogout = async () => {
-    const res = await callLogout();
+    const res = await callLogout(idUser);
     if (res && res.data) {
       dispatch(doLogoutAction());
+      window.open("http://localhost:8086/api/v1/social/logout", "_self");
       message.success("Đăng xuất thành công");
     }
-    window.open("http://localhost:8086/api/v1/social/logout", "_self");
   };
   const location = useLocation();
   const items = [

@@ -15,15 +15,15 @@ const instance = axios.create({
   withCredentials: true,
 });
 
-axiosRetry(instance, {
-  retries: 2,
-  retryCondition: (error) => {
-    return error.response?.status == 401;
-  },
-  retryDelay: (retryCount, error) => {
-    return retryCount * 100;
-  },
-});
+// axiosRetry(instance, {
+//   retries: 2,
+//   retryCondition: (error) => {
+//     return error.response?.status === 401;
+//   },
+//   retryDelay: (retryCount, error) => {
+//     return retryCount * 100;
+//   },
+// });
 
 const handleRefreshToken = async () => {
   const res = await instance.get("/api/v1/auth/refresh");

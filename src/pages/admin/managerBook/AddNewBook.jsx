@@ -46,7 +46,6 @@ const AddNewBook = (props) => {
   };
   const onFinish = async (values) => {
     const { name, author, price, quantity, sold, rate } = values;
-    console.log("ffffffffff", values);
     if (dataThumbnail.length === 0) {
       notification.error({
         description: "Hãy upload ảnh thumbnail",

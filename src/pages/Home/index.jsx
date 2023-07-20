@@ -273,7 +273,15 @@ const Home = () => {
   const handleShowMore = () => {
     setShowMore(!showMore);
   };
-
+  const handleSearchPriceInput = () => {
+    setactivePrice({
+      a: false,
+      b: false,
+      c: false,
+      d: false,
+    });
+    setPrice([]);
+  };
   const handleRedirectBook = (book) => {
     const slug = convertSlug(book.mainText);
     navigate(`/book/${slug}?id=${book.id}`);
@@ -430,6 +438,7 @@ const Home = () => {
                         className="input-number"
                         min={0}
                         placeholder="đ"
+                        onChange={() => handleSearchPriceInput()}
                         formatter={(value) =>
                           `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
                         }
@@ -690,9 +699,13 @@ const Home = () => {
                               }).format(item.price)}
                             </div>
                             <div className="rating">
-                              <Rate value={5} disabled className="star" />
+                              <Rate
+                                value={item.rate}
+                                disabled
+                                className="star"
+                              />
 
-                              <span className="rate">5</span>
+                              <span className="rate">{item.rate}</span>
                               <AiFillStar className="responsive-star" />
                               <span
                                 style={{ display: "inline-block" }}
@@ -740,6 +753,7 @@ const Home = () => {
             filterCategory={filterCategory}
             callApiSortDepsCategory={callApiSortDepsCategory}
             setIsLoading={setIsLoading}
+            handleSearchPriceInput={handleSearchPriceInput}
           />
         </div>
       </div>

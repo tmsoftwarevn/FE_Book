@@ -113,7 +113,7 @@ const OrderHistory = () => {
       key: "status",
     },
     {
-      title: "Tổng sản phẩm",
+      title: "Số loại sản phẩm",
       dataIndex: "totalProduct",
       align: "center",
       responsive: ["md"],
@@ -162,6 +162,7 @@ const OrderHistory = () => {
             columns={columns}
             dataSource={listOrder}
             onChange={onChangeTable}
+            locale={locale}
             scroll={{ x: "430px" }}
             pagination={{
               pageSize: pageSize,
@@ -200,7 +201,6 @@ const OrderHistory = () => {
                 fontFamily: "Roboto",
               }}
               defaultActiveKey="1"
-              locale={locale}
               items={items}
               tabPosition={"top"}
               onChange={onChange}

@@ -12,25 +12,21 @@ import Footer from "./components/Footer";
 import Home from "./pages/Home/index";
 import RegisterPage from "./pages/register";
 import { useDispatch, useSelector } from "react-redux";
-import { callGetAccount, callGetSocial } from "./services/api";
-import {
-  doGetAccountAction,
-  doLoginAction,
-} from "./redux/account/accountSlice";
+import { callGetAccount } from "./services/api";
+import { doGetAccountAction } from "./redux/account/accountSlice";
 import Loading from "./components/Loading/loading";
 import Notfound from "./components/Notfound";
 import ManagerUser from "./pages/admin/managerUser/ManagerUser";
 import ProtectedRoute from "./components/ProtectedRoute/ProtectedRoute";
 import LayoutAdmin from "./components/Admin/LayoutAdmin";
-import Dashboard from "./pages/admin/dashboard/Dashboard";
 import ManagerBook from "./pages/admin/managerBook/ManagerBook";
 import BookPageDetail from "./pages/book/BookPageDetail";
 import Cart from "./pages/cart/Cart";
 import Checkout from "./pages/checkout/Chekout";
-import ManagerOrder from "./pages/admin/order/managerOrder";
 import PageOrder from "./pages/order/order";
 import OrderHistory from "./pages/order history/OrderHistory";
 import DetailOrderById from "./pages/Order detail/OrderDetailById";
+import ManagerOrder from "./pages/admin/managerOrder/managerOrder";
 
 const Layout = () => {
   const role = useSelector((state) => state.account?.user?.role);
@@ -63,7 +59,6 @@ export default function App() {
       dispatch(doGetAccountAction(res.data));
     }
   };
-
   useEffect(() => {
     if (localStorage.getItem("access_token")) {
       getAccount();

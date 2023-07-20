@@ -19,8 +19,8 @@ export const callGetAccount = () => {
   return axios.get("/api/v1/auth/account");
 };
 
-export const callLogout = () => {
-  return axios.post("/api/v1/auth/logout");
+export const callLogout = (idUser) => {
+  return axios.post("/api/v1/auth/logout", { id: idUser });
 };
 
 export const callGetListUser = (current, pageSize, sort, search) => {
@@ -130,7 +130,11 @@ export const callUpdateInfoDelivery = (id, up) => {
 export const callCreateOrder = (order) => {
   return axios.post("/api/v1/order", order);
 };
-
+export const callGetOrderAdmin = (current, pageSize, search) => {
+  return axios.get(
+    `/api/v1/order?current=${current}&pageSize=${pageSize}&search=${search}`
+  );
+};
 export const callUpdateBookAfterOrder = (id, count) => {
   return axios.put("/api/v1/updateBook", { id, count });
 };
@@ -147,4 +151,12 @@ export const callCreateOrderDetail = (detail) => {
 
 export const callGetDetailOrderWithId = (id) => {
   return axios.get(`/api/v1/orderDetail/${id}`);
+};
+
+export const callGetStatus = () => {
+  return axios.get(`/api/v1/status`);
+};
+
+export const callUpdateOrderStatus = (idOrder, id) => {
+  return axios.put(`/api/v1/orderStatus/${idOrder}`, { idStatus: id });
 };

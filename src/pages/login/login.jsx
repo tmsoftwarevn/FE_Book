@@ -56,7 +56,6 @@ const LoginPage = () => {
           .then((response) => response.json())
           .then((resObject) => {
             user = resObject;
-            console.log(resObject);
           })
           .catch((err) => {
             console.log(err);

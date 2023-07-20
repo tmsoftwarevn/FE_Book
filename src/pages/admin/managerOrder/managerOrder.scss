@@ -1,0 +1,10 @@
+.manager-order {
+    .search-status {
+    }
+    .action-order {
+        cursor: pointer;
+        &:hover {
+            color: blue;
+        }
+    }
+}

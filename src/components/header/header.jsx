@@ -4,7 +4,18 @@ import { AiOutlineSearch } from "react-icons/ai";
 import { SlBasket } from "react-icons/sl";
 import { AiFillHome } from "react-icons/ai";
 import { VscAccount } from "react-icons/vsc";
-import { Dropdown, Badge, Space, message } from "antd";
+import {
+  Dropdown,
+  Badge,
+  Space,
+  message,
+  Modal,
+  Tabs,
+  Input,
+  Row,
+  Col,
+  Form,
+} from "antd";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
@@ -13,7 +24,6 @@ import { doLogoutAction } from "../../redux/account/accountSlice";
 import {
   doRemoveCartLogout,
   doSetListCartLogin,
-  resetCart,
 } from "../../redux/cart/cartSlice";
 import PreviewCart from "../../pages/cart/PreviewCart";
 
@@ -52,37 +62,41 @@ const Header = () => {
     if (isAuthenticated === true && role === "USER") {
       setItems([
         {
-          label: <Link to="/">Quản lý tài khoản</Link>,
+          label: <p onClick={showModal}>Quản Lý Tài Khoản</p>,
           key: "account",
         },
         {
-          label: <p onClick={() => handleLogout()}>Đăng xuất</p>,
+          label: <Link to="/orderHistory">Đơn Mua</Link>,
+          key: "orderHistory",
+        },
+        {
+          label: <p onClick={() => handleLogout()}>Đăng Xuất</p>,
           key: "logout",
         },
       ]);
     } else if (isAuthenticated === true && role === "ADMIN") {
       setItems([
         {
-          label: <Link to="/">Quản lí tài khoản</Link>,
+          label: <p onClick={showModal}>Quản Lý Tài Khoản</p>,
           key: "account",
         },
         {
-          label: <Link to="/admin/book">Trang quản trị</Link>,
+          label: <Link to="/admin/book">Trang Quản Trị</Link>,
           key: "admin",
         },
         {
-          label: <p onClick={() => handleLogout()}>Đăng xuất</p>,
+          label: <p onClick={() => handleLogout()}>Đăng Xuất</p>,
           key: "logout",
         },
       ]);
     } else {
       setItems([
         {
-          label: <Link to="/login">Đăng nhập</Link>,
+          label: <Link to="/login">Đăng Nhập</Link>,
           key: "login",
         },
         {
-          label: <Link to="/register">Đăng kí</Link>,
+          label: <Link to="/register">Đăng Kí</Link>,
           key: "register",
         },
       ]);
@@ -90,15 +104,30 @@ const Header = () => {
   };
 
   const handleLogout = async () => {
-    const res = await callLogout();
+    const res = await callLogout(idUser);
     if (res && res.data) {
       dispatch(doLogoutAction());
       dispatch(doRemoveCartLogout());
+      window.open("http://localhost:8086/api/v1/social/logout", "_self");
       message.success("Đăng xuất thành công");
     }
-    window.open("http://localhost:8086/api/v1/social/logout", "_self");
   };
-
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [form] = Form.useForm();
+  const showModal = () => {
+    let init = {
+      email: userEmail,
+      fullname: username,
+    };
+    form.setFieldsValue(init);
+    setIsModalOpen(true);
+  };
+  const handleOk = () => {
+    setIsModalOpen(false);
+  };
+  const handleCancel = () => {
+    setIsModalOpen(false);
+  };
   return (
     <div className="header-main">
       <div className="container">
@@ -150,7 +179,7 @@ const Header = () => {
                     menu={{
                       items,
                     }}
-                    placement="bottomLeft"
+                    placement="bottomRight"
                   >
                     {isAuthenticated === true ? (
                       <div className="username">
@@ -174,6 +203,55 @@ const Header = () => {
           </div>
         </div>
       </div>
+      <Modal
+        title="Thông tin tài khoản"
+        open={isModalOpen}
+        onOk={handleOk}
+        okText="Update"
+        onCancel={handleCancel}
+      >
+        <Tabs
+          defaultActiveKey="1"
+          items={[
+            {
+              key: "1",
+              label: `Thông tin`,
+              children: (
+                <div>
+                  <Form name="basic" autoComplete="off" form={form}>
+                    <Row gutter={20}>
+                      <Col span={12}>
+                        <Form.Item
+                          labelCol={{ span: 24 }}
+                          label="Email"
+                          name="email"
+                        >
+                          <Input disabled={true} />
+                        </Form.Item>
+                      </Col>
+                      <Col span={12}>
+                        <Form.Item
+                          labelCol={{ span: 24 }}
+                          label="Tên hiển thị"
+                          name="fullname"
+                        >
+                          <Input />
+                        </Form.Item>
+                      </Col>
+                    </Row>
+                  </Form>
+                </div>
+              ),
+            },
+            {
+              key: "2",
+              label: "Đổi mật khẩu",
+              children: <></>,
+            },
+          ]}
+          //onChange={onChange}
+        />
+      </Modal>
     </div>
   );
 };

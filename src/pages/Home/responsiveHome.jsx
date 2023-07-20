@@ -11,6 +11,7 @@ const ResponsiveHome = (props) => {
     onFinish,
     form,
     handleChangeFilter,
+    handleSearchPriceInput,
     listCategory,
     handleSelectStar,
     activeStar,
@@ -84,7 +85,7 @@ const ResponsiveHome = (props) => {
                     <Col
                       span={24}
                       className="category-group"
-                      key={`itemres-${item}`}
+                      key={`home_ress-${index}`}
                     >
                       <input
                         ref={(el) => (reftest.current[index] = el)}
@@ -230,6 +231,7 @@ const ResponsiveHome = (props) => {
                   className="input-number"
                   min={0}
                   placeholder="đ"
+                  onChange={() => handleSearchPriceInput()}
                   formatter={(value) =>
                     `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
                   }

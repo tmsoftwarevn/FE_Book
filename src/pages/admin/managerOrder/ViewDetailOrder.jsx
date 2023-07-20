@@ -1,34 +1,24 @@
 import { useEffect, useState } from "react";
-import { useLocation, useNavigate, useParams } from "react-router-dom";
-import { callGetDetailOrderWithId } from "../../services/api";
-import "./orderDetail.scss";
-import { Col, Divider, Form, Image, Input, Modal, Row } from "antd";
-import { convertSlug } from "../../utils/convertSlug";
+import "../../Order detail/orderDetail.scss";
+import { Button, Col, Divider, Form, Image, Input, Modal, Row } from "antd";
+import * as XLSX from "xlsx";
 import TextArea from "antd/es/input/TextArea";
-
-const DetailOrderById = () => {
+const ViewDetailOrder = (props) => {
   const [form] = Form.useForm();
-  const params = useParams();
-  const [dataView, setDataView] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const navigate = useNavigate();
-  const location = useLocation();
-  const infoDelivery = location.state?.infoDelivery;
-  console.log("checkkkkkkk", infoDelivery);
+  const [dataExport, setDataExport] = useState("");
+  const { dataView, infoDelivery, idOrder } = props;
   useEffect(() => {
-    const fetchDetailOrder = async () => {
-      let res = await callGetDetailOrderWithId(params.id);
-      if (res && res.data) {
-        setDataView(res.data);
-      }
-    };
-    if (!infoDelivery) navigate("/orderHistory");
-    fetchDetailOrder();
-  }, []);
-  const handleRedirectDetailBook = (book) => {
-    const slug = convertSlug(book.mainText);
-    navigate(`/book/${slug}?id=${book.id}`);
-  };
+    let arr = [...dataView];
+    arr.push({
+      fullname: infoDelivery.fullname,
+      phone: infoDelivery.phone,
+      address: infoDelivery.address,
+      idOrder: idOrder,
+    });
+    setDataExport(arr);
+  }, [idOrder]);
+
   const showModal = () => {
     const init = {
       fullname: infoDelivery.fullname,
@@ -44,11 +34,25 @@ const DetailOrderById = () => {
   const handleCancel = () => {
     setIsModalOpen(false);
   };
-  return (
-    <div className="detail-order">
-      <div className="container">
+  const handleExportData = () => {
+    const worksheet = XLSX.utils.json_to_sheet(dataExport);
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, "Sheet1");
+    XLSX.writeFile(workbook, "exportdetailOrder.csv");
+  };
+  if (dataView && dataView[0]?.mainText) {
+    return (
+      <div className="detail-order">
         <div className="detail-content">
-          <div className="title-detail">Chi tiết đơn hàng</div>
+          <div
+            className="group-tittle"
+            style={{ display: "flex", justifyContent: "space-between" }}
+          >
+            <div className="title-detail">Chi tiết đơn hàng: {idOrder}</div>
+            <Button type="primary" onClick={handleExportData}>
+              Export đơn hàng
+            </Button>
+          </div>
           <div className="address">
             <div
               style={{
@@ -143,19 +147,6 @@ const DetailOrderById = () => {
               return (
                 <div key={`detail-id${index}`} className="parent">
                   <div className="group">
-                    <div
-                      className="thumbnail"
-                      onClick={() => handleRedirectDetailBook(item)}
-                    >
-                      <Image
-                        width={80}
-                        height={80}
-                        preview={false}
-                        src={`${import.meta.env.VITE_BACKEND_URL}/images/book/${
-                          item.thumbnail
-                        }`}
-                      />
-                    </div>
                     <div className="name">{item.mainText}</div>
                   </div>
                   <div className="price">
@@ -178,8 +169,10 @@ const DetailOrderById = () => {
           </div>
         </div>
       </div>
-    </div>
-  );
+    );
+  } else {
+    return <></>;
+  }
 };
 
-export default DetailOrderById;
+export default ViewDetailOrder;

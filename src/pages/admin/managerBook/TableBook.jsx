@@ -223,7 +223,7 @@ const TableBook = (props) => {
       >
         <div>Danh sách Books: </div>
         <div style={{ gap: 10, display: "flex" }}>
-          <div>
+          {/* <div>
             <Button type="primary" onClick={() => handleExportData()}>
               Export data
             </Button>
@@ -232,7 +232,7 @@ const TableBook = (props) => {
             <Button type="primary" onClick={() => setIsModalImportBook(true)}>
               Import data
             </Button>
-          </div>
+          </div> */}
           <div>
             <Button type="primary" onClick={() => setIsModalAddBook(true)}>
               Thêm mới
