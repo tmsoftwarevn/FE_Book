@@ -27,6 +27,7 @@ import PageOrder from "./pages/order/order";
 import OrderHistory from "./pages/order history/OrderHistory";
 import DetailOrderById from "./pages/Order detail/OrderDetailById";
 import ManagerOrder from "./pages/admin/managerOrder/managerOrder";
+import GetPassword from "./pages/forgot password/GetPassword";
 
 const Layout = () => {
   const role = useSelector((state) => state.account?.user?.role);
@@ -128,6 +129,10 @@ export default function App() {
       element: <RegisterPage />,
     },
     {
+      path: "/forgot-password",
+      element: <GetPassword />,
+    },
+    {
       path: "/admin",
       element: (
         <ProtectedRoute>
@@ -154,7 +159,7 @@ export default function App() {
   ]);
 
   // cho phep vao route, ko check quyen
-  const permissionPath = ["/login", "/register", "/book"];
+  const permissionPath = ["/login", "/register", "/book", "/forgot-password"];
 
   const str = window.location.pathname;
 

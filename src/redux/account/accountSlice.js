@@ -62,6 +62,9 @@ export const accountSlice = createSlice({
     doUpdateAddressUser: (state, action) => {
       state.delivery = action.payload;
     },
+    doUpdateFullname: (state, action) => {
+      state.user.fullName = action.payload;
+    },
   },
 });
 
@@ -70,6 +73,7 @@ export const {
   doGetAccountAction,
   doLogoutAction,
   doUpdateAddressUser,
+  doUpdateFullname,
 } = accountSlice.actions;
 
 export default accountSlice.reducer;

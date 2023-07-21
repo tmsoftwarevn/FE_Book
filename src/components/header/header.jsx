@@ -19,8 +19,15 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { callLogout } from "../../services/api";
-import { doLogoutAction } from "../../redux/account/accountSlice";
+import {
+  callLogout,
+  callUpdatePassword,
+  callUpdateUser,
+} from "../../services/api";
+import {
+  doLogoutAction,
+  doUpdateFullname,
+} from "../../redux/account/accountSlice";
 import {
   doRemoveCartLogout,
   doSetListCartLogin,
@@ -29,15 +36,19 @@ import PreviewCart from "../../pages/cart/PreviewCart";
 
 const Header = () => {
   const isAuthenticated = useSelector((state) => state.account.isAuthenticated);
-  const username = useSelector((state) => state.account.user.fullName);
-  const userEmail = useSelector((state) => state.account.user.email);
+  const username = useSelector((state) => state.account.user?.fullName);
+  const userEmail = useSelector((state) => state.account.user?.email);
   const role = useSelector((state) => state.account.user.role);
   const countProduct = useSelector((state) =>
     state.cart?.listCart ? state.cart.listCart : 0
   );
   const idUser = useSelector((state) => state.account?.user?.id);
+  const user = useSelector((state) => state.account?.user);
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [form] = Form.useForm();
+  const [keyTab, setKeyTab] = useState("1");
 
   useEffect(() => {
     listItems();
@@ -112,21 +123,51 @@ const Header = () => {
       message.success("Đăng xuất thành công");
     }
   };
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [form] = Form.useForm();
+
   const showModal = () => {
-    let init = {
-      email: userEmail,
-      fullname: username,
-    };
-    form.setFieldsValue(init);
     setIsModalOpen(true);
   };
-  const handleOk = () => {
+  const handleOk = async (updateName, email, oldPassword, newPassword) => {
+    if (+keyTab === 1) {
+      let res = await callUpdateUser(idUser, updateName);
+      if (res && res.data) {
+        message.success("Update thành công");
+        dispatch(doUpdateFullname(updateName));
+      } else {
+        message.error("Có lỗi. Hãy thử lại");
+      }
+    }
+    if (+keyTab === 2) {
+      let res = await callUpdatePassword(email, oldPassword, newPassword);
+      if (res && res.data) {
+        message.success("Update thành công");
+      } else {
+        message.error(res.message);
+      }
+    }
+    form.resetFields();
     setIsModalOpen(false);
   };
   const handleCancel = () => {
     setIsModalOpen(false);
+  };
+  const onFinish = (values) => {
+    if (+keyTab === 1 && values.fullname) {
+      handleOk(values.fullname);
+    }
+    if (
+      +keyTab === 2 &&
+      values.email &&
+      values.oldPassword &&
+      values.newPassword
+    ) {
+      handleOk("a", values.email, values.oldPassword, values.newPassword);
+    }
+    return;
+  };
+  const onchange = (key) => {
+    console.log(key);
+    setKeyTab(key);
   };
   return (
     <div className="header-main">
@@ -204,27 +245,40 @@ const Header = () => {
         </div>
       </div>
       <Modal
-        title="Thông tin tài khoản"
+        title="Quản lý tài khoản"
         open={isModalOpen}
-        onOk={handleOk}
+        onOk={() => form.submit()}
         okText="Update"
         onCancel={handleCancel}
+        maskClosable={false}
       >
         <Tabs
-          defaultActiveKey="1"
+          defaultActiveKey={1}
           items={[
             {
               key: "1",
               label: `Thông tin`,
               children: (
                 <div>
-                  <Form name="basic" autoComplete="off" form={form}>
+                  <Form
+                    name="basic"
+                    autoComplete="off"
+                    form={form}
+                    onFinish={onFinish}
+                    fields={[
+                      {
+                        name: ["fullname"],
+                        value: username,
+                      },
+                    ]}
+                  >
                     <Row gutter={20}>
                       <Col span={12}>
                         <Form.Item
                           labelCol={{ span: 24 }}
                           label="Email"
                           name="email"
+                          initialValue={userEmail}
                         >
                           <Input disabled={true} />
                         </Form.Item>
@@ -234,6 +288,12 @@ const Header = () => {
                           labelCol={{ span: 24 }}
                           label="Tên hiển thị"
                           name="fullname"
+                          rules={[
+                            {
+                              required: true,
+                              message: "Nhập tên hiển thị!",
+                            },
+                          ]}
                         >
                           <Input />
                         </Form.Item>
@@ -246,10 +306,60 @@ const Header = () => {
             {
               key: "2",
               label: "Đổi mật khẩu",
-              children: <></>,
+              children: (
+                <>
+                  {user.type === "SOCIAL" ? (
+                    <></>
+                  ) : (
+                    <div>
+                      <Form
+                        name="basic"
+                        autoComplete="off"
+                        form={form}
+                        onFinish={onFinish}
+                      >
+                        <Row gutter={20}>
+                          <Col span={12}>
+                            <Form.Item
+                              labelCol={{ span: 24 }}
+                              label="Mật khẩu cũ"
+                              name="oldPassword"
+                              rules={[
+                                {
+                                  required: true,
+                                  message: "Nhập mật khẩu cũ",
+                                },
+                              ]}
+                              initialValue={"1"}
+                            >
+                              <Input.Password />
+                            </Form.Item>
+                          </Col>
+                          <Col span={12}>
+                            <Form.Item
+                              labelCol={{ span: 24 }}
+                              label="Mật khẩu mới"
+                              name="newPassword"
+                              rules={[
+                                {
+                                  required: true,
+                                  message: "Nhập mật khẩu mới",
+                                },
+                              ]}
+                              initialValue={"1"}
+                            >
+                              <Input.Password />
+                            </Form.Item>
+                          </Col>
+                        </Row>
+                      </Form>
+                    </div>
+                  )}
+                </>
+              ),
             },
           ]}
-          //onChange={onChange}
+          onChange={onchange}
         />
       </Modal>
     </div>

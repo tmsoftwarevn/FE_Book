@@ -198,7 +198,7 @@ const ManagerOrder = () => {
       message.success("Update trạng thái thành công");
       fetchOrderAdmin();
     } else {
-      message.err("Có lỗi xảy ra. Hãy thử lại");
+      message.error("Có lỗi xảy ra. Hãy thử lại");
     }
     setIsModalUpdate(false);
     form.resetFields();

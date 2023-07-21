@@ -115,7 +115,7 @@ const RegisterPage = () => {
           <b onClick={() => navigate("/login")}>Đăng nhập</b>
         </div>
         <div className="home" onClick={() => navigate("/")}>
-          &#60;Trang Chủ&#62;
+          Trang Chủ
         </div>
       </div>
     </div>

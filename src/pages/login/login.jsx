@@ -127,7 +127,7 @@ const LoginPage = () => {
 
         <div className="text">
           <p onClick={() => navigate("/register")}>Đăng kí</p>
-          <u>Quên mật khẩu ?</u>
+          <u onClick={() => navigate("/forgot-password")}>Quên mật khẩu ?</u>
         </div>
         <div className="group">
           <Divider
@@ -146,7 +146,7 @@ const LoginPage = () => {
             </div>
           </div>
           <div className="home" onClick={() => navigate("/")}>
-            &#60;Trang Chủ&#62;
+            Trang Chủ
           </div>
         </div>
       </div>

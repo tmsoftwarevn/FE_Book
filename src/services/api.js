@@ -160,3 +160,15 @@ export const callGetStatus = () => {
 export const callUpdateOrderStatus = (idOrder, id) => {
   return axios.put(`/api/v1/orderStatus/${idOrder}`, { idStatus: id });
 };
+
+export const callUpdateUser = (id, name) => {
+  return axios.put(`/api/v1/user/${id}`, { fullname: name });
+};
+
+export const callUpdatePassword = (email, pass, newPass) => {
+  return axios.put("/api/v1/user", {
+    email: email,
+    password: pass,
+    newPassword: newPass,
+  });
+};
