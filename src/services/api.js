@@ -172,3 +172,15 @@ export const callUpdatePassword = (email, pass, newPass) => {
     newPassword: newPass,
   });
 };
+
+export const callSendOTP = (email) => {
+  return axios.post("/api/v1/forgot-password", { email });
+};
+
+export const callVerify = (email, OTP) => {
+  return axios.post("/api/v1/checkOTP", { email, OTP });
+};
+
+export const callNewPassword = (email, newPassword) => {
+  return axios.post("/api/v1/newPass", { email, newPassword });
+};
