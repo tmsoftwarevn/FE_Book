@@ -31,7 +31,7 @@ const Home = () => {
   const [form] = Form.useForm();
   const [total, setTotal] = useState(0);
   const [current, setCurrent] = useState(1);
-  const [pageSize, setPageSize] = useState(12);
+  const [pageSize, setPageSize] = useState(16);
   const [dataBook, setDataBook] = useState("");
   const [price, setPrice] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -325,6 +325,7 @@ const Home = () => {
                               span={24}
                               className="category-group"
                               key={`itemcategory-${index}`}
+                              style={{ display: "flex" }}
                             >
                               <input
                                 ref={(el) => (refCheckbox.current[index] = el)}
@@ -334,7 +335,8 @@ const Home = () => {
                                   handleSortDepsCategory(e, item)
                                 }
                               ></input>
-                              {item.category}
+                              {/* {item.category} */}
+                              <div>{item.category}</div>
                             </Col>
                           );
                         })}

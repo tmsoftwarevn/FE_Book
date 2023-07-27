@@ -88,8 +88,9 @@ const LoginPage = () => {
           <Form name="basic" onFinish={onFinish} autoComplete="off">
             <Form.Item
               labelCol={{ span: 24 }}
-              label="Email"
+              //label="Email"
               name="email"
+              requiredMark={"optional"}
               rules={[
                 {
                   required: true,
@@ -97,13 +98,14 @@ const LoginPage = () => {
                 },
               ]}
             >
-              <Input />
+              <Input placeholder="Email" />
             </Form.Item>
 
             <Form.Item
               labelCol={{ span: 24 }}
-              label="Mật khẩu"
+              // label="Mật khẩu"
               name="password"
+              requiredMark={"optional"}
               rules={[
                 {
                   required: true,
@@ -111,7 +113,7 @@ const LoginPage = () => {
                 },
               ]}
             >
-              <Input.Password />
+              <Input.Password visibilityToggle={false} placeholder="Mật khẩu" />
             </Form.Item>
             <Form.Item>
               <Button

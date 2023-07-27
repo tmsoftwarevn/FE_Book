@@ -294,7 +294,7 @@ const BookPageDetail = (props) => {
                       <div className="title-name">{detailBook.mainText}</div>
                       <div className="rating">
                         <Rate
-                          value={5}
+                          value={detailBook.rate}
                           disabled
                           style={{ color: "#ffce3d", fontSize: 12 }}
                         />

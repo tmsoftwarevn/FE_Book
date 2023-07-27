@@ -332,7 +332,7 @@ const Header = () => {
                               ]}
                               initialValue={"1"}
                             >
-                              <Input.Password />
+                              <Input.Password visibilityToggle={false} />
                             </Form.Item>
                           </Col>
                           <Col span={12}>

@@ -3,7 +3,7 @@ import "./getPassword.scss";
 import { Button, Form, Input, message, notification, Steps } from "antd";
 import { useNavigate } from "react-router-dom";
 import { callNewPassword, callSendOTP, callVerify } from "../../services/api";
-
+import NProgress from "nprogress";
 const GetPassword = () => {
   const [current, setCurrent] = useState(0);
   const [email, setEmail] = useState("");
@@ -23,16 +23,21 @@ const GetPassword = () => {
       message.error("Email không được để trống");
       return;
     }
+    NProgress.start();
     let res = await callSendOTP(email);
     if (res && res.EC === 1) {
+      NProgress.done();
       message.success(res.message);
       next();
     } else {
+      NProgress.done();
       message.error(res.message);
     }
   };
   const handleVerify = async () => {
+    NProgress.start();
     let res = await callVerify(email, otpRef.current.value);
+    NProgress.done();
     if (res && res.EC === 1) {
       next();
     } else {
@@ -51,8 +56,9 @@ const GetPassword = () => {
       });
       return;
     }
-    console.log(email, password);
+    NProgress.start();
     let res = await callNewPassword(email, password);
+    NProgress.done();
     if (res && res.data) {
       message.success("Thay đổi mật khẩu thành công");
       navigate("/login");
@@ -120,7 +126,7 @@ const GetPassword = () => {
                 },
               ]}
             >
-              <Input.Password />
+              <Input.Password visibilityToggle={false} />
             </Form.Item>
 
             <Form.Item
@@ -134,7 +140,7 @@ const GetPassword = () => {
                 },
               ]}
             >
-              <Input.Password />
+              <Input.Password visibilityToggle={false} />
             </Form.Item>
           </Form>
         </>
@@ -151,11 +157,12 @@ const GetPassword = () => {
       <div className="forgot-content">
         <div
           style={{
-            marginBottom: 70,
+            marginBottom: 50,
             textAlign: "center",
             fontWeight: 500,
-            fontSize: 20,
+            fontSize: 24,
             cursor: "pointer",
+            color: "orange",
           }}
           onClick={() => navigate("/")}
         >

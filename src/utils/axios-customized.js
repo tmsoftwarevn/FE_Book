@@ -4,11 +4,11 @@ import NProgress from "nprogress";
 
 const baseURL = import.meta.env.VITE_BACKEND_URL;
 
-// NProgress.configure({
-//   showSpinner: false,
-//   easing: "ease",
-//   speed: 1000,
-// });
+NProgress.configure({
+  showSpinner: false,
+  easing: "ease",
+  speed: 1000,
+});
 
 const instance = axios.create({
   baseURL: baseURL,
