@@ -88,10 +88,10 @@ const Checkout = () => {
     setIsModalOpen(false);
   };
   const onFinish = async (values) => {
-    if (values.phone.length != 10) {
-      message.error("Số điện thoại không đúng định dạng");
-      return;
-    }
+    // if (values.phone.length != 10) {
+    //   message.error("Số điện thoại không đúng định dạng");
+    //   return;
+    // }
     values.idUser = user.id;
     if (delivery.phone) {
       let up = await callUpdateInfoDelivery(delivery.id, values);

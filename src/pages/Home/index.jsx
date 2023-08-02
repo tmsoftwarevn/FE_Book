@@ -725,6 +725,7 @@ const Home = () => {
               <Divider />
               <Row style={{ display: "flex", justifyContent: "center" }}>
                 <Pagination
+                  showSizeChanger={false}
                   current={current}
                   total={total}
                   pageSize={pageSize}
