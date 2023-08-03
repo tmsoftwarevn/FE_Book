@@ -14,7 +14,7 @@ const DetailOrderById = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const infoDelivery = location.state?.infoDelivery;
-  console.log("checkkkkkkk", infoDelivery);
+
   useEffect(() => {
     const fetchDetailOrder = async () => {
       let res = await callGetDetailOrderWithId(params.id);

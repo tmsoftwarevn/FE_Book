@@ -10,7 +10,10 @@ import {
   Tabs,
   Tag,
 } from "antd";
-import { callOrderHistoryUser } from "../../services/api";
+import {
+  callGetOrderHistoryWithStatus,
+  callOrderHistoryUser,
+} from "../../services/api";
 import { useSelector } from "react-redux";
 import moment from "moment";
 import {
@@ -25,6 +28,7 @@ const OrderHistory = () => {
   const [current, setCurrent] = useState(1);
   const [pageSize, setPageSize] = useState(5);
   const [total, setTotal] = useState(0);
+  const [listOrderStatus, setListOrderStatus] = useState([]);
   const user = useSelector((state) => state.account?.user);
   const navigate = useNavigate();
 
@@ -32,7 +36,18 @@ const OrderHistory = () => {
     fetchOrderHistoryUser();
   }, [current]);
 
-  const onChange = (key) => {};
+  const onChange = async (key) => {
+    let res = await callGetOrderHistoryWithStatus(
+      user.id,
+      key,
+      current,
+      pageSize
+    );
+    if (res && res.data) {
+      customTableStatus(res.data.result);
+      setTotal(res.data.meta.total);
+    }
+  };
   const fetchOrderHistoryUser = async () => {
     let res = await callOrderHistoryUser(user.id, current, pageSize);
     if (res && res.data) {
@@ -94,7 +109,47 @@ const OrderHistory = () => {
     });
     setListOrder(arr);
   };
+  const customTableStatus = (list) => {
+    let arr = [];
 
+    list.map((item, index) => {
+      arr.push({
+        key: `itemzz-${index}`,
+        id: item.id,
+        stt: index + 1,
+        totalProduct: item.totalProduct,
+        total: `${item.total}`.replace(/\B(?=(\d{3})+(?!\d))/g, ","),
+        payment: item.payment,
+        status: (
+          <Tag
+            icon={
+              item.status === "Đặt hàng" ? (
+                <ClockCircleOutlined />
+              ) : item.status === "Đang giao" ? (
+                <SyncOutlined spin />
+              ) : (
+                <CheckCircleOutlined />
+              )
+            }
+            color={
+              item.status === "Đặt hàng"
+                ? "default"
+                : item.status === "Đang giao"
+                ? "processing"
+                : "success"
+            }
+          >
+            {item.status}
+          </Tag>
+        ),
+        createdAt: moment(item?.createdAt).format("DD-MM-YY hh:mm:ss"),
+        fullname: item.fullname,
+        address: item.address,
+        phone: item.phone,
+      });
+    });
+    setListOrderStatus(arr);
+  };
   let columns = [
     {
       title: "STT",
@@ -154,10 +209,10 @@ const OrderHistory = () => {
   };
   const items = [
     {
-      key: "1",
+      key: "0",
       label: `Tất cả`,
       children: (
-        <div className="tab-1">
+        <div className="tab-0">
           <Table
             columns={columns}
             dataSource={listOrder}
@@ -175,19 +230,67 @@ const OrderHistory = () => {
       ),
     },
     {
-      key: "2",
+      key: "1",
       label: `Đã đặt hàng`,
-      children: <></>,
+      children: (
+        <div className="tab-1">
+          <Table
+            columns={columns}
+            dataSource={listOrderStatus}
+            onChange={onChangeTable}
+            locale={locale}
+            scroll={{ x: "430px" }}
+            pagination={{
+              pageSize: pageSize,
+              total: total,
+              current: current,
+              position: ["bottomCenter"],
+            }}
+          />
+        </div>
+      ),
+    },
+    {
+      key: "2",
+      label: `Đang vận chuyển`,
+      children: (
+        <div className="tab-1">
+          <Table
+            columns={columns}
+            dataSource={listOrderStatus}
+            onChange={onChangeTable}
+            locale={locale}
+            scroll={{ x: "430px" }}
+            pagination={{
+              pageSize: pageSize,
+              total: total,
+              current: current,
+              position: ["bottomCenter"],
+            }}
+          />
+        </div>
+      ),
     },
     {
       key: "3",
-      label: `Đang vận chuyển`,
-      children: <></>,
-    },
-    {
-      key: "4",
       label: `Đã giao thành công`,
-      children: <></>,
+      children: (
+        <div className="tab-1">
+          <Table
+            columns={columns}
+            dataSource={listOrderStatus}
+            onChange={onChangeTable}
+            locale={locale}
+            scroll={{ x: "430px" }}
+            pagination={{
+              pageSize: pageSize,
+              total: total,
+              current: current,
+              position: ["bottomCenter"],
+            }}
+          />
+        </div>
+      ),
     },
   ];
   return (
@@ -200,7 +303,7 @@ const OrderHistory = () => {
               style={{
                 fontFamily: "Roboto",
               }}
-              defaultActiveKey="1"
+              defaultActiveKey="0"
               items={items}
               tabPosition={"top"}
               onChange={onChange}

@@ -12,16 +12,18 @@ import {
 import storage from "redux-persist/lib/storage";
 import accountReducer from "../redux/account/accountSlice";
 import cartReducer from "../redux/cart/cartSlice";
+import categoryReducer from "../redux/category/categorySlice";
 const persistConfig = {
   key: "root",
   version: 1,
   storage,
-  blacklist: ["account"], // account will not be persisted
+  blacklist: ["account", "category"], // account will not be persisted
 };
 
 const rootReducer = combineReducers({
   account: accountReducer,
   cart: cartReducer,
+  category: categoryReducer,
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);

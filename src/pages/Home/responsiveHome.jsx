@@ -19,7 +19,6 @@ const ResponsiveHome = (props) => {
     handleSelectPrice,
     handleReset,
     filterCategory,
-    callApiSortDepsCategory,
   } = props;
   const [showMore, setShowMore] = useState(false);
   const numberOfItems = showMore ? listCategory.length : 5;
@@ -37,7 +36,6 @@ const ResponsiveHome = (props) => {
           setTimeout(() => {
             reftest.current[index].checked = true;
           }, 200);
-          // callApiSortDepsCategory(item);
         }
       });
     }
@@ -45,7 +43,6 @@ const ResponsiveHome = (props) => {
 
   const handleSelectCategoryRes = (e, item) => {
     console.log("checked res", item);
-    callApiSortDepsCategory();
   };
 
   return (

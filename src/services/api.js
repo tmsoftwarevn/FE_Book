@@ -38,8 +38,10 @@ export const callGetListBookAdmin = (current, pageSize, sort, d) => {
     `/api/v1/book?current=${current}&pageSize=${pageSize}${sort}${d}`
   );
 };
-export const callGetListBookHome = (current, pageSize) => {
-  return axios.get(`/api/v1/home/book?current=${current}&pageSize=${pageSize}`);
+export const callGetListBookHome = (current, pageSize, category) => {
+  return axios.get(
+    `/api/v1/home/book?current=${current}&pageSize=${pageSize}&category=${category}`
+  );
 };
 export const callFetchCategory = () => {
   return axios.get("/api/v1/database/category");
@@ -183,4 +185,15 @@ export const callVerify = (email, OTP) => {
 
 export const callNewPassword = (email, newPassword) => {
   return axios.post("/api/v1/newPass", { email, newPassword });
+};
+
+export const callGetOrderHistoryWithStatus = (
+  idUser,
+  idStatus,
+  current,
+  pageSize
+) => {
+  return axios.get(
+    `/api/v1/user/orderStatus/${idUser}?current=${current}&pageSize=${pageSize}&idStatus=${idStatus}`
+  );
 };

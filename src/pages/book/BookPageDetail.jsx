@@ -392,7 +392,7 @@ const BookPageDetail = (props) => {
 
             <div className="detail">
               <div className="description">CHI TIẾT SẢN PHẨM</div>
-              <div className="content" style={{ fontSize: 18 }}>
+              <div className="content-detail" style={{ fontSize: 18 }}>
                 Đang cập nhật...
               </div>
             </div>

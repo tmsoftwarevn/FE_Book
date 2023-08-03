@@ -26,6 +26,8 @@ import { AiOutlineLeft, AiOutlineRight } from "react-icons/ai";
 import ResponsiveHome from "./responsiveHome";
 import { convertSlug } from "../../utils/convertSlug";
 import { LazyLoadImage } from "react-lazy-load-image-component";
+import { useDispatch, useSelector } from "react-redux";
+import { doAddCategoryAction } from "../../redux/category/categorySlice";
 
 const Home = () => {
   const [form] = Form.useForm();
@@ -44,9 +46,83 @@ const Home = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const [searchBook, setSearchBook] = useOutletContext();
-
+  const [queryCategory, setQueryCategory] = useState([]);
+  const [firstRender, setFirstRender] = useState(false);
   const numberOfItems = showMore ? listCategory.length : 5;
+
   let filterCategory = location.state?.category;
+
+  const dispatch = useDispatch();
+  const listCategoryRedux = useSelector(
+    (state) => state.category?.listCategory
+  );
+
+  window.onbeforeunload = function () {
+    window.scrollTo(0, 0);
+  };
+
+  useEffect(() => {
+    setFirstRender(true); // de listcate redux not null
+  }, []);
+
+  useEffect(() => {
+    getListBook();
+    window.scrollTo(0, 0);
+    if (firstRender === true) {
+      dispatch(doAddCategoryAction(queryCategory));
+    }
+  }, [current, searchBook, queryCategory]);
+
+  //console.log("reduc", listCategoryRedux);
+  useEffect(() => {
+    // setQueryCategory(listCategoryRedux) // set redux
+    // listCategoryRedux.map((item) =>{
+
+    // })
+    const getListCategory = async () => {
+      let res = await callFetchCategory();
+      if (res && res.data) {
+        setlistCategory(res.data);
+      }
+    };
+    getListCategory();
+  }, []);
+
+  useEffect(() => {
+    if (listCategory) {
+      listCategory.map((item, index) => {
+        if (item.category === filterCategory) {
+          if (index >= +numberOfItems) {
+            setShowMore(true);
+          }
+          // lần đầu chạy skeleton chưa render được, deps là listcategory
+          // chờ để hiển thị category more => để gán ref
+          setTimeout(() => {
+            refCheckbox.current[index].checked = true;
+          }, 400);
+          let c = queryCategory.findIndex((i) => i.category === filterCategory);
+          if (c === -1) {
+            setQueryCategory([...queryCategory, item]);
+          }
+          // navigate("/");
+        }
+      });
+      setTimeout(() => {
+        setIsLoading(false); // skeleton hien , doi load xong ref
+      }, 300);
+    }
+  }, [listCategory]);
+  const handleSortDepsCategory = (e, category) => {
+    let c = queryCategory.findIndex((item) => item.id === category.id);
+    if (e.target.checked === true && c === -1) {
+      setQueryCategory([...queryCategory, category]);
+    }
+    if (e.target.checked === false) {
+      let c = queryCategory.filter((item) => item.id != category.id);
+      setQueryCategory(c);
+    }
+    setCurrent(1); // set lai current khi list thay doi
+  };
   const [activePrice, setactivePrice] = useState({
     a: false,
     b: false,
@@ -61,60 +137,15 @@ const Home = () => {
       three: false,
     },
   ]);
-
-  window.onbeforeunload = function () {
-    window.scrollTo(0, 0);
-  };
-  useEffect(() => {
-    getListBook();
-    window.scrollTo(0, 0);
-  }, [current, searchBook]);
-  useEffect(() => {
-    const getListCategory = async () => {
-      let res = await callFetchCategory();
-      if (res && res.data) {
-        setlistCategory(res.data);
-      }
-    };
-    getListCategory();
-  }, []);
-  useEffect(() => {
-    if (listCategory) {
-      listCategory.map((item, index) => {
-        if (item.category === filterCategory) {
-          if (index >= +numberOfItems) {
-            setShowMore(true);
-          }
-          // lần đầu chạy skeleton chưa render được, deps là listcategory
-          // chờ để hiển thị category more => để gán ref
-          setTimeout(() => {
-            refCheckbox.current[index].checked = true;
-          }, 400);
-          callApiSortDepsCategory(item);
-        }
-      });
-      setTimeout(() => {
-        setIsLoading(false); // skeleton hien , doi load xong ref
-      }, 300);
-    }
-  }, [listCategory]);
-  const callApiSortDepsCategory = (filterCategory) => {
-    //add filtercate vao string api
-    if (filterCategory) {
-      console.log("goi api co category ", filterCategory);
-    }
-  };
-  const handleSortDepsCategory = (e, category) => {
-    // custom string api
-
-    //co chon thi add vao string, ko co thi ko add string=> goi
-
-    console.log("call api catrgory", category);
-    callApiSortDepsCategory();
-  };
-
   const getListBook = async () => {
-    let res = await callGetListBookHome(current, pageSize);
+    let query = "";
+    let arr = [];
+    queryCategory.map((item) => {
+      arr.push(item.id);
+    });
+    query = arr.join(",");
+
+    let res = await callGetListBookHome(current, pageSize, query);
     if (res && res.data) {
       setDataBook(res.data.result);
       setTotal(res.data.meta.total);
@@ -754,7 +785,6 @@ const Home = () => {
             handleSelectPrice={handleSelectPrice}
             handleReset={handleReset}
             filterCategory={filterCategory}
-            callApiSortDepsCategory={callApiSortDepsCategory}
             setIsLoading={setIsLoading}
             handleSearchPriceInput={handleSearchPriceInput}
           />
