@@ -212,9 +212,7 @@ input[type='checkbox'] {
         ////////// =============responsive tab  ===========
         .tab-reponsive {
             .text-tab {
-                &:hover {
-                    color: blue;
-                }
+                color: blue;
             }
             @include sm {
                 display: none;

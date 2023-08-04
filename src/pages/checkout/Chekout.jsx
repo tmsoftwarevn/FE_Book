@@ -24,7 +24,6 @@ import {
   callCreateDelivery,
   callCreateOrder,
   callCreateOrderDetail,
-  callGetAccount,
   callGetDetailBook,
   callGetInfoDelivery,
   callUpdateBookAfterOrder,

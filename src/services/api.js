@@ -38,9 +38,9 @@ export const callGetListBookAdmin = (current, pageSize, sort, d) => {
     `/api/v1/book?current=${current}&pageSize=${pageSize}${sort}${d}`
   );
 };
-export const callGetListBookHome = (current, pageSize, category) => {
+export const callGetListBookHome = (current, pageSize, category, sort) => {
   return axios.get(
-    `/api/v1/home/book?current=${current}&pageSize=${pageSize}&category=${category}`
+    `/api/v1/home/book?current=${current}&pageSize=${pageSize}&category=${category}${sort}`
   );
 };
 export const callFetchCategory = () => {
@@ -196,4 +196,8 @@ export const callGetOrderHistoryWithStatus = (
   return axios.get(
     `/api/v1/user/orderStatus/${idUser}?current=${current}&pageSize=${pageSize}&idStatus=${idStatus}`
   );
+};
+
+export const callListBookPopularAll = () => {
+  return axios.get("/api/v1/book/popular/all");
 };

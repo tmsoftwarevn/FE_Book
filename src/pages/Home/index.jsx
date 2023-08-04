@@ -14,7 +14,11 @@ import {
 } from "antd";
 import "./home.scss";
 import { useEffect, useRef, useState } from "react";
-import { callFetchCategory, callGetListBookHome } from "../../services/api";
+import {
+  callFetchCategory,
+  callGetListBookHome,
+  callListBookPopularAll,
+} from "../../services/api";
 import { AiFillFilter } from "react-icons/ai";
 import { GrPowerReset } from "react-icons/gr";
 import { AiOutlineDown } from "react-icons/ai";
@@ -27,12 +31,18 @@ import ResponsiveHome from "./responsiveHome";
 import { convertSlug } from "../../utils/convertSlug";
 import { LazyLoadImage } from "react-lazy-load-image-component";
 import { useDispatch, useSelector } from "react-redux";
-import { doAddCategoryAction } from "../../redux/category/categorySlice";
+import {
+  doSetCurrentPageAction,
+  doSetKeyTabHomeAction,
+  doSetQuerySortHomeAction,
+} from "../../redux/category/categorySlice";
 
 const Home = () => {
+  const currentRedux = useSelector((state) => state.category.current);
+
   const [form] = Form.useForm();
-  const [total, setTotal] = useState(0);
-  const [current, setCurrent] = useState(1);
+  const [total, setTotal] = useState(1);
+  const [current, setCurrent] = useState(currentRedux);
   const [pageSize, setPageSize] = useState(16);
   const [dataBook, setDataBook] = useState("");
   const [price, setPrice] = useState([]);
@@ -47,38 +57,42 @@ const Home = () => {
   const location = useLocation();
   const [searchBook, setSearchBook] = useOutletContext();
   const [queryCategory, setQueryCategory] = useState([]);
-  const [firstRender, setFirstRender] = useState(false);
+  const [listPopularAll, setListPopularAll] = useState([]);
+  const [listPopularCategory, setListPopularCategory] = useState([]);
+
   const numberOfItems = showMore ? listCategory.length : 5;
 
   let filterCategory = location.state?.category;
 
   const dispatch = useDispatch();
-  const listCategoryRedux = useSelector(
-    (state) => state.category?.listCategory
-  );
+  const keyTabHome = useSelector((state) => state.category?.keyTabHome);
+  const querySort = useSelector((state) => state.category?.querySort);
+  const [sort, setSort] = useState(querySort); // set lai de tu dong lay lai
+  const [activeRes, setActiveRes] = useState({
+    a1: keyTabHome === 1 ? true : false,
+    a2: keyTabHome === 2 ? true : false,
+    a3: keyTabHome === 3 ? true : false,
+    a4: keyTabHome === 4 ? true : false,
+  });
 
   window.onbeforeunload = function () {
     window.scrollTo(0, 0);
   };
 
-  useEffect(() => {
-    setFirstRender(true); // de listcate redux not null
-  }, []);
+  const getListBookPopularAll = async () => {
+    let res = await callListBookPopularAll();
+    if (res && res.data) {
+      setListPopularAll(res.data);
+    }
+  };
 
   useEffect(() => {
+    getListBookPopularAll();
     getListBook();
     window.scrollTo(0, 0);
-    if (firstRender === true) {
-      dispatch(doAddCategoryAction(queryCategory));
-    }
-  }, [current, searchBook, queryCategory]);
+  }, [current, searchBook, queryCategory, sort]);
 
-  //console.log("reduc", listCategoryRedux);
   useEffect(() => {
-    // setQueryCategory(listCategoryRedux) // set redux
-    // listCategoryRedux.map((item) =>{
-
-    // })
     const getListCategory = async () => {
       let res = await callFetchCategory();
       if (res && res.data) {
@@ -102,9 +116,8 @@ const Home = () => {
           }, 400);
           let c = queryCategory.findIndex((i) => i.category === filterCategory);
           if (c === -1) {
-            setQueryCategory([...queryCategory, item]);
+            setQueryCategory([item]);
           }
-          // navigate("/");
         }
       });
       setTimeout(() => {
@@ -113,15 +126,24 @@ const Home = () => {
     }
   }, [listCategory]);
   const handleSortDepsCategory = (e, category) => {
+    if (e.target.checked === true) {
+      refCheckbox.current.map((item) => {
+        item.checked = false;
+      });
+
+      e.target.checked = true; // chi cho select 1
+      navigate("/", { state: { category: category.category } }); // reset/ assign state location
+    } else navigate("/");
     let c = queryCategory.findIndex((item) => item.id === category.id);
     if (e.target.checked === true && c === -1) {
-      setQueryCategory([...queryCategory, category]);
+      setQueryCategory([category]);
     }
     if (e.target.checked === false) {
       let c = queryCategory.filter((item) => item.id != category.id);
       setQueryCategory(c);
     }
     setCurrent(1); // set lai current khi list thay doi
+    dispatch(doSetCurrentPageAction(1));
   };
   const [activePrice, setactivePrice] = useState({
     a: false,
@@ -143,14 +165,19 @@ const Home = () => {
     queryCategory.map((item) => {
       arr.push(item.id);
     });
-    query = arr.join(",");
+    query = arr.join(","); // custom query many "in"
 
-    let res = await callGetListBookHome(current, pageSize, query);
+    let res = await callGetListBookHome(current, pageSize, query, sort);
     if (res && res.data) {
       setDataBook(res.data.result);
       setTotal(res.data.meta.total);
+      if (res.data.meta.pages < currentRedux) {
+        setCurrent(1);
+        dispatch(doSetCurrentPageAction(1));
+      }
     }
   };
+
   const handleSelectPrice = (name, price) => {
     if (name === "a") {
       setactivePrice({
@@ -233,10 +260,6 @@ const Home = () => {
     setModalFilter(false);
   };
 
-  const handleChangeFilter = (changedValues, values) => {
-    //console.log(">>> check handleChangeFilter", changedValues, values);
-  };
-
   const onFinish = (values) => {
     console.log("check value", values);
     console.log("price", price);
@@ -244,8 +267,48 @@ const Home = () => {
     onClose();
   };
 
-  const onChange = (key) => {
-    console.log(key);
+  const onChangeTab = (key) => {
+    if (+key === 1) {
+      setActiveRes({
+        a1: true,
+        a2: false,
+        a3: false,
+      });
+      setSort("&field=&sort=");
+      dispatch(doSetKeyTabHomeAction(key));
+      dispatch(doSetQuerySortHomeAction("&field=&sort="));
+    }
+    if (+key === 2) {
+      setActiveRes({
+        a1: false,
+        a2: true,
+        a3: false,
+      });
+      setSort("&field=createdAt&sort=DESC");
+      dispatch(doSetKeyTabHomeAction(key));
+      dispatch(doSetQuerySortHomeAction("&field=createdAt&sort=DESC"));
+    }
+    if (+key === 3) {
+      setActiveRes({
+        a1: false,
+        a2: false,
+        a3: true,
+      });
+      setSort("&field=price&sort=ASC");
+      dispatch(doSetKeyTabHomeAction(key));
+      dispatch(doSetQuerySortHomeAction("&field=price&sort=ASC"));
+    }
+    if (+key === 4) {
+      setActiveRes({
+        a1: false,
+        a2: false,
+        a3: false,
+        a4: true,
+      });
+      setSort("&field=price&sort=DESC");
+      dispatch(doSetKeyTabHomeAction(key));
+      dispatch(doSetQuerySortHomeAction("&field=price&sort=DESC"));
+    }
   };
 
   const item = [
@@ -273,18 +336,34 @@ const Home = () => {
 
   const items = [
     {
-      label: <a href="">Thấp đến cao</a>,
-      key: "0",
+      label: (
+        <p
+          style={{ color: activeRes.a3 === true ? "blue" : "black" }}
+          onClick={() => onChangeTab(3)}
+        >
+          Thấp đến cao
+        </p>
+      ),
+      key: "3",
     },
     {
-      label: <a href="">Cao đến thấp</a>,
-      key: "1",
+      label: (
+        <p
+          style={{ color: activeRes.a4 === true ? "blue" : "black" }}
+          onClick={() => onChangeTab(4)}
+        >
+          Cao đến thấp
+        </p>
+      ),
+      key: "4",
     },
   ];
   const handleChangePage = (p, s) => {
     setCurrent(p);
+    dispatch(doSetCurrentPageAction(p));
   };
   const handleReset = () => {
+    setQueryCategory([]);
     form.resetFields();
     setactivePrice({
       a: false,
@@ -301,6 +380,7 @@ const Home = () => {
     //reset search header
     setSearchBook("");
   };
+
   const handleShowMore = () => {
     setShowMore(!showMore);
   };
@@ -332,9 +412,9 @@ const Home = () => {
               <Form
                 onFinish={onFinish}
                 form={form}
-                onValuesChange={(changedValues, values) =>
-                  handleChangeFilter(changedValues, values)
-                }
+                // onValuesChange={(changedValues, values) =>
+                //   handleChangeFilter(changedValues, values)
+                // }
               >
                 <div
                   style={{
@@ -359,6 +439,7 @@ const Home = () => {
                               style={{ display: "flex" }}
                             >
                               <input
+                                id={index}
                                 ref={(el) => (refCheckbox.current[index] = el)}
                                 type="checkbox"
                                 style={{ marginRight: 10 }}
@@ -366,8 +447,11 @@ const Home = () => {
                                   handleSortDepsCategory(e, item)
                                 }
                               ></input>
-                              {/* {item.category} */}
-                              <div>{item.category}</div>
+                              <label htmlFor={index}>
+                                {" "}
+                                <div>{item.category}</div>
+                              </label>
+                              {/* <div>{item.category}</div> */}
                             </Col>
                           );
                         })}
@@ -529,9 +613,9 @@ const Home = () => {
                         }}
                         className="carousel-1"
                       >
-                        {dataBook &&
-                          dataBook.length > 0 &&
-                          dataBook.slice(0, 4).map((item, index) => {
+                        {listPopularAll &&
+                          listPopularAll.length > 0 &&
+                          listPopularAll.slice(0, 4).map((item, index) => {
                             return (
                               <div
                                 className="wrapper"
@@ -591,9 +675,9 @@ const Home = () => {
                         }}
                         className="carousel-1"
                       >
-                        {dataBook &&
-                          dataBook.length > 0 &&
-                          dataBook.slice(4, 8).map((item, index) => {
+                        {listPopularAll &&
+                          listPopularAll.length > 0 &&
+                          listPopularAll.slice(4, 8).map((item, index) => {
                             return (
                               <div
                                 className="wrapper"
@@ -661,16 +745,30 @@ const Home = () => {
                 </div>
 
                 <div className="tabs">
-                  <Tabs defaultActiveKey="1" items={item} onChange={onChange} />
+                  <Tabs
+                    defaultActiveKey={keyTabHome}
+                    items={item}
+                    onChange={onChangeTab}
+                  />
                   <div className="filter" onClick={() => setModalFilter(true)}>
                     <span style={{ marginRight: 10 }}>Bộ lọc</span>
-                    <AiFillFilter />
+                    <AiFillFilter style={{ marginTop: 3 }} />
                   </div>
                 </div>
                 {/* ---------Reponsive xs tabs -------- */}
                 <div className="tab-reponsive">
-                  <span className="text-tab">Phổ Biến</span>
-                  <span className="text-tab">Hàng Mới</span>
+                  <span
+                    className={activeRes.a1 === true ? "text-tab" : ""}
+                    onClick={() => onChangeTab(1)}
+                  >
+                    Tất cả
+                  </span>
+                  <span
+                    className={activeRes.a2 === true ? "text-tab" : ""}
+                    onClick={() => onChangeTab(2)}
+                  >
+                    Hàng Mới
+                  </span>
                   <span>
                     <Dropdown
                       menu={{
@@ -679,13 +777,22 @@ const Home = () => {
                       trigger={["click"]}
                     >
                       <a onClick={(e) => e.preventDefault()}>
-                        <Space style={{ color: "black" }}>Giá</Space>
+                        <Space
+                          style={{
+                            color:
+                              activeRes.a3 === true || activeRes.a4 === true
+                                ? "blue"
+                                : "black",
+                          }}
+                        >
+                          Giá
+                        </Space>
                       </a>
                     </Dropdown>
                   </span>
                   <span onClick={() => setModalFilter(true)}>
                     {" "}
-                    <AiFillFilter />
+                    <AiFillFilter style={{ marginTop: 3 }} />
                   </span>
                 </div>
               </div>
@@ -702,13 +809,6 @@ const Home = () => {
                       >
                         <div className="wrapper">
                           <div className="thumbnail">
-                            {/* <LazyLoadImage
-                              effect="blur"
-                              src={`${
-                                import.meta.env.VITE_BACKEND_URL
-                              }/images/book/${item?.thumbnail}`}
-                              alt="thumbnail book"
-                            /> */}
                             <img
                               src={`${
                                 import.meta.env.VITE_BACKEND_URL
@@ -774,7 +874,6 @@ const Home = () => {
             modalFilter={modalFilter}
             onFinish={onFinish}
             form={form}
-            handleChangeFilter={handleChangeFilter}
             listCategory={listCategory}
             showMore={showMore}
             setShowMore={setShowMore}
@@ -787,6 +886,9 @@ const Home = () => {
             filterCategory={filterCategory}
             setIsLoading={setIsLoading}
             handleSearchPriceInput={handleSearchPriceInput}
+            setQueryCategory={setQueryCategory}
+            queryCategory={queryCategory}
+            setCurrent={setCurrent}
           />
         </div>
       </div>

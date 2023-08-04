@@ -2,15 +2,19 @@ import { Button, Col, Divider, Drawer, Form, InputNumber, Row } from "antd";
 import { useEffect, useRef, useState } from "react";
 import { AiFillStar, AiOutlineDown, AiOutlineUp } from "react-icons/ai";
 import { GrPowerReset } from "react-icons/gr";
+import { doSetCurrentPageAction } from "../../redux/category/categorySlice";
+import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
 const ResponsiveHome = (props) => {
   const reftest = useRef([]);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   const {
     onClose,
     modalFilter,
     onFinish,
     form,
-    handleChangeFilter,
     handleSearchPriceInput,
     listCategory,
     handleSelectStar,
@@ -19,7 +23,11 @@ const ResponsiveHome = (props) => {
     handleSelectPrice,
     handleReset,
     filterCategory,
+    setQueryCategory,
+    queryCategory,
+    setCurrent,
   } = props;
+
   const [showMore, setShowMore] = useState(false);
   const numberOfItems = showMore ? listCategory.length : 5;
   const handleShowMore = () => {
@@ -36,13 +44,34 @@ const ResponsiveHome = (props) => {
           setTimeout(() => {
             reftest.current[index].checked = true;
           }, 200);
+          let c = queryCategory.findIndex((i) => i.category === filterCategory);
+          if (c === -1) {
+            setQueryCategory([item]);
+          }
         }
       });
     }
   }, [modalFilter]);
 
-  const handleSelectCategoryRes = (e, item) => {
-    console.log("checked res", item);
+  const handleSortDepsCategory = (e, category) => {
+    if (e.target.checked === true) {
+      reftest.current.map((item) => {
+        item.checked = false;
+      });
+
+      e.target.checked = true; // chi cho select 1
+      navigate("/", { state: { category: category.category } }); // reset/ assign state location
+    } else navigate("/");
+    let c = queryCategory.findIndex((item) => item.id === category.id);
+    if (e.target.checked === true && c === -1) {
+      setQueryCategory([category]);
+    }
+    if (e.target.checked === false) {
+      let c = queryCategory.filter((item) => item.id != category.id);
+      setQueryCategory(c);
+    }
+    setCurrent(1);
+    dispatch(doSetCurrentPageAction(1));
   };
 
   return (
@@ -57,14 +86,7 @@ const ResponsiveHome = (props) => {
         }}
         width={window.innerWidth > 576 ? "50%" : "100%"} ///responsive mobile
       >
-        <Form
-          className="homepage-left"
-          onFinish={onFinish}
-          form={form}
-          onValuesChange={(changedValues, values) =>
-            handleChangeFilter(changedValues, values)
-          }
-        >
+        <Form className="homepage-left" onFinish={onFinish} form={form}>
           <div
             style={{
               fontWeight: 600,
@@ -88,7 +110,7 @@ const ResponsiveHome = (props) => {
                         ref={(el) => (reftest.current[index] = el)}
                         type="checkbox"
                         style={{ marginRight: 10 }}
-                        onChange={(e) => handleSelectCategoryRes(e, item)}
+                        onChange={(e) => handleSortDepsCategory(e, item)}
                       ></input>
                       {item.category}
                     </Col>

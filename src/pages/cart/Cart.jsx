@@ -243,12 +243,7 @@ const Cart = () => {
                               }/images/book/${item.detail.thumbnail}`}
                             />
                           </div>
-                          <div
-                            className="name"
-                            onClick={() => handleRedirectDetailBook(item)}
-                          >
-                            {item.detail?.mainText}
-                          </div>
+                          <div className="name">{item.detail?.mainText}</div>
                         </div>
 
                         <div className="price">
