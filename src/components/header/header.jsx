@@ -166,7 +166,6 @@ const Header = () => {
     return;
   };
   const onchange = (key) => {
-    console.log(key);
     setKeyTab(key);
   };
   return (
@@ -309,7 +308,7 @@ const Header = () => {
               children: (
                 <>
                   {user.type === "SOCIAL" ? (
-                    <></>
+                    <div>Tài khoản đăng nhập bằng Email or FaceBook</div>
                   ) : (
                     <div>
                       <Form

@@ -38,9 +38,16 @@ export const callGetListBookAdmin = (current, pageSize, sort, d) => {
     `/api/v1/book?current=${current}&pageSize=${pageSize}${sort}${d}`
   );
 };
-export const callGetListBookHome = (current, pageSize, category, sort) => {
+export const callGetListBookHome = (
+  current,
+  pageSize,
+  category,
+  sort,
+  price,
+  rate
+) => {
   return axios.get(
-    `/api/v1/home/book?current=${current}&pageSize=${pageSize}&category=${category}${sort}`
+    `/api/v1/home/book?current=${current}&pageSize=${pageSize}&category=${category}${sort}&price=${price}&rate=${rate}`
   );
 };
 export const callFetchCategory = () => {

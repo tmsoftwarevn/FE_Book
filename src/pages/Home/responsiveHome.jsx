@@ -147,7 +147,7 @@ const ResponsiveHome = (props) => {
                 <Col span={8}>
                   <div
                     onClick={() => handleSelectStar("five")}
-                    className={activeStar?.five ? "active " : "default"}
+                    className={activeStar.five === true ? "active" : "default"}
                   >
                     <AiFillStar style={{ color: "#fadb14", marginRight: 5 }} />
                     <span>5 sao</span>
@@ -157,7 +157,7 @@ const ResponsiveHome = (props) => {
                 <Col span={8}>
                   <div
                     onClick={() => handleSelectStar("four")}
-                    className={activeStar?.four ? "active" : "default"}
+                    className={activeStar.four === true ? "active" : "default"}
                   >
                     <AiFillStar style={{ color: "#fadb14", marginRight: 5 }} />
                     <span>4 sao</span>
@@ -167,7 +167,7 @@ const ResponsiveHome = (props) => {
                 <Col span={8}>
                   <div
                     onClick={() => handleSelectStar("three")}
-                    className={activeStar?.three ? "active" : "default"}
+                    className={activeStar.three === true ? "active" : "default"}
                   >
                     <AiFillStar style={{ color: "#fadb14", marginRight: 5 }} />
                     <span>3 sao</span>
@@ -193,7 +193,7 @@ const ResponsiveHome = (props) => {
                 <Col span={12}>
                   <div
                     onClick={() => {
-                      handleSelectPrice("a", [40000]);
+                      handleSelectPrice("a", "0,40000");
                     }}
                     className={activePrice.a === true ? "active" : "default"}
                   >
@@ -203,7 +203,7 @@ const ResponsiveHome = (props) => {
                 <Col span={12}>
                   <div
                     onClick={() => {
-                      handleSelectPrice("b", [40000, 120000]);
+                      handleSelectPrice("b", "40000,120000");
                     }}
                     className={activePrice.b === true ? "active" : "default"}
                   >
@@ -215,7 +215,7 @@ const ResponsiveHome = (props) => {
                 <Col span={12}>
                   <div
                     onClick={() => {
-                      handleSelectPrice("c", [120000, 300000]);
+                      handleSelectPrice("c", "120000,300000");
                     }}
                     className={activePrice.c === true ? "active" : "default"}
                   >
@@ -226,7 +226,7 @@ const ResponsiveHome = (props) => {
                 <Col span={12}>
                   <div
                     onClick={() => {
-                      handleSelectPrice("d", [300000]);
+                      handleSelectPrice("d", "300000,99999999");
                     }}
                     className={activePrice.d === true ? "active" : "default"}
                   >
@@ -245,7 +245,7 @@ const ResponsiveHome = (props) => {
                 justifyContent: "space-between",
               }}
             >
-              <Form.Item name="from">
+              <Form.Item name="priceFrom">
                 <InputNumber
                   className="input-number"
                   min={0}

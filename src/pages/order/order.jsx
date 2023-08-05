@@ -2,7 +2,7 @@ import { Button, Result } from "antd";
 import { useContext, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { MdOutlineDone } from "react-icons/md";
-
+import NProgress from "nprogress";
 const PageOrder = () => {
   const navigate = useNavigate();
   const location = useLocation();
@@ -35,7 +35,15 @@ const PageOrder = () => {
             }
             title="Đơn hàng được đặt thành công!"
             extra={
-              <Button type="primary" onClick={() => navigate("/orderHistory")}>
+              <Button
+                type="primary"
+                onClick={() => {
+                  NProgress.start();
+                  setTimeout(() => {
+                    navigate("/orderHistory");
+                  }, 1000);
+                }}
+              >
                 Lịch sử mua hàng
               </Button>
             }

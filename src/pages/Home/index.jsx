@@ -34,7 +34,10 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   doSetCurrentPageAction,
   doSetKeyTabHomeAction,
+  doSetPriceAction,
   doSetQuerySortHomeAction,
+  doSetRateReduxAction,
+  doSetSearchPriceAction,
 } from "../../redux/category/categorySlice";
 
 const Home = () => {
@@ -45,7 +48,6 @@ const Home = () => {
   const [current, setCurrent] = useState(currentRedux);
   const [pageSize, setPageSize] = useState(16);
   const [dataBook, setDataBook] = useState("");
-  const [price, setPrice] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [listCategory, setlistCategory] = useState([]);
   const [showMore, setShowMore] = useState(false);
@@ -58,7 +60,6 @@ const Home = () => {
   const [searchBook, setSearchBook] = useOutletContext();
   const [queryCategory, setQueryCategory] = useState([]);
   const [listPopularAll, setListPopularAll] = useState([]);
-  const [listPopularCategory, setListPopularCategory] = useState([]);
 
   const numberOfItems = showMore ? listCategory.length : 5;
 
@@ -66,13 +67,30 @@ const Home = () => {
 
   const dispatch = useDispatch();
   const keyTabHome = useSelector((state) => state.category?.keyTabHome);
+  const rateRedux = useSelector((state) => state.category.rateRedux);
+  const priceRedux = useSelector((state) => state.category.priceRedux);
   const querySort = useSelector((state) => state.category?.querySort);
+  const searchPrice = useSelector((state) => state.category.searchPrice);
   const [sort, setSort] = useState(querySort); // set lai de tu dong lay lai
+  const [price, setPrice] = useState(priceRedux);
+  const [rate, setRate] = useState(rateRedux);
+
   const [activeRes, setActiveRes] = useState({
     a1: keyTabHome === 1 ? true : false,
     a2: keyTabHome === 2 ? true : false,
     a3: keyTabHome === 3 ? true : false,
     a4: keyTabHome === 4 ? true : false,
+  });
+  const [activePrice, setactivePrice] = useState({
+    a: priceRedux === "0,40000" ? true : false,
+    b: priceRedux === "40000,120000" ? true : false,
+    c: priceRedux === "120000,300000" ? true : false,
+    d: priceRedux === "300000,99999999" ? true : false,
+  });
+  const [activeStar, setActiveStar] = useState({
+    five: +rateRedux === 5 ? true : false,
+    four: +rateRedux === 4 ? true : false,
+    three: +rateRedux === 3 ? true : false,
   });
 
   window.onbeforeunload = function () {
@@ -88,9 +106,11 @@ const Home = () => {
 
   useEffect(() => {
     getListBookPopularAll();
+  }, []);
+  useEffect(() => {
     getListBook();
     window.scrollTo(0, 0);
-  }, [current, searchBook, queryCategory, sort]);
+  }, [current, searchBook, queryCategory, sort, price, rate]);
 
   useEffect(() => {
     const getListCategory = async () => {
@@ -145,29 +165,24 @@ const Home = () => {
     setCurrent(1); // set lai current khi list thay doi
     dispatch(doSetCurrentPageAction(1));
   };
-  const [activePrice, setactivePrice] = useState({
-    a: false,
-    b: false,
-    c: false,
-    d: false,
-  });
 
-  const [activeStar, setActiveStar] = useState([
-    {
-      five: false,
-      four: false,
-      three: false,
-    },
-  ]);
   const getListBook = async () => {
     let query = "";
     let arr = [];
     queryCategory.map((item) => {
       arr.push(item.id);
     });
-    query = arr.join(","); // custom query many "in"
-
-    let res = await callGetListBookHome(current, pageSize, query, sort);
+    query = arr.join(","); // custom query category many "in"
+    dispatch(doSetPriceAction(price));
+    dispatch(doSetRateReduxAction(rate));
+    let res = await callGetListBookHome(
+      current,
+      pageSize,
+      query,
+      sort,
+      price,
+      rate
+    );
     if (res && res.data) {
       setDataBook(res.data.result);
       setTotal(res.data.meta.total);
@@ -187,7 +202,7 @@ const Home = () => {
         d: false,
       });
       if (activePrice.a === true) {
-        setPrice([]);
+        setPrice("");
       } else {
         setPrice(price);
       }
@@ -200,7 +215,7 @@ const Home = () => {
         d: false,
       });
       if (activePrice.b === true) {
-        setPrice([]);
+        setPrice("");
       } else {
         setPrice(price);
       }
@@ -213,7 +228,7 @@ const Home = () => {
         d: false,
       });
       if (activePrice.c === true) {
-        setPrice([]);
+        setPrice("");
       } else {
         setPrice(price);
       }
@@ -226,7 +241,7 @@ const Home = () => {
         d: !activePrice.d,
       });
       if (activePrice.d === true) {
-        setPrice([]);
+        setPrice("");
       } else {
         setPrice(price);
       }
@@ -240,6 +255,11 @@ const Home = () => {
         four: false,
         three: false,
       });
+      if (activeStar.five === true) {
+        setRate(0);
+      } else {
+        setRate(5);
+      }
     }
     if (name === "four") {
       setActiveStar({
@@ -247,6 +267,11 @@ const Home = () => {
         four: !activeStar.four,
         three: false,
       });
+      if (activeStar.four === true) {
+        setRate(0);
+      } else {
+        setRate(4);
+      }
     }
     if (name === "three") {
       setActiveStar({
@@ -254,6 +279,11 @@ const Home = () => {
         four: false,
         three: !activeStar.three,
       });
+      if (activeStar.three === true) {
+        setRate(0);
+      } else {
+        setRate(3);
+      }
     }
   };
   const onClose = () => {
@@ -261,9 +291,9 @@ const Home = () => {
   };
 
   const onFinish = (values) => {
-    console.log("check value", values);
-    console.log("price", price);
-    console.log("star", activeStar);
+    let v = values.priceFrom;
+    dispatch(doSetSearchPriceAction(v));
+    setPrice(`${v},99999999`);
     onClose();
   };
 
@@ -371,7 +401,8 @@ const Home = () => {
       c: false,
       d: false,
     });
-    setPrice([]);
+    setPrice("");
+    setRate(0);
     setActiveStar({
       five: false,
       four: false,
@@ -391,7 +422,7 @@ const Home = () => {
       c: false,
       d: false,
     });
-    setPrice([]);
+    setPrice("");
   };
   const handleRedirectBook = (book) => {
     const slug = convertSlug(book.mainText);
@@ -415,6 +446,7 @@ const Home = () => {
                 // onValuesChange={(changedValues, values) =>
                 //   handleChangeFilter(changedValues, values)
                 // }
+                initialValues={{ priceFrom: searchPrice }}
               >
                 <div
                   style={{
@@ -506,7 +538,7 @@ const Home = () => {
                     </span>
                     <Button
                       onClick={() => {
-                        handleSelectPrice("a", [40000]);
+                        handleSelectPrice("a", "0,40000");
                       }}
                       type={activePrice.a === true ? "primary" : "default"}
                     >
@@ -514,7 +546,7 @@ const Home = () => {
                     </Button>
                     <Button
                       onClick={() => {
-                        handleSelectPrice("b", [40000, 120000]);
+                        handleSelectPrice("b", "40000,120000");
                       }}
                       type={activePrice.b === true ? "primary" : "default"}
                     >
@@ -523,7 +555,7 @@ const Home = () => {
                     </Button>
                     <Button
                       onClick={() => {
-                        handleSelectPrice("c", [120000, 300000]);
+                        handleSelectPrice("c", "120000,300000");
                       }}
                       type={activePrice.c === true ? "primary" : "default"}
                     >
@@ -532,7 +564,7 @@ const Home = () => {
                     </Button>
                     <Button
                       onClick={() => {
-                        handleSelectPrice("d", [300000]);
+                        handleSelectPrice("d", "300000,99999999");
                       }}
                       // className={activePrice.d === true ? "active" : ""}
                       type={activePrice.d === true ? "primary" : "default"}
@@ -550,7 +582,7 @@ const Home = () => {
                       justifyContent: "space-between",
                     }}
                   >
-                    <Form.Item name="from">
+                    <Form.Item name="priceFrom">
                       <InputNumber
                         className="input-number"
                         min={0}
@@ -889,6 +921,7 @@ const Home = () => {
             setQueryCategory={setQueryCategory}
             queryCategory={queryCategory}
             setCurrent={setCurrent}
+            setActiveStar={setActiveStar}
           />
         </div>
       </div>

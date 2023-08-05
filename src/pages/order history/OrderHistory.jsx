@@ -1,15 +1,6 @@
 import { useEffect, useState } from "react";
 import "./orderHistory.scss";
-import {
-  Button,
-  Descriptions,
-  Divider,
-  Drawer,
-  Space,
-  Table,
-  Tabs,
-  Tag,
-} from "antd";
+import { Table, Tabs, Tag, message } from "antd";
 import {
   callGetOrderHistoryWithStatus,
   callOrderHistoryUser,
@@ -22,6 +13,7 @@ import {
   SyncOutlined,
 } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
+import NProgress from "nprogress";
 
 const OrderHistory = () => {
   const [listOrder, setListOrder] = useState([]);
@@ -29,14 +21,24 @@ const OrderHistory = () => {
   const [pageSize, setPageSize] = useState(5);
   const [total, setTotal] = useState(0);
   const [listOrderStatus, setListOrderStatus] = useState([]);
+  const [key, setKey] = useState(1);
   const user = useSelector((state) => state.account?.user);
   const navigate = useNavigate();
 
   useEffect(() => {
     fetchOrderHistoryUser();
-  }, [current]);
+    fetchOrderHistoryStatus();
+  }, [current, key]);
 
   const onChange = async (key) => {
+    setCurrent(1);
+    if (+key === 0) {
+      fetchOrderHistoryUser();
+      return;
+    }
+    setKey(key);
+  };
+  const fetchOrderHistoryStatus = async () => {
     let res = await callGetOrderHistoryWithStatus(
       user.id,
       key,
@@ -53,6 +55,8 @@ const OrderHistory = () => {
     if (res && res.data) {
       customTable(res.data.result);
       setTotal(res.data.meta.total);
+    } else {
+      message.error("Có lỗi xảy ra");
     }
   };
   const onChangeTable = (pagination) => {
@@ -70,7 +74,6 @@ const OrderHistory = () => {
   };
   const customTable = (list) => {
     let arr = [];
-
     list.map((item, index) => {
       arr.push({
         key: `itemzz-${index}`,
@@ -111,7 +114,6 @@ const OrderHistory = () => {
   };
   const customTableStatus = (list) => {
     let arr = [];
-
     list.map((item, index) => {
       arr.push({
         key: `itemzz-${index}`,

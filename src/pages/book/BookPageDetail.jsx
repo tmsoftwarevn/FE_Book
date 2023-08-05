@@ -21,6 +21,8 @@ import { doAddBookAction, saveInfoCartUser } from "../../redux/cart/cartSlice";
 import { useDispatch, useSelector } from "react-redux";
 import MessageCart from "../cart/MessageCart";
 import ResponsiveBookDetail from "./responsiveBookDetail";
+import NProgress from "nprogress";
+
 const BookPageDetail = (props) => {
   const [isOpenModalGallery, setIsOpenModalGallery] = useState(false);
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -46,6 +48,7 @@ const BookPageDetail = (props) => {
   };
   useEffect(() => {
     const getDetailBook = async () => {
+      NProgress.start();
       let res = await callGetDetailBook(id);
       if (res && res.data) {
         setDetailBook(res.data);

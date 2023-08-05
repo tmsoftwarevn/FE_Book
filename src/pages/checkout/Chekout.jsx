@@ -29,6 +29,7 @@ import {
   callUpdateBookAfterOrder,
   callUpdateInfoDelivery,
 } from "../../services/api";
+import NProgress from "nprogress";
 
 const { TextArea } = Input;
 const validKeyForPayment = [
@@ -64,11 +65,13 @@ const Checkout = () => {
   useEffect(() => {
     checkQuantityDatabase();
     const getInfoDelivery = async () => {
+      NProgress.done();
       let res = await callGetInfoDelivery(user.id);
       if (res && res.data[0]) {
         dispatch(doUpdateAddressUser(res.data[0]));
       }
     };
+    NProgress.start();
     getInfoDelivery();
   }, []);
   const showModal = () => {
@@ -162,12 +165,15 @@ const Checkout = () => {
         );
         return;
       } else {
+        NProgress.start();
         let d = await callCreateOrder(order);
         if (d && d.data) {
           createOrderDetail(d.data.id);
           dispatch(doRemoveAfterOrder(listProductBuy));
           dispatch(saveInfoCartUser());
-          navigate("/order", { state: { isCheckout: true } });
+          setTimeout(() => {
+            navigate("/order", { state: { isCheckout: true } });
+          }, 1000);
         } else {
           message.error("Có lỗi. Hãy thử lại");
         }

@@ -90,7 +90,7 @@ const LoginPage = () => {
               labelCol={{ span: 24 }}
               //label="Email"
               name="email"
-              requiredMark={"optional"}
+              requiredMark={"optional"} // off star form
               rules={[
                 {
                   required: true,
