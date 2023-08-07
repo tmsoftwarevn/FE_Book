@@ -175,16 +175,15 @@ const Cart = () => {
   if (listCart.length < 1) {
     return (
       <div className="container">
-        <div
-          className="cart-empty"
-          style={{ fontFamily: "roboto" }}
-          onClick={() => navigate("/")}
-        >
+        <div className="cart-empty" style={{ fontFamily: "roboto" }}>
           <BsBagPlus
             style={{ fontSize: 100, marginBottom: 20, color: "#ffeaa7" }}
           />
           <div className="empty">giỏ hàng của bạn trống</div>
-          <div className="buy"> mua ngay</div>
+          <div className="buy" onClick={() => navigate("/")}>
+            {" "}
+            mua ngay
+          </div>
         </div>
       </div>
     );

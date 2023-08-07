@@ -7,7 +7,7 @@ import {
 } from "react-router-dom";
 import { Outlet } from "react-router-dom";
 import LoginPage from "./pages/login/login";
-import Header from "./components/Header/header";
+import Header from "./components/header/header";
 import Footer from "./components/Footer";
 import Home from "./pages/Home/index";
 import RegisterPage from "./pages/register";
@@ -28,6 +28,7 @@ import OrderHistory from "./pages/order history/OrderHistory";
 import DetailOrderById from "./pages/Order detail/OrderDetailById";
 import ManagerOrder from "./pages/admin/managerOrder/managerOrder";
 import GetPassword from "./pages/forgot password/GetPassword";
+import Search from "./pages/search/search";
 
 const Layout = () => {
   const role = useSelector((state) => state.account?.user?.role);
@@ -44,7 +45,7 @@ const Layout = () => {
 
   return (
     <div className="layout-app">
-      <Header searchBook={searchBook} setSearchBook={setSearchBook} />
+      <Header />
       <Outlet context={[searchBook, setSearchBook]} />
       <Footer />
     </div>
@@ -117,6 +118,10 @@ export default function App() {
               <DetailOrderById />
             </ProtectedRoute>
           ),
+        },
+        {
+          path: "search/*",
+          element: <Search />,
         },
       ],
     },

@@ -34,7 +34,7 @@ import {
 } from "../../redux/cart/cartSlice";
 import PreviewCart from "../../pages/cart/PreviewCart";
 
-const Header = () => {
+const Header = (props) => {
   const isAuthenticated = useSelector((state) => state.account.isAuthenticated);
   const username = useSelector((state) => state.account.user?.fullName);
   const userEmail = useSelector((state) => state.account.user?.email);
@@ -49,6 +49,11 @@ const Header = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [form] = Form.useForm();
   const [keyTab, setKeyTab] = useState("1");
+  const [search, setSearch] = useState("");
+
+  useEffect(() => {
+    if (location.pathname === "/") setSearch("");
+  }, [location.pathname]);
 
   useEffect(() => {
     listItems();
@@ -168,6 +173,12 @@ const Header = () => {
   const onchange = (key) => {
     setKeyTab(key);
   };
+
+  const handleSearch = (e) => {
+    if (e.key === "Enter" && e.target.value) {
+      navigate(`/search?mainText=${e.target.value}`);
+    }
+  };
   return (
     <div className="header-main">
       <div className="container">
@@ -184,9 +195,22 @@ const Header = () => {
               </div>
               <div className="group">
                 <AiOutlineSearch className="icon-search" />
-                <input type="text" placeholder="Bạn tìm gì hôm nay " />
+                <input
+                  type="text"
+                  placeholder="Bạn tìm gì hôm nay "
+                  onKeyDown={(e) => handleSearch(e)}
+                  value={search}
+                  onChange={(e) => setSearch(e.target.value)}
+                />
               </div>
-              <button className="button">Tìm kiếm</button>
+              <button
+                className="button"
+                onClick={(e) => {
+                  search ? navigate(`/search?mainText=${search}`) : "";
+                }}
+              >
+                Tìm kiếm
+              </button>
             </div>
           </div>
 

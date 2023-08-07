@@ -42,7 +42,6 @@ const BookPageDetail = (props) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   let id = params.get("id");
-
   window.onbeforeunload = function () {
     window.scrollTo(0, 0);
   };

@@ -57,7 +57,7 @@ const Home = () => {
   const refCheckbox = useRef([]);
   const navigate = useNavigate();
   const location = useLocation();
-  const [searchBook, setSearchBook] = useOutletContext();
+
   const [queryCategory, setQueryCategory] = useState([]);
   const [listPopularAll, setListPopularAll] = useState([]);
 
@@ -110,7 +110,7 @@ const Home = () => {
   useEffect(() => {
     getListBook();
     window.scrollTo(0, 0);
-  }, [current, searchBook, queryCategory, sort, price, rate]);
+  }, [current, queryCategory, sort, price, rate]);
 
   useEffect(() => {
     const getListCategory = async () => {
@@ -408,8 +408,6 @@ const Home = () => {
       four: false,
       three: false,
     });
-    //reset search header
-    setSearchBook("");
   };
 
   const handleShowMore = () => {

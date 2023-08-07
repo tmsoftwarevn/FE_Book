@@ -208,3 +208,9 @@ export const callGetOrderHistoryWithStatus = (
 export const callListBookPopularAll = () => {
   return axios.get("/api/v1/book/popular/all");
 };
+
+export const callSearchBook = (mainText, current, pageSize) => {
+  return axios.get(
+    `/api/v1/search?mainText=${mainText}&current=${current}&pageSize=${pageSize}`
+  );
+};
