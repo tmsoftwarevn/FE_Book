@@ -331,53 +331,49 @@ const Header = (props) => {
               label: "Đổi mật khẩu",
               children: (
                 <>
-                  {user.type === "SOCIAL" ? (
-                    <div>Tài khoản đăng nhập bằng Email or FaceBook</div>
-                  ) : (
-                    <div>
-                      <Form
-                        name="basic"
-                        autoComplete="off"
-                        form={form}
-                        onFinish={onFinish}
-                      >
-                        <Row gutter={20}>
-                          <Col span={12}>
-                            <Form.Item
-                              labelCol={{ span: 24 }}
-                              label="Mật khẩu cũ"
-                              name="oldPassword"
-                              rules={[
-                                {
-                                  required: true,
-                                  message: "Nhập mật khẩu cũ",
-                                },
-                              ]}
-                              initialValue={"1"}
-                            >
-                              <Input.Password visibilityToggle={false} />
-                            </Form.Item>
-                          </Col>
-                          <Col span={12}>
-                            <Form.Item
-                              labelCol={{ span: 24 }}
-                              label="Mật khẩu mới"
-                              name="newPassword"
-                              rules={[
-                                {
-                                  required: true,
-                                  message: "Nhập mật khẩu mới",
-                                },
-                              ]}
-                              initialValue={"1"}
-                            >
-                              <Input.Password />
-                            </Form.Item>
-                          </Col>
-                        </Row>
-                      </Form>
-                    </div>
-                  )}
+                  <div>
+                    <Form
+                      name="basic"
+                      autoComplete="off"
+                      form={form}
+                      onFinish={onFinish}
+                    >
+                      <Row gutter={20}>
+                        <Col span={12}>
+                          <Form.Item
+                            labelCol={{ span: 24 }}
+                            label="Mật khẩu cũ"
+                            name="oldPassword"
+                            rules={[
+                              {
+                                required: true,
+                                message: "Nhập mật khẩu cũ",
+                              },
+                            ]}
+                            initialValue={"1"}
+                          >
+                            <Input.Password visibilityToggle={false} />
+                          </Form.Item>
+                        </Col>
+                        <Col span={12}>
+                          <Form.Item
+                            labelCol={{ span: 24 }}
+                            label="Mật khẩu mới"
+                            name="newPassword"
+                            rules={[
+                              {
+                                required: true,
+                                message: "Nhập mật khẩu mới",
+                              },
+                            ]}
+                            initialValue={"1"}
+                          >
+                            <Input.Password />
+                          </Form.Item>
+                        </Col>
+                      </Row>
+                    </Form>
+                  </div>
                 </>
               ),
             },
