@@ -43,16 +43,19 @@ const LoginPage = () => {
     if (isLoginSocial === true) {
       let user = "";
       const getUser = async () => {
-        await fetch("http://localhost:8086/api/v1/login/success", {
-          method: "GET",
-          credentials: "include",
-          headers: {
-            Accept: "application/json",
-            "Content-Type": "application/json",
-            "Access-Control-Allow-Credentials": true,
-          },
-          cache: "no-cache",
-        })
+        await fetch(
+          `${import.meta.env.VITE_BACKEND_URL}/api/v1/login/success`,
+          {
+            method: "GET",
+            credentials: "include",
+            headers: {
+              Accept: "application/json",
+              "Content-Type": "application/json",
+              "Access-Control-Allow-Credentials": true,
+            },
+            cache: "no-cache",
+          }
+        )
           .then((response) => response.json())
           .then((resObject) => {
             user = resObject;
@@ -71,12 +74,19 @@ const LoginPage = () => {
       getUser();
     }
   }, []);
+
   const handleLoginWithGoogle = () => {
-    window.open("http://localhost:8086/api/v1/auth/google", "_self");
+    window.open(
+      `${import.meta.env.VITE_BACKEND_URL}/api/v1/auth/google`,
+      "_self"
+    );
     dispatch(doLoginSocialTrue());
   };
   const handleLoginWithFacebook = () => {
-    window.open("http://localhost:8086/api/v1/auth/facebook", "_self");
+    window.open(
+      `${import.meta.env.VITE_BACKEND_URL}/api/v1/auth/facebook`,
+      "_self"
+    );
     dispatch(doLoginSocialTrue());
   };
   return (

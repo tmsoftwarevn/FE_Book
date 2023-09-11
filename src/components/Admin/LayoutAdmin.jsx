@@ -47,7 +47,10 @@ const AccountAdmin = () => {
     const res = await callLogout(idUser);
     if (res && res.data) {
       dispatch(doLogoutAction());
-      window.open("http://localhost:8086/api/v1/social/logout", "_self");
+      window.open(
+        `${import.meta.env.VITE_BACKEND_URL}/api/v1/social/logout`,
+        "_self"
+      );
       message.success("Đăng xuất thành công");
     }
   };

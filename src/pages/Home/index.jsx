@@ -466,7 +466,6 @@ const Home = () => {
                               span={24}
                               className="category-group"
                               key={`itemcategory-${index}`}
-                              style={{ display: "flex" }}
                             >
                               <input
                                 id={index}
