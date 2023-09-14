@@ -97,9 +97,10 @@
             }
 
             .text {
-                @include xs {
-                    height: 53px; //set width cho 1 dong = 2 dong text
-                }
+                // @include xs {
+                //     height: 53px; //set width cho 1 dong = 2 dong text
+                // }
+                height: 53px;
                 padding: 10px 20px 0px 20px;
                 display: -webkit-box;
                 -webkit-line-clamp: 2;

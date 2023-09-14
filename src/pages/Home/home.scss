@@ -136,7 +136,14 @@ input[type='checkbox'] {
                 .price-sold {
                     margin-left: 20px;
                     margin-top: 2px;
-                    .price-carousel {
+
+                    .sold-carousel {
+                        @include sm {
+                            display: none;
+                        }
+                        @include md {
+                            display: block;
+                        }
                     }
                 }
             }
@@ -313,9 +320,10 @@ input[type='checkbox'] {
                 }
 
                 .text {
-                    @include xs {
-                        height: 47px; //set width cho 1 dong = 2 dong text
-                    }
+                    // @include xs {
+                    //     height: 47px; //set width cho 1 dong = 2 dong text
+                    // }
+                    height: 47px;
                     padding: 10px 20px 0px 20px;
                     display: -webkit-box;
                     -webkit-line-clamp: 2;

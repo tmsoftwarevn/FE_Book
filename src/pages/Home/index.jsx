@@ -291,6 +291,13 @@ const Home = () => {
   };
 
   const onFinish = (values) => {
+    setactivePrice({
+      a: false,
+      b: false,
+      c: false,
+      d: false,
+    });
+
     let v = values.priceFrom;
     dispatch(doSetSearchPriceAction(v));
     setPrice(`${v},99999999`);
@@ -605,7 +612,7 @@ const Home = () => {
                       style={{ width: "60%" }}
                       type="primary"
                     >
-                      Áp dụng
+                      Tìm kiếm
                     </Button>
 
                     <Button

@@ -6,7 +6,7 @@ const initialState = {
   querySort: "&field=&sort=",
   priceRedux: "",
   rateRedux: 0,
-  searchPrice: "",
+  searchPrice: 0,
 };
 
 export const categorySlice = createSlice({

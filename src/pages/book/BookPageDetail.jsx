@@ -88,6 +88,7 @@ const BookPageDetail = (props) => {
       thumbnailClass: "thumbnail-image",
     };
     arr.push(obj);
+
     detailBook.slider = JSON.parse(detailBook.slider);
     detailBook?.slider.map((item, i) => {
       obj = {

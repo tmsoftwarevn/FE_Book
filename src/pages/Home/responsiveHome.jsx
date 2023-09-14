@@ -270,7 +270,7 @@ const ResponsiveHome = (props) => {
                 style={{ width: "70%" }}
                 type="primary"
               >
-                Áp dụng
+                Tìm kiếm
               </Button>
 
               <Button onClick={() => handleReset()} style={{ width: "30%" }}>
