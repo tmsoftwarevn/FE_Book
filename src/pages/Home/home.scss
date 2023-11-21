@@ -124,7 +124,7 @@ input[type='checkbox'] {
                         }
                     }
                 }
-                .text {
+                .text-cr {
                     height: 54px;
                     padding: 10px 20px 0px 20px;
                     display: -webkit-box;
@@ -261,7 +261,7 @@ input[type='checkbox'] {
 
             .wrapper {
                 @include xs {
-                    padding-bottom: 5%; // padding-bottom: theo ti le % voi width = height
+                    //padding-bottom: 5%; // padding-bottom: theo ti le % voi width = height
                     width: 100%;
                 }
                 @include sm {
@@ -319,17 +319,18 @@ input[type='checkbox'] {
                     }
                 }
 
-                .text {
-                    // @include xs {
-                    //     height: 47px; //set width cho 1 dong = 2 dong text
-                    // }
-                    height: 47px;
+                .text-home {
                     padding: 10px 20px 0px 20px;
-                    display: -webkit-box;
-                    -webkit-line-clamp: 2;
-                    -webkit-box-orient: vertical;
-                    overflow: hidden;
-                    text-overflow: ellipsis;
+                    @include xs {
+                        height: 47px; //set width cho 1 dong = 2 dong text
+                    }
+                    .t-h {
+                        display: -webkit-box;
+                        -webkit-line-clamp: 2;
+                        -webkit-box-orient: vertical;
+                        overflow: hidden;
+                        text-overflow: ellipsis;
+                    }
                 }
                 .group-child {
                     @include xs {

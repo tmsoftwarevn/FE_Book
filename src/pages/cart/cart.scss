@@ -210,7 +210,7 @@ input[type='checkbox'] {
                 }
                 @include lg {
                     margin-bottom: 0;
-                    position: static;
+                    position: static; // reset position
                     width: 15%;
                     justify-content: center;
                     display: flex;

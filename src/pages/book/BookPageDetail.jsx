@@ -47,15 +47,19 @@ const BookPageDetail = (props) => {
   };
   useEffect(() => {
     const getDetailBook = async () => {
-      NProgress.start();
+      //NProgress.start();
       let res = await callGetDetailBook(id);
+
       if (res && res.data) {
+        console.log("apiiiiiii");
         setDetailBook(res.data);
         customDataBook(res.data);
       }
+      console.log("rrrrrrrrrrrrr");
       setIsLoading(false);
     };
     getDetailBook();
+
     window.scrollTo(0, 0);
   }, []);
 

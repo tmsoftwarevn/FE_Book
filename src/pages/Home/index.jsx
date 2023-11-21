@@ -61,7 +61,7 @@ const Home = () => {
   const [queryCategory, setQueryCategory] = useState([]);
   const [listPopularAll, setListPopularAll] = useState([]);
 
-  const numberOfItems = showMore ? listCategory.length : 5;
+  let numberOfItems = showMore ? listCategory.length : 5;
 
   let filterCategory = location.state?.category;
 
@@ -148,7 +148,7 @@ const Home = () => {
   const handleSortDepsCategory = (e, category) => {
     if (e.target.checked === true) {
       refCheckbox.current.map((item) => {
-        item.checked = false;
+        if (item) item.checked = false;
       });
 
       e.target.checked = true; // chi cho select 1
@@ -420,6 +420,7 @@ const Home = () => {
   const handleShowMore = () => {
     setShowMore(!showMore);
   };
+
   const handleSearchPriceInput = () => {
     setactivePrice({
       a: false,
@@ -667,7 +668,7 @@ const Home = () => {
                                   />
                                 </div>
 
-                                <div className="text">{item.mainText}</div>
+                                <div className="text-cr">{item.mainText}</div>
                                 <div
                                   className="price-sold"
                                   style={{
@@ -729,7 +730,7 @@ const Home = () => {
                                   />
                                 </div>
 
-                                <div className="text">{item.mainText}</div>
+                                <div className="text-cr">{item.mainText}</div>
                                 <div
                                   className="price-sold"
                                   style={{
@@ -853,7 +854,9 @@ const Home = () => {
                             />
                           </div>
 
-                          <div className="text">{item.mainText}</div>
+                          <div className="text-home">
+                            <div className="t-h">{item.mainText}</div>
+                          </div>
                           <div className="group-child">
                             <div
                               className="price"

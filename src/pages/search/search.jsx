@@ -77,7 +77,10 @@ const Search = () => {
                           />
                         </div>
 
-                        <div className="text">{item.mainText}</div>
+                        <div className="text-search">
+                          <div className="t-s">{item.mainText}</div>
+                        </div>
+
                         <div className="group-child">
                           <div
                             className="price"

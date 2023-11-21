@@ -55,13 +55,14 @@ const ResponsiveHome = (props) => {
 
   const handleSortDepsCategory = (e, category) => {
     if (e.target.checked === true) {
-      reftest.current.map((item) => {
-        item.checked = false;
+      reftest?.current.map((item) => {
+        if (item) item.checked = false;
       });
 
       e.target.checked = true; // chi cho select 1
       navigate("/", { state: { category: category.category } }); // reset/ assign state location
     } else navigate("/");
+
     let c = queryCategory.findIndex((item) => item.id === category.id);
     if (e.target.checked === true && c === -1) {
       setQueryCategory([category]);
