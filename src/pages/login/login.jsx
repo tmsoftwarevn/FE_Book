@@ -40,6 +40,7 @@ const LoginPage = () => {
     if (localStorage.getItem("access_token")) return navigate("/");
   }, []);
   useEffect(() => {
+    console.log("check isloginlocal: ", isLoginSocial);
     if (isLoginSocial === true) {
       let user = "";
       const getUser = async () => {
@@ -58,6 +59,7 @@ const LoginPage = () => {
         )
           .then((response) => response.json())
           .then((resObject) => {
+            console.log("checkkkkkk res", resObject);
             user = resObject;
           })
           .catch((err) => {

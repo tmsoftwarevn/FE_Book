@@ -67,101 +67,106 @@ export default function App() {
     }
   }, []);
 
-  const router = createBrowserRouter([
-    {
-      path: "/",
-      element: <Layout />,
-      errorElement: <Notfound />,
-      children: [
-        { index: true, element: <Home /> },
+  const router = createBrowserRouter(
+    [
+      {
+        path: "/",
+        element: <Layout />,
+        errorElement: <Notfound />,
+        children: [
+          { index: true, element: <Home /> },
 
-        {
-          path: "book/:slug",
-          element: <BookPageDetail />,
-        },
-        {
-          path: "cart",
-          element: (
-            <ProtectedRoute>
-              <Cart />
-            </ProtectedRoute>
-          ),
-        },
-        {
-          path: "checkout",
-          element: (
-            <ProtectedRoute>
-              <Checkout />
-            </ProtectedRoute>
-          ),
-        },
-        {
-          path: "order",
-          element: (
-            <ProtectedRoute>
-              <PageOrder />
-            </ProtectedRoute>
-          ),
-        },
-        {
-          path: "orderHistory",
-          element: (
-            <ProtectedRoute>
-              <OrderHistory />
-            </ProtectedRoute>
-          ),
-        },
-        {
-          path: "orderHistory/:id",
-          element: (
-            <ProtectedRoute>
-              <DetailOrderById />
-            </ProtectedRoute>
-          ),
-        },
-        {
-          path: "search/*",
-          element: <Search />,
-        },
-      ],
-    },
+          {
+            path: "book/:slug",
+            element: <BookPageDetail />,
+          },
+          {
+            path: "cart",
+            element: (
+              <ProtectedRoute>
+                <Cart />
+              </ProtectedRoute>
+            ),
+          },
+          {
+            path: "checkout",
+            element: (
+              <ProtectedRoute>
+                <Checkout />
+              </ProtectedRoute>
+            ),
+          },
+          {
+            path: "order",
+            element: (
+              <ProtectedRoute>
+                <PageOrder />
+              </ProtectedRoute>
+            ),
+          },
+          {
+            path: "orderHistory",
+            element: (
+              <ProtectedRoute>
+                <OrderHistory />
+              </ProtectedRoute>
+            ),
+          },
+          {
+            path: "orderHistory/:id",
+            element: (
+              <ProtectedRoute>
+                <DetailOrderById />
+              </ProtectedRoute>
+            ),
+          },
+          {
+            path: "search/*",
+            element: <Search />,
+          },
+        ],
+      },
+      {
+        path: "/login/*",
+        element: <LoginPage />,
+      },
+      {
+        path: "/register/*",
+        element: <RegisterPage />,
+      },
+      {
+        path: "/forgot-password",
+        element: <GetPassword />,
+      },
+      {
+        path: "/admin",
+        element: (
+          <ProtectedRoute>
+            <LayoutAdmin />
+          </ProtectedRoute>
+        ),
+        errorElement: <Notfound />,
+        children: [
+          {
+            index: true,
+            path: "book",
+            element: <ManagerBook />,
+          },
+          {
+            path: "user",
+            element: <ManagerUser />,
+          },
+          {
+            path: "order",
+            element: <ManagerOrder />,
+          },
+        ],
+      },
+    ],
     {
-      path: "/login/*",
-      element: <LoginPage />,
-    },
-    {
-      path: "/register/*",
-      element: <RegisterPage />,
-    },
-    {
-      path: "/forgot-password",
-      element: <GetPassword />,
-    },
-    {
-      path: "/admin",
-      element: (
-        <ProtectedRoute>
-          <LayoutAdmin />
-        </ProtectedRoute>
-      ),
-      errorElement: <Notfound />,
-      children: [
-        {
-          index: true,
-          path: "book",
-          element: <ManagerBook />,
-        },
-        {
-          path: "user",
-          element: <ManagerUser />,
-        },
-        {
-          path: "order",
-          element: <ManagerOrder />,
-        },
-      ],
-    },
-  ]);
+      basename: import.meta.env.VITE_BASE_NAME,
+    }
+  );
 
   // cho phep vao route, ko check quyen
   const permissionPath = ["/login", "/register", "/book", "/forgot-password"];
@@ -170,6 +175,7 @@ export default function App() {
 
   const contains = permissionPath.some((element) => {
     if (window.location.pathname === "/") return true;
+    //if (window.location.pathname === "/FE-book-deploy/") return true;
     if (str.includes(element)) {
       return true;
     }
