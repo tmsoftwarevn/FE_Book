@@ -76,7 +76,8 @@ instance.interceptors.response.use(
       error.config.url === "/api/v1/auth/refresh"
     ) {
       localStorage.removeItem("access_token");
-      window.location.href = "/FE-book-deploy/login";
+      // window.location.href = "/FE-book-deploy/login";
+      window.location.href = "/login";
     }
     return error?.response?.data ?? Promise.reject(error);
   }

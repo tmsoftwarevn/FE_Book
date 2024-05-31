@@ -94,7 +94,7 @@ const TableBook = (props) => {
       setTotal(res.data.meta.total);
       customListBook(res.data.result);
       setIsLoading(false);
-    }
+    } 
   };
   const customListBook = (list) => {
     // fake data

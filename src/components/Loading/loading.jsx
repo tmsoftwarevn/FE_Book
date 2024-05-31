@@ -4,7 +4,8 @@ import ScaleLoader from "react-spinners/ScaleLoader";
 const Loading = () => {
   useEffect(() => {
     if (!localStorage.getItem("access_token")) {
-      window.location.href = "/FE-book-deploy/login";
+      // window.location.href = "/FE-book-deploy/login";
+      window.location.href = "/login";
     }
   }, []);
   const style = {

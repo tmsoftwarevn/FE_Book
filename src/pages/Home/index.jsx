@@ -39,6 +39,7 @@ import {
   doSetRateReduxAction,
   doSetSearchPriceAction,
 } from "../../redux/category/categorySlice";
+import CarouselBanner from "../../components/carousel/CarouselBanner";
 
 const Home = () => {
   const currentRedux = useSelector((state) => state.category.current);
@@ -628,6 +629,9 @@ const Home = () => {
             </Col>
 
             <Col lg={19} md={24} sm={24} xs={24} className="homepage-right">
+
+                <CarouselBanner />   
+
               <div className="carousel-homepage">
                 <div
                   style={{
@@ -640,8 +644,9 @@ const Home = () => {
                 >
                   Phổ biến
                 </div>
+
                 <div className="carousel">
-                  <Carousel ref={refCarousel} dots={false} autoplay>
+                  <Carousel ref={refCarousel} dots={false} >
                     <div>
                       <div
                         style={{
@@ -699,7 +704,7 @@ const Home = () => {
                                   </div>
                                 </div>
                               </div>
-                            );
+                            )
                           })}
                       </div>
                     </div>
@@ -766,6 +771,7 @@ const Home = () => {
                       </div>
                     </div>
                   </Carousel>
+
                   <div
                     className="left-carousel"
                     onClick={() => refCarousel.current.prev()}

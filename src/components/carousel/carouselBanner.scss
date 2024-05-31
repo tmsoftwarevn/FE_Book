@@ -1,0 +1,63 @@
+@import '../../scss/media.scss';
+
+.carousel-banner {
+  
+    .carousel {
+        position: relative;
+        &__img{
+            width: 100%;
+            img{
+                width: 100%;
+            }
+        }
+        .left-carousel {
+            @include sm {
+                display: none;
+            }
+            @include md {
+                display: flex;
+            }
+            position: absolute;
+            left: 5px;
+            top: 45%;
+            width: 30px;
+            height: 30px;
+            font-size: 20px;
+            color: #ccc;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            &:hover {
+                background: #ccc;
+                color: black;
+            }
+        }
+        .right-carousel {
+            @include sm {
+                display: none;
+            }
+            @include md {
+                display: flex;
+            }
+            cursor: pointer;
+            position: absolute;
+            right: 5px;
+            top: 45%;
+            width: 30px;
+            height: 30px;
+            font-size: 20px;
+            color: #ccc;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            &:hover {
+                background: #ccc;
+                color: black;
+            }
+        }
+
+    }
+}
