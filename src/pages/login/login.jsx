@@ -95,7 +95,7 @@ const LoginPage = () => {
     <div className="login-container">
       <div className="content">
         <div className="title-login">Đăng Nhập</div>
-        <Divider />
+        {/* <Divider /> */}
         <div className="form-content">
           <Form name="basic" onFinish={onFinish} autoComplete="off">
             <Form.Item
@@ -106,7 +106,7 @@ const LoginPage = () => {
               rules={[
                 {
                   required: true,
-                  message: "Please input your email!",
+                  message: "Email không được để trống !",
                 },
               ]}
             >
@@ -121,7 +121,7 @@ const LoginPage = () => {
               rules={[
                 {
                   required: true,
-                  message: "Please input your password!",
+                  message: "Mật khẩu không được để trống !",
                 },
               ]}
             >
@@ -149,17 +149,17 @@ const LoginPage = () => {
               borderColor: "black",
             }}
           >
-            Or Login Using
+            Hoặc đăng nhập với
           </Divider>
           <div className="login-with">
             <div className="google" onClick={() => handleLoginWithGoogle()}>
               <GrGoogle />
             </div>
-            <div className="faceBook" onClick={handleLoginWithFacebook}>
+            {/* <div className="faceBook" onClick={handleLoginWithFacebook}>
               <GrFacebook />
-            </div>
+            </div> */}
           </div>
-          <div className="home" onClick={() => navigate("/")}>
+          <div className="home hover:text-blue-400" onClick={() => navigate("/")}>
             Trang Chủ
           </div>
         </div>

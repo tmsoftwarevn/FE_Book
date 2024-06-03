@@ -21,6 +21,7 @@
     background-color: var(--color-background-form);
     border-radius: 10px;
     position: relative;
+    max-width: 100%;
     .title-register {
         display: flex;
         justify-content: center;
@@ -52,12 +53,7 @@
     }
     .text {
         margin-bottom: 20px;
-        b {
-            cursor: pointer;
-            &:hover {
-                color: blue;
-            }
-        }
+        
     }
     .home {
         cursor: pointer;
@@ -65,8 +61,6 @@
         justify-content: center;
         margin-top: 10px;
 
-        &:hover {
-            color: blue;
-        }
+       
     }
 }

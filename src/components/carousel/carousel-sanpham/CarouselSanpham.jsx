@@ -44,7 +44,7 @@ const CarouselSanpham = (props) => {
 
   const handleRedirectBook = (book) => {
     // const slug = convertSlug(book.mainText);
-    navigate(`/book/${book.detail.slug}`);
+    navigate(`/book/${book.slug}`);
   };
   return (
     <div>

@@ -37,13 +37,14 @@ const RegisterPage = () => {
   return (
     <div className="register-container">
       <div className="content">
-        <div className="title-register">Đăng Kí Tài Khoản </div>
+        <div className="title-register">Đăng Ký Tài Khoản </div>
         <Divider />
         <div className="form-content">
-          <Form name="basic" onFinish={onFinish} autoComplete="off">
+          <Form requiredMark={false} name="basic" onFinish={onFinish} autoComplete="off">
             <Form.Item
               labelCol={{ span: 24 }}
               label="Tên hiển thị"
+              
               name="fullName"
               rules={[
                 {
@@ -102,19 +103,19 @@ const RegisterPage = () => {
                 style={{ width: "100%" }}
                 loading={isSubmit}
               >
-                Đăng kí
+                Đăng ký
               </Button>
             </Form.Item>
           </Form>
         </div>
-        <div className="image-bg">
+        {/* <div className="image-bg">
           <img src={bgRegister} alt="" />
-        </div>
+        </div> */}
         <div className="text">
           Đã có tài khoản?
-          <b onClick={() => navigate("/login")}>Đăng nhập</b>
+          <div className="hover:text-blue-600 cursor-pointer" onClick={() => navigate("/login")}>Đăng nhập</div>
         </div>
-        <div className="home" onClick={() => navigate("/")}>
+        <div className="home hover:text-blue-600" onClick={() => navigate("/")}>
           Trang Chủ
         </div>
       </div>

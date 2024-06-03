@@ -109,6 +109,7 @@ const Home = () => {
   useEffect(() => {
     getListBookPopularAll();
   }, []);
+
   useEffect(() => {
     getListBook();
     // window.scrollTo(0, 0);
@@ -177,6 +178,7 @@ const Home = () => {
     query = arr.join(","); // custom query category many "in"
     dispatch(doSetPriceAction(price));
     dispatch(doSetRateReduxAction(rate));
+    // console.log(`current=${current}&pageSize=${pageSize}&category=${category}${sort}&price=${price}&rate=${rate}`)
     let res = await callGetListBookHome(
       current,
       pageSize,
@@ -398,6 +400,7 @@ const Home = () => {
     },
   ];
   const handleChangePage = (p, s) => {
+    // navigate("?page")
     setCurrent(p);
     dispatch(doSetCurrentPageAction(p));
   };
@@ -704,6 +707,7 @@ const Home = () => {
                                 import.meta.env.VITE_BACKEND_URL
                               }/images/book/${item?.thumbnail}`}
                               alt="thumbnail book"
+                              loading="lazy"
                             />
                           </div>
 
