@@ -31,6 +31,7 @@ const PageOrder = () => {
                   backgroundColor: "green",
                   borderRadius: "50%",
                 }}
+                className="mx-auto w-fit"
               />
             }
             title="Đơn hàng được đặt thành công!"

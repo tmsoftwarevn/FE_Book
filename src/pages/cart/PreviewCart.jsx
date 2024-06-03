@@ -17,7 +17,7 @@ const PreviewCart = () => {
       {listCart.map((item, i) => {
         return (
           <div key={`item-${i}`} className="wrap">
-            <div className="group">
+            <div className="group flex ">
               <div className="thumbnail">
                 <Image
                   width={50}
@@ -50,6 +50,7 @@ const PreviewCart = () => {
     <div className="cart-empty">
       <BsBagPlus
         style={{ fontSize: 100, marginBottom: 20, color: "#ffeaa7" }}
+        
       />
       <div className="empty">Chưa có sản phẩm</div>
     </div>

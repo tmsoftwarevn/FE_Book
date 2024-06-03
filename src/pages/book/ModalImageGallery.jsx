@@ -23,11 +23,11 @@ const ModalGallery = (props) => {
         setIsOpen(false);
       }}
       footer={null} //hide footer
-      closable={false} //hide close button
+      closable={true} //hide close button
       className="modal-gallery"
     >
-      <Row gutter={[20, 20]}>
-        <Col span={16}>
+      <Row gutter={[20, 20]} className="">
+        <Col span={15}>
           <ImageGallery
             ref={refGallery}
             items={items}
@@ -40,8 +40,8 @@ const ModalGallery = (props) => {
           />
         </Col>
         <Col span={8}>
-          <div style={{ marginBottom: 10 }}>{title}</div>
-          <div>
+          {/* <div style={{ marginBottom: 10 }}>{title}</div> */}
+          <div className="">
             <Row gutter={[20, 20]}>
               {items?.map((item, i) => {
                 return (
@@ -50,6 +50,7 @@ const ModalGallery = (props) => {
                       wrapperClassName={"img-normal"}
                       width={100}
                       height={100}
+                      style={{objectFit:"contain"}}
                       src={item.original}
                       preview={false}
                       onClick={() => {

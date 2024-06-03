@@ -101,6 +101,7 @@ const ManagerBook = () => {
               form.resetFields();
             }}
             type="primary"
+            className="flex items-center"
           >
             <FiRefreshCcw style={{ marginRight: 5 }} />
             Danh sách ban đầu

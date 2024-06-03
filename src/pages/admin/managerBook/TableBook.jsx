@@ -7,6 +7,8 @@ import ViewBook from "./ViewBook";
 import { MdOutlinePreview } from "react-icons/md";
 import { AiFillDelete } from "react-icons/ai";
 import { BsFillPencilFill } from "react-icons/bs";
+import { CiViewList } from "react-icons/ci";
+
 import AddNewBook from "./AddNewBook";
 import UpdateBook from "./UpdateBook";
 import BookImport from "./dataImport/BookImport";
@@ -188,7 +190,7 @@ const TableBook = (props) => {
               </Popconfirm>
             </div>
             <div>
-              <MdOutlinePreview
+              <CiViewList
                 style={{ color: "blue" }}
                 onClick={() => {
                   setView(true);
@@ -202,6 +204,7 @@ const TableBook = (props) => {
                 onClick={() => {
                   setIsModalUpdateBook(true), setDataUpdate(record);
                 }}
+                className="text-blue-600"
               />
             </div>
           </div>

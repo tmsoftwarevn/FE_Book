@@ -18,7 +18,7 @@ const MessageCart = forwardRef((props, ref) => {
       className="modal"
       style={{ visibility: showPopup ? "visible" : "hidden" }}
     >
-      <div className="icon">
+      <div className="icon mx-auto w-fit">
         <TiTick />
       </div>
       <div className="add">Đã thêm vào giỏ hàng</div>

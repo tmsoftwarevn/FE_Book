@@ -41,9 +41,10 @@ const Search = () => {
   ];
 
   const handleRedirectBook = (book) => {
-    const slug = convertSlug(book.mainText);
-    navigate(`/book/${slug}?id=${book.id}`);
+    // const slug = convertSlug(book.mainText);
+    navigate(`/book/${book.slug}`);
   };
+  
   const handleChangePage = (p, s) => {
     setCurrent(p);
   };

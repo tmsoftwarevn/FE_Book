@@ -36,12 +36,15 @@ const BookPageDetail = (props) => {
   const refMessage = useRef();
 
   const location = useLocation();
-  const params = new URLSearchParams(location.search);
+  // const params = new URLSearchParams(location.search);
   const isAuthenticated = useSelector((state) => state.account.isAuthenticated);
   const listCart = useSelector((state) => state.cart.listCart);
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  let id = params.get("id");
+  // let id = params.get("id");
+  const params = useParams();
+  const id = params.slug;    // fix lại id = slug
+
   window.onbeforeunload = function () {
     window.scrollTo(0, 0);
   };
@@ -51,11 +54,9 @@ const BookPageDetail = (props) => {
       let res = await callGetDetailBook(id);
 
       if (res && res.data) {
-        console.log("apiiiiiii");
         setDetailBook(res.data);
         customDataBook(res.data);
       }
-      console.log("rrrrrrrrrrrrr");
       setIsLoading(false);
     };
     getDetailBook();
@@ -168,6 +169,7 @@ const BookPageDetail = (props) => {
       quantity: +quantity,
       id: id,
       detail: {
+        slug: detailBook.slug,
         thumbnail: detailBook.thumbnail,
         mainText: detailBook.mainText,
         price: detailBook.price,
@@ -292,7 +294,7 @@ const BookPageDetail = (props) => {
                       onSlide={() => handleOnclickResponsive()}
                     />
                     <div className="page-total">
-                      {currentIndex + 1}/{detailBook.slider.length + 1}
+                      {currentIndex + 1}/{detailBook?.slider?.length + 1}
                     </div>
                   </Col>
 

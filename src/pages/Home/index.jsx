@@ -39,7 +39,8 @@ import {
   doSetRateReduxAction,
   doSetSearchPriceAction,
 } from "../../redux/category/categorySlice";
-import CarouselBanner from "../../components/carousel/CarouselBanner";
+import CarouselBanner from "../../components/carousel/carousel-banner/CarouselBanner";
+import CarouselSanpham from "../../components/carousel/carousel-sanpham/CarouselSanpham";
 
 const Home = () => {
   const currentRedux = useSelector((state) => state.category.current);
@@ -94,9 +95,9 @@ const Home = () => {
     three: +rateRedux === 3 ? true : false,
   });
 
-  window.onbeforeunload = function () {
-    window.scrollTo(0, 0);
-  };
+  // window.onbeforeunload = function () {
+  //   window.scrollTo(0, 0);
+  // };
 
   const getListBookPopularAll = async () => {
     let res = await callListBookPopularAll();
@@ -110,7 +111,7 @@ const Home = () => {
   }, []);
   useEffect(() => {
     getListBook();
-    window.scrollTo(0, 0);
+    // window.scrollTo(0, 0);
   }, [current, queryCategory, sort, price, rate]);
 
   useEffect(() => {
@@ -432,8 +433,8 @@ const Home = () => {
     setPrice("");
   };
   const handleRedirectBook = (book) => {
-    const slug = convertSlug(book.mainText);
-    navigate(`/book/${slug}?id=${book.id}`);
+    // const slug = convertSlug(book.mainText);
+    navigate(`/book/${book.slug}`);
   };
   if (isLoading === true) {
     return (
@@ -629,163 +630,10 @@ const Home = () => {
             </Col>
 
             <Col lg={19} md={24} sm={24} xs={24} className="homepage-right">
-
-                <CarouselBanner />   
+              <CarouselBanner />
 
               <div className="carousel-homepage">
-                <div
-                  style={{
-                    padding: 20,
-                    backgroundColor: "rgb(255 255 255)",
-                    fontWeight: 600,
-                    fontSize: 16,
-                  }}
-                  className="popular"
-                >
-                  Phổ biến
-                </div>
-
-                <div className="carousel">
-                  <Carousel ref={refCarousel} dots={false} >
-                    <div>
-                      <div
-                        style={{
-                          display: "flex",
-                          justifyContent: "space-between",
-                        }}
-                        className="carousel-1"
-                      >
-                        {listPopularAll &&
-                          listPopularAll.length > 0 &&
-                          listPopularAll.slice(0, 4).map((item, index) => {
-                            return (
-                              <div
-                                className="wrapper"
-                                key={`itemcarosel-${index}`}
-                                onClick={() => handleRedirectBook(item)}
-                              >
-                                <div className="thumbnail">
-                                  <img
-                                    src={`${
-                                      import.meta.env.VITE_BACKEND_URL
-                                    }/images/book/${item?.thumbnail}`}
-                                    alt="thumbnail book"
-                                  />
-                                </div>
-
-                                <div className="text-cr">{item.mainText}</div>
-                                <div
-                                  className="price-sold"
-                                  style={{
-                                    display: "flex",
-                                    justifyContent: "space-between",
-                                  }}
-                                >
-                                  <div
-                                    className="price-carousel"
-                                    style={{
-                                      color: "rgb(255 66 78)",
-                                      fontWeight: 600,
-                                    }}
-                                  >
-                                    {new Intl.NumberFormat("vi-VN", {
-                                      style: "currency",
-                                      currency: "VND",
-                                    }).format(item.price)}
-                                  </div>
-                                  <div
-                                    className="sold-carousel"
-                                    style={{
-                                      marginRight: 20,
-                                      color: "#535c68",
-                                    }}
-                                  >
-                                    Đã bán ({item.sold}){" "}
-                                  </div>
-                                </div>
-                              </div>
-                            )
-                          })}
-                      </div>
-                    </div>
-
-                    <div>
-                      <div
-                        style={{
-                          display: "flex",
-                          justifyContent: "space-between",
-                        }}
-                        className="carousel-1"
-                      >
-                        {listPopularAll &&
-                          listPopularAll.length > 0 &&
-                          listPopularAll.slice(4, 8).map((item, index) => {
-                            return (
-                              <div
-                                className="wrapper"
-                                key={`itemcaro-${item.id}`}
-                                onClick={() => handleRedirectBook(item)}
-                              >
-                                <div className="thumbnail">
-                                  <img
-                                    src={`${
-                                      import.meta.env.VITE_BACKEND_URL
-                                    }/images/book/${item?.thumbnail}`}
-                                    alt="thumbnail book"
-                                  />
-                                </div>
-
-                                <div className="text-cr">{item.mainText}</div>
-                                <div
-                                  className="price-sold"
-                                  style={{
-                                    display: "flex",
-                                    justifyContent: "space-between",
-                                  }}
-                                >
-                                  <div
-                                    className="price-carousel"
-                                    style={{
-                                      color: "rgb(255 66 78)",
-                                      fontWeight: 600,
-                                    }}
-                                  >
-                                    {new Intl.NumberFormat("vi-VN", {
-                                      style: "currency",
-                                      currency: "VND",
-                                    }).format(item.price)}
-                                  </div>
-                                  <div
-                                    className="sold-carousel"
-                                    style={{
-                                      marginRight: 20,
-                                      color: "#535c68",
-                                    }}
-                                  >
-                                    Đã bán ({item.sold}){" "}
-                                  </div>
-                                </div>
-                              </div>
-                            );
-                          })}
-                      </div>
-                    </div>
-                  </Carousel>
-
-                  <div
-                    className="left-carousel"
-                    onClick={() => refCarousel.current.prev()}
-                  >
-                    <AiOutlineLeft />
-                  </div>
-                  <div
-                    className="right-carousel"
-                    onClick={() => refCarousel.current.next()}
-                  >
-                    <AiOutlineRight />
-                  </div>
-                  <Divider style={{ borderColor: "grey" }} />
-                </div>
+                <CarouselSanpham listPopularAll={listPopularAll} />
 
                 <div className="tabs">
                   <Tabs
@@ -834,7 +682,6 @@ const Home = () => {
                     </Dropdown>
                   </span>
                   <span onClick={() => setModalFilter(true)}>
-                    {" "}
                     <AiFillFilter style={{ marginTop: 3 }} />
                   </span>
                 </div>

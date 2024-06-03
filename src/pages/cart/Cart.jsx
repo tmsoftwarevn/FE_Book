@@ -142,8 +142,7 @@ const Cart = () => {
   };
 
   const handleRedirectDetailBook = (book) => {
-    const slug = convertSlug(book.detail.mainText);
-    navigate(`/book/${slug}?id=${book.id}`);
+    navigate(`/book/${book.detail.slug}`);
   };
   const handleDeleteBook = (book) => {
     // dich mang xuong 1, ref bi override
@@ -178,6 +177,7 @@ const Cart = () => {
         <div className="cart-empty" style={{ fontFamily: "roboto" }}>
           <BsBagPlus
             style={{ fontSize: 100, marginBottom: 20, color: "#ffeaa7" }}
+            className="mx-auto w-fit"
           />
           <div className="empty">giỏ hàng của bạn trống</div>
           <div className="buy" onClick={() => navigate("/")}>

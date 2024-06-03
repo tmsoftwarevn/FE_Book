@@ -25,10 +25,12 @@ const DetailOrderById = () => {
     if (!infoDelivery) navigate("/orderHistory");
     fetchDetailOrder();
   }, []);
+  
   const handleRedirectDetailBook = (book) => {
-    const slug = convertSlug(book.mainText);
-    navigate(`/book/${slug}?id=${book.id}`);
+    // const slug = convertSlug(book.mainText);
+    navigate(`/book/${book.slug}`);
   };
+
   const showModal = () => {
     const init = {
       fullname: infoDelivery.fullname,
