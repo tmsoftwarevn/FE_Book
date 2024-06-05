@@ -92,21 +92,14 @@
         margin: 10px 0;
     }
     .author {
-        padding: 20px 0;
+        // padding: 20px 0;
         width: fit-content;
-        cursor: pointer;
-
-        &:hover {
-            span {
-                color: blue;
-            }
-        }
     }
     .price {
         border-radius: 4px;
         background-color: rgb(245 245 250);
         padding: 10px;
-        margin-bottom: 10px;
+        margin-bottom: 20px;
 
         .currency {
             font-weight: 500;
@@ -171,7 +164,7 @@
     }
 
     .leftt {
-        color: #757575;
+        
         width: 110px;
         text-transform: capitalize;
         display: inline-block;

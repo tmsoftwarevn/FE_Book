@@ -9,15 +9,38 @@ import {
   notification,
 } from "antd";
 import { Form, Input, Upload } from "antd";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   callCreateBook,
   callFetchCategory,
   callUploadBookImg,
 } from "../../../services/api";
 import { PlusOutlined, LoadingOutlined } from "@ant-design/icons";
+import { Editor } from "@tinymce/tinymce-react";
 
 const AddNewBook = (props) => {
+  ////////    luu ảnh
+  const filePickerCallback = function (cb, value, meta) {
+    const input = document.createElement("input");
+    input.setAttribute("type", "file");
+    input.setAttribute("accept", "image/*");
+
+    input.onchange = async function () {
+      const file = input.files[0];
+
+      // const res = await callUpload_Single_Img_baiviet(file);
+      // if (res && res.EC === 1) {
+      //   cb(
+      //     `${process.env.REACT_APP_BACKEND_URL}/images/baiviet/${res.data.fileUploaded}`,
+      //     { alt: file.name }
+      //   );
+      // }
+    };
+
+    input.click();
+  };
+
+  /////////////////
   const { isModalAddBook, setIsModalAddBook, getListBook } = props;
   const [listCategory, setListCategory] = useState([]);
   const [form] = Form.useForm();
@@ -33,6 +56,8 @@ const AddNewBook = (props) => {
   const [previewOpen, setPreviewOpen] = useState(false);
   const [previewImage, setPreviewImage] = useState("");
   const [previewTitle, setPreviewTitle] = useState("");
+  const [noidung, setNoidung] = useState();
+  const refEditor = useRef();
 
   const handleOk = () => {
     setIsModalAddBook(false);
@@ -172,7 +197,7 @@ const AddNewBook = (props) => {
         open={isModalAddBook}
         onOk={() => form.submit()}
         onCancel={handleCancel}
-        width={1000}
+        width={1200}
         maskClosable={false}
         okText="Thêm mới"
       >
@@ -363,6 +388,49 @@ const AddNewBook = (props) => {
                   </div>
                 </Upload>
               </Form.Item>
+            </Col>
+            <Col span={24}>
+              <h4 className="mb-4">Nội dung:</h4>
+              <Editor
+                apiKey={import.meta.env.VITE_APP_API_KEY_EDITOR}
+                //onChange={(evt, editor) => setNoidung(editor.getContent())}
+                onChange={(evt, editor) => (refEditor.current = editor)}
+                initialValue={noidung}
+                init={{
+                  height: 500,
+                  menubar: false,
+                  plugins: [
+                    "advlist",
+                    "autolink",
+                    "lists",
+                    "link",
+                    "image",
+                    "charmap",
+                    "preview",
+                    "anchor",
+                    "searchreplace",
+                    "visualblocks",
+                    "code",
+                    "fullscreen",
+                    "insertdatetime",
+                    "media",
+                    "table",
+                    "code",
+                    "help",
+                    "wordcount",
+                  ],
+                  toolbar:
+                    "undo redo | blocks | " +
+                    "bold italic fontsize forecolor | alignleft aligncenter " +
+                    "alignright alignjustify | bullist numlist outdent indent | " +
+                    "removeformat | help | image media",
+                  content_style:
+                    "body { font-family: Helvetica, Arial, sans-serif; font-size: 14px }",
+                  fontsize_formats: "8px 10px 12px 14px 18px 24px 36px",
+                  file_picker_types: "image",
+                  file_picker_callback: filePickerCallback,
+                }}
+              />
             </Col>
           </Row>
         </Form>

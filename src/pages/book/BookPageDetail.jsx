@@ -43,7 +43,7 @@ const BookPageDetail = (props) => {
   const navigate = useNavigate();
   // let id = params.get("id");
   const params = useParams();
-  const id = params.slug;    // fix lại id = slug
+  const id = params.slug; // fix lại id = slug
 
   window.onbeforeunload = function () {
     window.scrollTo(0, 0);
@@ -70,7 +70,10 @@ const BookPageDetail = (props) => {
     },
     {
       title: (
-        <Link to={"/"} state={{ category: detailBook.category }}>
+        // <Link to={"/"} state={{ category: detailBook.category }}>
+        //   {detailBook.category}
+        // </Link>
+        <Link to={`/?category=${detailBook.category}`}>
           {detailBook.category}
         </Link>
       ),
@@ -312,10 +315,7 @@ const BookPageDetail = (props) => {
                           Đã bán {detailBook.sold}
                         </span>
                       </div>
-                      <div className="author">
-                        <u style={{ marginRight: 5 }}>Tác giả:</u>{" "}
-                        <span>{detailBook.author}</span>
-                      </div>
+
                       <div className="price">
                         <span className="currency">
                           {new Intl.NumberFormat("vi-VN", {
@@ -324,14 +324,31 @@ const BookPageDetail = (props) => {
                           }).format(detailBook.price)}
                         </span>
                       </div>
-                      <div className="delivery">
+
+                      <div className="author flex text-base my-2">
+                        <p className="mr-2">Tác giả:</p>
+                        <p>{detailBook.author}</p>
+                      </div>
+                      <div className="hinhthuc flex text-base my-2">
+                        <p className="mr-2">Hình thức:</p>
+                        <p> Bìa cứng, 19 x 27cm, 808 trang</p>
+                      </div>
+                      <div className="nhaxuatban flex text-base my-2">
+                        <p className="mr-2">Nhà xuất bản:</p>
+                        <p> NXB Khoa Học Xã Hội</p>
+                      </div>
+                      <div className="ngayxuatban flex text-base my-2">
+                        <p className="mr-2">Ngày xuất bản:</p>
+                        <p> Tháng 6 năm 2024</p>
+                      </div>
+                      {/* <div className="delivery">
                         <div>
                           <span className="leftt">Vận chuyển</span>
                           <span className="rightt">Miễn phí vận chuyển</span>
                         </div>
-                      </div>
+                      </div> */}
                       <div className="quantity">
-                        <span className="leftt">Số lượng</span>
+                        <span className="leftt text-base font-semibold">Số lượng</span>
                         <span className="rightt">
                           <button
                             onClick={() => handleChangeQuantity("minus", "lg")}

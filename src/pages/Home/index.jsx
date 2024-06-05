@@ -29,7 +29,7 @@ import HomeSkeleton from "./homeSkeleton";
 import { AiOutlineLeft, AiOutlineRight } from "react-icons/ai";
 import ResponsiveHome from "./responsiveHome";
 import { convertSlug } from "../../utils/convertSlug";
-import { LazyLoadImage } from "react-lazy-load-image-component";
+
 import { useDispatch, useSelector } from "react-redux";
 import {
   doSetCurrentPageAction,
@@ -43,11 +43,8 @@ import CarouselBanner from "../../components/carousel/carousel-banner/CarouselBa
 import CarouselSanpham from "../../components/carousel/carousel-sanpham/CarouselSanpham";
 
 const Home = () => {
-  const currentRedux = useSelector((state) => state.category.current);
-
   const [form] = Form.useForm();
   const [total, setTotal] = useState(1);
-  const [current, setCurrent] = useState(currentRedux);
   const [pageSize, setPageSize] = useState(16);
   const [dataBook, setDataBook] = useState("");
   const [isLoading, setIsLoading] = useState(true);
@@ -60,19 +57,24 @@ const Home = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const [queryCategory, setQueryCategory] = useState([]);
   const [listPopularAll, setListPopularAll] = useState([]);
 
   let numberOfItems = showMore ? listCategory.length : 5;
-
-  let filterCategory = location.state?.category;
+  // let filterCategory = location.state?.category;
+  const [filterCategory, setFilterCategory] = useState();
 
   const dispatch = useDispatch();
+  const params = new URLSearchParams(location.search);
+
   const keyTabHome = useSelector((state) => state.category?.keyTabHome);
   const rateRedux = useSelector((state) => state.category.rateRedux);
   const priceRedux = useSelector((state) => state.category.priceRedux);
   const querySort = useSelector((state) => state.category?.querySort);
   const searchPrice = useSelector((state) => state.category.searchPrice);
+  const currentRedux = useSelector((state) => state.category.current);
+
+  const [queryCategory, setQueryCategory] = useState([]);
+  const [current, setCurrent] = useState(currentRedux);
   const [sort, setSort] = useState(querySort); // set lai de tu dong lay lai
   const [price, setPrice] = useState(priceRedux);
   const [rate, setRate] = useState(rateRedux);
@@ -84,11 +86,12 @@ const Home = () => {
     a4: keyTabHome === 4 ? true : false,
   });
   const [activePrice, setactivePrice] = useState({
-    a: priceRedux === "0,40000" ? true : false,
-    b: priceRedux === "40000,120000" ? true : false,
-    c: priceRedux === "120000,300000" ? true : false,
-    d: priceRedux === "300000,99999999" ? true : false,
+    a: price === "0,40000" ? true : false,
+    b: price === "40000,120000" ? true : false,
+    c: price === "120000,300000" ? true : false,
+    d: price === "300000,99999999" ? true : false,
   });
+
   const [activeStar, setActiveStar] = useState({
     five: +rateRedux === 5 ? true : false,
     four: +rateRedux === 4 ? true : false,
@@ -111,8 +114,54 @@ const Home = () => {
   }, []);
 
   useEffect(() => {
+    // set lại query từ url, ko lấy từ redux nữa
+    if (params.get("category")) {
+      setFilterCategory(params.get("category"));
+    }
+    if (params.get("page")) {
+      setCurrent(params.get("page"));
+    }
+    if (params.get("price")) {
+      setPrice(params.get("price"));
+    }
+    setactivePrice({
+      a: params.get("price") === "0,40000" ? true : false,
+      b: params.get("price") === "40000,120000" ? true : false,
+      c: params.get("price") === "120000,300000" ? true : false,
+      d: params.get("price") === "300000,99999999" ? true : false,
+    });
+    
+  }, [location]);
+
+  useEffect(() => {
     getListBook();
-    // window.scrollTo(0, 0);
+    window.scrollTo(0, 0);
+
+    // custom url link
+    let url = "";
+    let d = 0;
+
+    if (+current > 1) {
+      url += `page=${current}`;
+      d = d + 1;
+    }
+    if (queryCategory[0]?.category) {
+      const theloai = queryCategory[0].category;
+      if (d > 0) url += "&";
+      url += `category=${queryCategory[0].category}`;
+      d = d + 1;
+    }
+
+    if (price) {
+      if (d > 0) url += "&";
+      url += `price=${price}`;
+      d = d + 1;
+    }
+    if (url[0] === "&") url = url.substring(1); // xóa kí tự & ở đầu
+    url = "?" + url; // thêm ? url
+    // console.log("url: ", url);
+
+    navigate(`/${url}`);
   }, [current, queryCategory, sort, price, rate]);
 
   useEffect(() => {
@@ -148,6 +197,7 @@ const Home = () => {
       }, 300);
     }
   }, [listCategory]);
+
   const handleSortDepsCategory = (e, category) => {
     if (e.target.checked === true) {
       refCheckbox.current.map((item) => {
@@ -175,10 +225,11 @@ const Home = () => {
     queryCategory.map((item) => {
       arr.push(item.id);
     });
-    query = arr.join(","); // custom query category many "in"
+    query = arr.join(","); // custom query category chỉ 1 thể loại
+
     dispatch(doSetPriceAction(price));
     dispatch(doSetRateReduxAction(rate));
-    // console.log(`current=${current}&pageSize=${pageSize}&category=${category}${sort}&price=${price}&rate=${rate}`)
+
     let res = await callGetListBookHome(
       current,
       pageSize,
@@ -703,11 +754,11 @@ const Home = () => {
                         <div className="wrapper">
                           <div className="thumbnail">
                             <img
+                              loading="lazy"
                               src={`${
                                 import.meta.env.VITE_BACKEND_URL
                               }/images/book/${item?.thumbnail}`}
                               alt="thumbnail book"
-                              loading="lazy"
                             />
                           </div>
 

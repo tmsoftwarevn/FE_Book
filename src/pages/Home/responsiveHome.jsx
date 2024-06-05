@@ -82,9 +82,11 @@ const ResponsiveHome = (props) => {
         placement="right"
         onClose={onClose}
         open={modalFilter}
+        
         headerStyle={{
           backgroundColor: "rgb(27 168 255)",
         }}
+        
         width={window.innerWidth > 576 ? "50%" : "100%"} ///responsive mobile
       >
         <Form className="homepage-left" onFinish={onFinish} form={form}>
