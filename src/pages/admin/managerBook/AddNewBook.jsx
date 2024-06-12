@@ -7,6 +7,8 @@ import {
   Select,
   message,
   notification,
+  DatePicker,
+  Space,
 } from "antd";
 import { Form, Input, Upload } from "antd";
 import { useEffect, useRef, useState } from "react";
@@ -28,13 +30,15 @@ const AddNewBook = (props) => {
     input.onchange = async function () {
       const file = input.files[0];
 
-      // const res = await callUpload_Single_Img_baiviet(file);
-      // if (res && res.EC === 1) {
-      //   cb(
-      //     `${process.env.REACT_APP_BACKEND_URL}/images/baiviet/${res.data.fileUploaded}`,
-      //     { alt: file.name }
-      //   );
-      // }
+      const res = await callUploadBookImg(file);
+      if (res && res.EC === 1) {
+        cb(
+          `${import.meta.env.VITE_BACKEND_URL}/images/book/${
+            res.data.fileUploaded
+          }`,
+          { alt: file.name }
+        );
+      }
     };
 
     input.click();
@@ -57,6 +61,8 @@ const AddNewBook = (props) => {
   const [previewImage, setPreviewImage] = useState("");
   const [previewTitle, setPreviewTitle] = useState("");
   const [noidung, setNoidung] = useState();
+  const [ngayxuatban, setNgayxuatban] = useState();
+
   const refEditor = useRef();
 
   const handleOk = () => {
@@ -69,8 +75,16 @@ const AddNewBook = (props) => {
   const handleSelectCategory = (value) => {
     setIdCategory(value);
   };
+  const onChangeDate = (date, dateString) => {
+    setNgayxuatban(dateString);
+  };
+  
   const onFinish = async (values) => {
-    const { name, author, price, quantity, sold, rate } = values;
+    const { name, author, price, quantity, sold, rate,hinhthuc,nhaxuatban } = values;
+    
+    
+    let description = refEditor?.current?.getContent();
+
     if (dataThumbnail.length === 0) {
       notification.error({
         description: "Hãy upload ảnh thumbnail",
@@ -94,7 +108,11 @@ const AddNewBook = (props) => {
       sold,
       quantity,
       rate,
-      idCategory
+      idCategory,
+      description,
+      hinhthuc,
+      nhaxuatban,
+      ngayxuatban
     );
 
     if (res && res.data) {
@@ -218,6 +236,7 @@ const AddNewBook = (props) => {
                 <Input />
               </Form.Item>
             </Col>
+
             <Col span={12}>
               <Form.Item
                 labelCol={{ span: 24 }}
@@ -233,8 +252,47 @@ const AddNewBook = (props) => {
                 <Input />
               </Form.Item>
             </Col>
-
-            <Col span={5}>
+            <Col span={12}>
+              <Form.Item
+                labelCol={{ span: 24 }}
+                label="Hình thức"
+                name="hinhthuc"
+                rules={[
+                  {
+                    required: true,
+                  },
+                ]}
+              >
+                <Input />
+              </Form.Item>
+            </Col>
+            <Col span={12}>
+              <Form.Item
+                labelCol={{ span: 24 }}
+                label="Nhà xuất bản"
+                name="nhaxuatban"
+                rules={[
+                  {
+                    required: true,
+                  },
+                ]}
+              >
+                <Input />
+              </Form.Item>
+            </Col>
+            <Col span={12}>
+              <Form.Item
+                labelCol={{ span: 24 }}
+                label="Ngày xuất bản"
+                name="ngayxuatban"
+               
+              >
+                <Space direction="vertical">
+                  <DatePicker onChange={onChangeDate} placeholder="Ngày"  />
+                </Space>
+              </Form.Item>
+            </Col>
+            <Col span={12}>
               <Form.Item
                 labelCol={{ span: 24 }}
                 label="Giá tiền"
@@ -255,7 +313,7 @@ const AddNewBook = (props) => {
                 />
               </Form.Item>
             </Col>
-            <Col span={7}>
+            <Col span={12}>
               <Form.Item
                 labelCol={{ span: 24 }}
                 label="Thể loại"
@@ -276,7 +334,7 @@ const AddNewBook = (props) => {
                 />
               </Form.Item>
             </Col>
-            <Col span={4}>
+            <Col span={12}>
               <Form.Item
                 labelCol={{ span: 24 }}
                 label="Số lượng"
@@ -291,7 +349,7 @@ const AddNewBook = (props) => {
                 <InputNumber min={0} style={{ width: "100%" }} />
               </Form.Item>
             </Col>
-            <Col span={4}>
+            <Col span={12}>
               <Form.Item
                 labelCol={{ span: 24 }}
                 label="Đã bán"
@@ -306,21 +364,18 @@ const AddNewBook = (props) => {
                 <InputNumber min={0} style={{ width: "100%" }} />
               </Form.Item>
             </Col>
-            <Col span={4}>
+            <Col span={12} style={{ display: "none" }}>
               <Form.Item
                 labelCol={{ span: 24 }}
                 label="Đánh giá"
                 name="rate"
-                rules={[
-                  {
-                    required: true,
-                  },
-                ]}
                 initialValue={0}
               >
                 <InputNumber min={0} style={{ width: "100%" }} />
               </Form.Item>
             </Col>
+          </Row>
+          <Row>
             {/* upload */}
             <Col span={12}>
               Ảnh Thumbnail

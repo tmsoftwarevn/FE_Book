@@ -60,7 +60,7 @@ const ManagerBook = () => {
               name="mainText"
               style={{ width: 300 }}
             >
-              <Input />
+              <Input placeholder="Tên sách" />
             </Form.Item>
             <Form.Item labelCol={{ span: 0 }} label="Giá tiền từ " name="price">
               <InputNumber
@@ -69,6 +69,7 @@ const ManagerBook = () => {
                   `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
                 }
                 addonAfter="VND"
+                placeholder="Giá tiền"
               />
             </Form.Item>
             <Form.Item

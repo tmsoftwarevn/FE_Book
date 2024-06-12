@@ -76,7 +76,11 @@ export const callCreateBook = (
   sold,
   quantity,
   rate,
-  idCategory
+  idCategory,
+  description,
+  hinhthuc,
+  nhaxuatban,
+  ngayxuatban
 ) => {
   return axios.post("/api/v1/book", {
     thumbnail,
@@ -88,6 +92,10 @@ export const callCreateBook = (
     quantity,
     rate,
     idCategory,
+    description,
+    hinhthuc,
+    nhaxuatban,
+    ngayxuatban,
   });
 };
 
@@ -99,7 +107,11 @@ export const callUpdateBook = (
   author,
   price,
   quantity,
-  idCategory
+  idCategory,
+  description,
+  hinhthuc,
+  ngayxuatban,
+  nhaxuatban
 ) => {
   return axios.put(`/api/v1/book/${id_book}`, {
     thumbnail,
@@ -109,6 +121,10 @@ export const callUpdateBook = (
     price,
     quantity,
     idCategory,
+    description,
+    hinhthuc,
+    ngayxuatban,
+    nhaxuatban,
   });
 };
 

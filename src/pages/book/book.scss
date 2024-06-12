@@ -164,7 +164,6 @@
     }
 
     .leftt {
-        
         width: 110px;
         text-transform: capitalize;
         display: inline-block;
@@ -301,19 +300,38 @@
 }
 ///    ==============      detail book
 .detail {
-    margin-top: 20px;
-    padding: 20px 20px 0 20px;
+    //padding: 20px 20px 0 20px;
+    //padding: 20px 0;
     background: rgb(255 255 255);
-    .description {
+    &__title {
         @include xs {
             font-size: 16px;
         }
         font-size: 20px;
-        padding: 20px;
-        background-color: rgb(245 245 250);
+        padding: 20px 0 0;
+        
+        // background-color: rgb(245 245 250);
     }
-    .content-detail {
-        padding: 20px;
+    &__content {
+        padding: 15px;
+        .show-more-btn {
+            padding: 20px 0;
+            background: #fff;
+            text-align: center;
+            display: block;
+            position: relative;
+            &::before {
+                content: '';
+                display: block;
+                position: absolute;
+                right: 0;
+                bottom: 100%;
+                left: 0;
+                height: 100px;
+                background: linear-gradient(to bottom, rgba(255, 255, 255, 0), #fff);
+                z-index: 5;
+            }
+        }
     }
 }
 

@@ -95,6 +95,7 @@ const TableBook = (props) => {
       setDataBook(res.data.result);
       setTotal(res.data.meta.total);
       customListBook(res.data.result);
+      
       setIsLoading(false);
     } 
   };
@@ -115,6 +116,10 @@ const TableBook = (props) => {
           sold: item.sold,
           rate: item.rate,
           quantity: item.quantity,
+          description: item.description,
+          hinhthuc: item.hinhthuc,
+          nhaxuatban: item.nhaxuatban,
+          ngayxuatban: item.ngayxuatban,
           action: index,
           createdAt: moment(item?.createdAt).format("DD-MM-YY hh:mm:ss"),
           updatedAt: moment(item?.updatedAt).format("DD-MM-YY hh:mm:ss"),
@@ -189,7 +194,7 @@ const TableBook = (props) => {
                 <AiFillDelete style={{ color: "red" }} />
               </Popconfirm>
             </div>
-            <div>
+            {/* <div>
               <CiViewList
                 style={{ color: "blue" }}
                 onClick={() => {
@@ -197,7 +202,7 @@ const TableBook = (props) => {
                   setDataView(record);
                 }}
               />
-            </div>
+            </div> */}
             <div>
               <BsFillPencilFill
                 style={{ fontSize: "15px" }}

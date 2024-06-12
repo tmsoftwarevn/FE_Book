@@ -22,7 +22,27 @@ import { useDispatch, useSelector } from "react-redux";
 import MessageCart from "../cart/MessageCart";
 import ResponsiveBookDetail from "./responsiveBookDetail";
 import NProgress from "nprogress";
+import DOMPurify from "dompurify";
 
+import dayjs from "dayjs";
+import "dayjs/locale/vi";
+import utc from "dayjs/plugin/utc";
+import timezone from "dayjs/plugin/timezone";
+// timezone vietnam
+dayjs.extend(utc);
+dayjs.extend(timezone);
+dayjs.locale("vi");
+
+const TimeConvert = (props) => {
+  const { detailBook } = props;
+  return (
+    <p>
+      {dayjs(detailBook?.ngayxuatban)
+        .tz("Asia/Ho_Chi_Minh")
+        .format("DD/MM/YYYY")}
+    </p>
+  );
+};
 const BookPageDetail = (props) => {
   const [isOpenModalGallery, setIsOpenModalGallery] = useState(false);
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -39,6 +59,8 @@ const BookPageDetail = (props) => {
   // const params = new URLSearchParams(location.search);
   const isAuthenticated = useSelector((state) => state.account.isAuthenticated);
   const listCart = useSelector((state) => state.cart.listCart);
+  const [isExpanded, setIsExpanded] = useState(false);
+
   const dispatch = useDispatch();
   const navigate = useNavigate();
   // let id = params.get("id");
@@ -48,6 +70,13 @@ const BookPageDetail = (props) => {
   window.onbeforeunload = function () {
     window.scrollTo(0, 0);
   };
+
+  const MAX_LENGTH = 600; // Độ dài tối đa của mô tả rút gọn
+  const cleanDescription = DOMPurify.sanitize(detailBook?.description);
+  const toggleExpanded = () => {
+    setIsExpanded(!isExpanded);
+  };
+
   useEffect(() => {
     const getDetailBook = async () => {
       //NProgress.start();
@@ -252,7 +281,7 @@ const BookPageDetail = (props) => {
           <div>
             <Breadcrumb
               separator=">"
-              style={{ padding: "10px 0", fontSize: 16 }}
+              style={{ padding: "10px ", fontSize: 16 }}
               items={a}
             />
             <div className="view-detail-book">
@@ -301,19 +330,16 @@ const BookPageDetail = (props) => {
                     </div>
                   </Col>
 
-                  <Col lg={14} sm={24} md={24} xs={24}>
+                  <Col lg={14} sm={24} md={24} xs={24} className="!p-0">
                     <Col span={24}>
                       <div className="title-name">{detailBook.mainText}</div>
                       <div className="rating">
-                        <Rate
+                        {/* <Rate
                           value={detailBook.rate}
                           disabled
                           style={{ color: "#ffce3d", fontSize: 12 }}
-                        />
-                        <span className="sold">
-                          <Divider type="vertical" />
-                          Đã bán {detailBook.sold}
-                        </span>
+                        /> */}
+                        <span className="sold">Đã bán {detailBook.sold}</span>
                       </div>
 
                       <div className="price">
@@ -331,24 +357,21 @@ const BookPageDetail = (props) => {
                       </div>
                       <div className="hinhthuc flex text-base my-2">
                         <p className="mr-2">Hình thức:</p>
-                        <p> Bìa cứng, 19 x 27cm, 808 trang</p>
+                        <p> {detailBook.hinhthuc}</p>
                       </div>
                       <div className="nhaxuatban flex text-base my-2">
                         <p className="mr-2">Nhà xuất bản:</p>
-                        <p> NXB Khoa Học Xã Hội</p>
+                        <p> {detailBook.nhaxuatban}</p>
                       </div>
                       <div className="ngayxuatban flex text-base my-2">
                         <p className="mr-2">Ngày xuất bản:</p>
-                        <p> Tháng 6 năm 2024</p>
+                        <TimeConvert detailBook={detailBook} />
                       </div>
-                      {/* <div className="delivery">
-                        <div>
-                          <span className="leftt">Vận chuyển</span>
-                          <span className="rightt">Miễn phí vận chuyển</span>
-                        </div>
-                      </div> */}
+
                       <div className="quantity">
-                        <span className="leftt text-base font-semibold">Số lượng</span>
+                        <span className="leftt text-base font-semibold">
+                          Số lượng
+                        </span>
                         <span className="rightt">
                           <button
                             onClick={() => handleChangeQuantity("minus", "lg")}
@@ -417,9 +440,28 @@ const BookPageDetail = (props) => {
             />
 
             <div className="detail">
-              <div className="description">CHI TIẾT SẢN PHẨM</div>
-              <div className="content-detail" style={{ fontSize: 18 }}>
-                Đang cập nhật...
+              {/* <div className="detail__title">CHI TIẾT SẢN PHẨM</div> */}
+              <div className="detail__content">
+              <div className="detail__title font-bold">CHI TIẾT SẢN PHẨM</div>
+              <div className="border border-black-400 mb-5"></div>
+                <div
+                  dangerouslySetInnerHTML={{
+                    __html: isExpanded
+                      ? cleanDescription
+                      : cleanDescription.substring(0, MAX_LENGTH) +
+                        (cleanDescription.length > MAX_LENGTH ? "..." : ""),
+                  }}
+                />
+                {cleanDescription.length > MAX_LENGTH && (
+                  <div
+                    onClick={toggleExpanded}
+                    className={isExpanded ? "mt-3" : "show-more-btn"}
+                  >
+                    <span className="block mx-auto w-fit px-20 py-2 rounded cursor-pointer border border-orange-600 text-orange-600 hover:bg-orange-600 hover:text-white">
+                      {isExpanded ? "Thu gọn" : "Xem thêm"}
+                    </span>
+                  </div>
+                )}
               </div>
             </div>
             <Divider />

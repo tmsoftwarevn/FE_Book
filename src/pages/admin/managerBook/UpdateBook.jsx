@@ -7,9 +7,14 @@ import {
   Select,
   message,
   notification,
+  Form,
+  Input,
+  Upload,
+  Space,
+  DatePicker,
 } from "antd";
-import { Form, Input, Upload } from "antd";
-import { useEffect, useState } from "react";
+
+import { useEffect, useRef, useState } from "react";
 import {
   callFetchCategory,
   callUpdateBook,
@@ -17,8 +22,40 @@ import {
 } from "../../../services/api";
 import { PlusOutlined, LoadingOutlined } from "@ant-design/icons";
 import { v4 as uuidv4 } from "uuid";
+import { Editor } from "@tinymce/tinymce-react";
+import moment from "moment";
+import dayjs from "dayjs";
+import "dayjs/locale/vi";
+import utc from "dayjs/plugin/utc";
+import timezone from "dayjs/plugin/timezone";
+// timezone vietnam
+dayjs.extend(utc);
+dayjs.extend(timezone);
+dayjs.locale("vi");
 
 const UpdateBook = (props) => {
+  const filePickerCallback = function (cb, value, meta) {
+    const input = document.createElement("input");
+    input.setAttribute("type", "file");
+    input.setAttribute("accept", "image/*");
+
+    input.onchange = async function () {
+      const file = input.files[0];
+
+      const res = await callUploadBookImg(file);
+      if (res && res.EC === 1) {
+        cb(
+          `${import.meta.env.VITE_BACKEND_URL}/images/book/${
+            res.data.fileUploaded
+          }`,
+          { alt: file.name }
+        );
+      }
+    };
+
+    input.click();
+  };
+  //////////
   const {
     isModalUpdateBook,
     setIsModalUpdateBook,
@@ -42,6 +79,10 @@ const UpdateBook = (props) => {
   const [previewImage, setPreviewImage] = useState("");
   const [previewTitle, setPreviewTitle] = useState("");
   const [initForm, setInitForm] = useState(null);
+  const [noidung, setNoidung] = useState();
+  const [ngayxuatban, setNgayxuatban] = useState();
+
+  const refEditor = useRef();
 
   const handleOk = () => {
     setIsModalUpdateBook(false);
@@ -66,6 +107,7 @@ const UpdateBook = (props) => {
     };
     fetchCategory();
   }, [dataUpdate]);
+
   useEffect(() => {
     let data = dataBook[+dataUpdate?.action];
     let arrThumbnail = [];
@@ -92,6 +134,11 @@ const UpdateBook = (props) => {
     }
     setDataThumbnail(arrThumbnail);
     setDataSlider(arrSlider);
+    setNoidung(dataUpdate.description);
+
+    const initialDate = dayjs(dataUpdate?.ngayxuatban).tz("Asia/Ho_Chi_Minh");
+
+    setNgayxuatban(initialDate);
 
     const init = {
       id: dataUpdate?.id,
@@ -100,6 +147,9 @@ const UpdateBook = (props) => {
       price: dataUpdate?.price,
       category: dataUpdate?.category,
       quantity: dataUpdate?.quantity,
+      hinhthuc: dataUpdate?.hinhthuc,
+      nhaxuatban: dataUpdate?.nhaxuatban,
+      // ngayxuatban: initialDate,
       thumbnail: { fileList: arrThumbnail },
       slider: { fileList: arrSlider },
     };
@@ -111,10 +161,27 @@ const UpdateBook = (props) => {
     };
   }, [dataUpdate]);
 
+  const onChangeDate = (date, dateString) => {
+    console.log("ẻwrwer", dateString);
+    //setNgayxuatban(dateString);
+  };
+
   const onFinish = async (values) => {
-    const { name, author, category, price, quantity, sold } = values;
+    const {
+      name,
+      author,
+      category,
+      price,
+      quantity,
+      sold,
+      hinhthuc,
+      ngayxuatban,
+      nhaxuatban,
+    } = values;
+
     let newprice = price.toString().replaceAll(",", "");
     newprice = parseInt(newprice);
+    let description = refEditor?.current?.getContent();
 
     if (dataThumbnail.length === 0) {
       notification.error({
@@ -133,7 +200,11 @@ const UpdateBook = (props) => {
       author,
       +newprice,
       quantity,
-      idCategory
+      idCategory,
+      description,
+      hinhthuc,
+      ngayxuatban,
+      nhaxuatban
     );
     if (res && res.data) {
       setDataSlider([]), setDataThumbnail([]);
@@ -275,8 +346,49 @@ const UpdateBook = (props) => {
                 <Input />
               </Form.Item>
             </Col>
-
-            <Col span={8}>
+            <Col span={12}>
+              <Form.Item
+                labelCol={{ span: 24 }}
+                label="Hình thức"
+                name="hinhthuc"
+                rules={[
+                  {
+                    required: true,
+                  },
+                ]}
+              >
+                <Input />
+              </Form.Item>
+            </Col>
+            <Col span={12}>
+              <Form.Item
+                labelCol={{ span: 24 }}
+                label="Nhà xuất bản"
+                name="nhaxuatban"
+                rules={[
+                  {
+                    required: true,
+                  },
+                ]}
+              >
+                <Input />
+              </Form.Item>
+            </Col>
+            <Col span={12}>
+              <Form.Item
+                labelCol={{ span: 24 }}
+                label="Ngày xuất bản"
+                name="ngayxuatban"
+              >
+                <DatePicker
+                  defaultValue={ngayxuatban}
+                  format="DD/MM/YYYY"
+                  onChange={onChangeDate}
+                  placeholder="Ngày"
+                />
+              </Form.Item>
+            </Col>
+            <Col span={12}>
               <Form.Item
                 labelCol={{ span: 24 }}
                 label="Giá tiền"
@@ -297,7 +409,7 @@ const UpdateBook = (props) => {
                 />
               </Form.Item>
             </Col>
-            <Col span={8}>
+            <Col span={12}>
               <Form.Item
                 labelCol={{ span: 24 }}
                 label="Thể loại"
@@ -318,7 +430,7 @@ const UpdateBook = (props) => {
                 />
               </Form.Item>
             </Col>
-            <Col span={8}>
+            <Col span={12}>
               <Form.Item
                 labelCol={{ span: 24 }}
                 label="Số lượng"
@@ -332,21 +444,14 @@ const UpdateBook = (props) => {
                 <InputNumber min={0} style={{ width: "100%" }} />
               </Form.Item>
             </Col>
-
+          </Row>
+          <Row>
             {/* upload */}
             <Col span={12}>
               <Form.Item
                 labelCol={{ span: 24 }}
                 label="Ảnh Thumbnail"
                 name="thumbnail"
-                //valuePropName="fileList"
-                // getValueFromEvent={(e) => {
-                //     if (Array.isArray(e)) {
-                //       return e;
-                //     }
-                //     return e && e.fileList;
-                //   }}
-                //noStyle
               >
                 <Upload
                   accept="image/*"
@@ -372,14 +477,6 @@ const UpdateBook = (props) => {
                 labelCol={{ span: 24 }}
                 label="Ảnh Slider"
                 name="slider"
-                // valuePropName="fileList"
-                // getValueFromEvent={(e) => {
-                //   if (Array.isArray(e)) {
-                //     return e;
-                //   }
-                //   return e && e.fileList;
-                // }}
-                // noStyle
               >
                 <Upload
                   accept="image/*"
@@ -398,6 +495,50 @@ const UpdateBook = (props) => {
                   </div>
                 </Upload>
               </Form.Item>
+            </Col>
+
+            <Col span={24}>
+              <h4 className="mb-4">Nội dung:</h4>
+              <Editor
+                apiKey={import.meta.env.VITE_APP_API_KEY_EDITOR}
+                //onChange={(evt, editor) => setNoidung(editor.getContent())}
+                onChange={(evt, editor) => (refEditor.current = editor)}
+                initialValue={noidung}
+                init={{
+                  height: 500,
+                  menubar: false,
+                  plugins: [
+                    "advlist",
+                    "autolink",
+                    "lists",
+                    "link",
+                    "image",
+                    "charmap",
+                    "preview",
+                    "anchor",
+                    "searchreplace",
+                    "visualblocks",
+                    "code",
+                    "fullscreen",
+                    "insertdatetime",
+                    "media",
+                    "table",
+                    "code",
+                    "help",
+                    "wordcount",
+                  ],
+                  toolbar:
+                    "undo redo | blocks | " +
+                    "bold italic fontsize forecolor | alignleft aligncenter " +
+                    "alignright alignjustify | bullist numlist outdent indent | " +
+                    "removeformat | help | image media",
+                  content_style:
+                    "body { font-family: Helvetica, Arial, sans-serif; font-size: 14px }",
+                  fontsize_formats: "8px 10px 12px 14px 18px 24px 36px",
+                  file_picker_types: "image",
+                  file_picker_callback: filePickerCallback,
+                }}
+              />
             </Col>
           </Row>
         </Form>
