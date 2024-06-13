@@ -230,3 +230,16 @@ export const callSearchBook = (mainText, current, pageSize) => {
     `/api/v1/search?mainText=${mainText}&current=${current}&pageSize=${pageSize}`
   );
 };
+
+// category
+export const callCreate_Category = (category) => {
+  return axios.post(`/api/v1/category/create`, { category });
+};
+
+export const callUpdate_Category = (id, category) => {
+  return axios.put(`/api/v1/category/${id}`, { category });
+};
+
+export const callDelete_Category = (id) => {
+  return axios.delete(`/api/v1/category/${id}`);
+};

@@ -29,6 +29,7 @@ import DetailOrderById from "./pages/Order detail/OrderDetailById";
 import ManagerOrder from "./pages/admin/managerOrder/managerOrder";
 import GetPassword from "./pages/forgot password/GetPassword";
 import Search from "./pages/search/search";
+import QuanliCategory from "./pages/admin/managerCategory/QuanlyCategory";
 
 const Layout = () => {
   const role = useSelector((state) => state.account?.user?.role);
@@ -159,6 +160,10 @@ export default function App() {
           {
             path: "order",
             element: <ManagerOrder />,
+          },
+          {
+            path: "category",
+            element: <QuanliCategory />,
           },
         ],
       },

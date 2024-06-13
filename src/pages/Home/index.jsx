@@ -765,6 +765,7 @@ const Home = () => {
                           <div className="text-home">
                             <div className="t-h">{item.mainText}</div>
                           </div>
+                          <div className="author"> {item.author}</div>
                           <div className="group-child">
                             <div
                               className="price"
@@ -778,7 +779,9 @@ const Home = () => {
                                 currency: "VND",
                               }).format(item.price)}
                             </div>
-                            <div className="rating">
+                             
+                            
+                            {/* <div className="rating">
                               <Rate
                                 value={item.rate}
                                 disabled
@@ -793,7 +796,8 @@ const Home = () => {
                               >
                                 Đã bán {item.sold}
                               </span>
-                            </div>
+                            </div> */}
+
                           </div>
                         </div>
                       </div>

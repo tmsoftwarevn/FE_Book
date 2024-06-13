@@ -164,19 +164,19 @@ input[type='checkbox'] {
                     width: 100%;
                 }
                 @include sm {
-                    height: 250px;
+                    height: 260px;
                     width: 100%;
                 }
                 @include md {
-                    height: 270px;
+                    height: 287px;
                     max-width: 100%;
                 }
                 @include lg {
-                    height: 290px;
+                    height: 307px;
                     width: 100%;
                 }
                 @include xl {
-                    height: 310px;
+                    height: 317px;
                     width: 100%;
                     //margin-bottom: 20px;
                 }
@@ -226,6 +226,7 @@ input[type='checkbox'] {
 
                 .text-home {
                     padding: 10px 20px 0px 20px;
+                    height: 42px;
                     @include xs {
                         height: 47px; //set width cho 1 dong = 2 dong text
                     }
@@ -236,6 +237,18 @@ input[type='checkbox'] {
                         overflow: hidden;
                         text-overflow: ellipsis;
                     }
+                }
+                .author{
+                    padding: 10px 20px 0;
+                    display: -webkit-box;
+                    -webkit-line-clamp: 1;
+                    -webkit-box-orient: vertical;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                    font-size: 14px;
+                    font-style: italic;
+                    color: #959494;
+                    margin-top: 7px;
                 }
                 .group-child {
                     @include xs {

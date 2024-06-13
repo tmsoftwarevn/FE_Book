@@ -339,7 +339,7 @@ const BookPageDetail = (props) => {
                           disabled
                           style={{ color: "#ffce3d", fontSize: 12 }}
                         /> */}
-                        <span className="sold">Đã bán {detailBook.sold}</span>
+                        {/* <span className="sold">Đã bán {detailBook.sold}</span> */}
                       </div>
 
                       <div className="price">

@@ -20,10 +20,13 @@ import {
   Row,
   Col,
   message,
+  Button,
 } from "antd";
 import moment from "moment";
 import "./managerOrder.scss";
 import ViewDetailOrder from "./ViewDetailOrder";
+import { CiEdit } from "react-icons/ci";
+import { AiFillEye } from "react-icons/ai";
 
 const ManagerOrder = () => {
   const [listOrder, setListOrder] = useState([]);
@@ -87,6 +90,7 @@ const ManagerOrder = () => {
         totalProduct: item.totalProduct,
         total: `${item.total}`.replace(/\B(?=(\d{3})+(?!\d))/g, ","),
         payment: item.payment,
+        idUser: item.idUser,
         status: (
           <Tag
             icon={
@@ -153,16 +157,31 @@ const ManagerOrder = () => {
       render: (text, record, index) => {
         return (
           <div style={{ display: "flex", justifyContent: "space-between" }}>
-            <div
-              className="action-order"
-              onClick={() => {
-                handleViewDetailOrder(record);
-              }}
-            >
-              View
+            <div className="action-order">
+              <Button
+                size="small"
+                type="primary"
+                style={{ display: "flex", alignItems: "center" }}
+              >
+                <AiFillEye
+                  style={{ fontSize: "15px" }}
+                  onClick={() => {
+                    handleViewDetailOrder(record);
+                  }}
+                />
+              </Button>
             </div>
-            <div className="action-order" onClick={() => showModal(record)}>
-              Update
+            <div className="action-order">
+              <Button
+                size="small"
+                type="primary"
+                style={{ display: "flex", alignItems: "center" }}
+              >
+                <CiEdit
+                  style={{ fontSize: "15px" }}
+                  onClick={() => showModal(record)}
+                />
+              </Button>
             </div>
           </div>
         );
@@ -213,7 +232,11 @@ const ManagerOrder = () => {
             name="status"
             style={{ width: 210 }}
           >
-            <Select options={status} onChange={onchangeStatus} />
+            <Select
+              placeholder="Trạng thái"
+              options={status}
+              onChange={onchangeStatus}
+            />
           </Form.Item>
         </Form>
       </div>

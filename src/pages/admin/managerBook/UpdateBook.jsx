@@ -310,7 +310,7 @@ const UpdateBook = (props) => {
         }}
         okText="Sửa"
         onCancel={handleCancel}
-        width={1000}
+        width={1200}
         maskClosable={false}
         forceRender
       >

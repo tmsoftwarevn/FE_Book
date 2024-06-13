@@ -105,8 +105,8 @@ const TableUser = (props) => {
   };
   const columns = [
     {
-      title: "STT",
-      dataIndex: "stt",
+      title: "ID",
+      dataIndex: "id",
     },
     {
       title: "Tên hiển thị",

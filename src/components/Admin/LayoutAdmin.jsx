@@ -23,17 +23,22 @@ function getItem(label, key, icon, children) {
 }
 const items = [
   getItem(
-    <Link to="/admin/user">Manager User</Link>,
+    <Link to="/admin/user">Quản lý người dùng</Link>,
     "/admin/user",
     <TeamOutlined />
   ),
   getItem(
-    <Link to="/admin/book">Manager Books</Link>,
+    <Link to="/admin/book">Quản lý sách</Link>,
     "/admin/book",
     <ExceptionOutlined />
   ),
   getItem(
-    <Link to="/admin/order">Manager Orders</Link>,
+    <Link to="/admin/category">Quản lý thể loại</Link>,
+    "/admin/category",
+    <DollarCircleOutlined />
+  ),
+  getItem(
+    <Link to="/admin/order">Quản lý đơn hàng</Link>,
     "/admin/order",
     <DollarCircleOutlined />
   ),

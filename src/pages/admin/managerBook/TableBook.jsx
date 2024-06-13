@@ -4,10 +4,8 @@ import { callDeleteBook, callGetListBookAdmin } from "../../../services/api";
 import Loading from "../../../components/Loading/loading";
 import moment from "moment";
 import ViewBook from "./ViewBook";
-import { MdOutlinePreview } from "react-icons/md";
-import { AiFillDelete } from "react-icons/ai";
-import { BsFillPencilFill } from "react-icons/bs";
-import { CiViewList } from "react-icons/ci";
+import { MdDelete, MdOutlinePreview } from "react-icons/md";
+import { CiEdit, CiViewList } from "react-icons/ci";
 
 import AddNewBook from "./AddNewBook";
 import UpdateBook from "./UpdateBook";
@@ -30,7 +28,7 @@ const TableBook = (props) => {
 
   const [isModalImportBook, setIsModalImportBook] = useState(false);
   const { searchData } = props;
-  const [sort, setSort] = useState(`&field=updatedAt&sort=DESC`);
+  const [sort, setSort] = useState(`&field=createdAt&sort=DESC`);
 
   const title = "Xác nhận xóa sách này ?";
   const confirm = async (id) => {
@@ -95,9 +93,9 @@ const TableBook = (props) => {
       setDataBook(res.data.result);
       setTotal(res.data.meta.total);
       customListBook(res.data.result);
-      
+
       setIsLoading(false);
-    } 
+    }
   };
   const customListBook = (list) => {
     // fake data
@@ -191,7 +189,14 @@ const TableBook = (props) => {
                 okText="Yes"
                 cancelText="No"
               >
-                <AiFillDelete style={{ color: "red" }} />
+                <Button
+                  size="small"
+                  type="primary"
+                  danger
+                  style={{ display: "flex", alignItems: "center" }}
+                >
+                  <MdDelete />
+                </Button>
               </Popconfirm>
             </div>
             {/* <div>
@@ -204,13 +209,19 @@ const TableBook = (props) => {
               />
             </div> */}
             <div>
-              <BsFillPencilFill
-                style={{ fontSize: "15px" }}
-                onClick={() => {
-                  setIsModalUpdateBook(true), setDataUpdate(record);
-                }}
-                className="text-blue-600"
-              />
+              <Button
+                size="small"
+                type="primary"
+                style={{ display: "flex", alignItems: "center" }}
+              >
+                <CiEdit
+                  style={{ fontSize: "15px" }}
+                  onClick={() => {
+                    setIsModalUpdateBook(true), setDataUpdate(record);
+                  }}
+                />
+              </Button>
+              
             </div>
           </div>
         );

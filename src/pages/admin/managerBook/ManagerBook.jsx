@@ -78,7 +78,7 @@ const ManagerBook = () => {
               label="Thể loại"
               name="category"
             >
-              <Select showSearch options={listCategory} />
+              <Select placeholder="Thể loại" showSearch options={listCategory} />
             </Form.Item>
           </Form>
         </div>

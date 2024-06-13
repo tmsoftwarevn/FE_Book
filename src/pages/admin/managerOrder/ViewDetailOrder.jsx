@@ -40,6 +40,7 @@ const ViewDetailOrder = (props) => {
     XLSX.utils.book_append_sheet(workbook, worksheet, "Sheet1");
     XLSX.writeFile(workbook, "exportdetailOrder.csv");
   };
+  //console.log('gggg', dataView)
   if (dataView && dataView[0]?.mainText) {
     return (
       <div className="detail-order">
@@ -49,10 +50,14 @@ const ViewDetailOrder = (props) => {
             style={{ display: "flex", justifyContent: "space-between" }}
           >
             <div className="title-detail">Chi tiết đơn hàng: {idOrder}</div>
+            
             <Button type="primary" onClick={handleExportData}>
               Export đơn hàng
             </Button>
           </div>
+
+          <div className="m-2 text-xl">Mã ID User: {dataView[0]?.idUser}</div>
+
           <div className="address">
             <div
               style={{
