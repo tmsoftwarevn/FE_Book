@@ -1,0 +1,22 @@
+@import '../../scss/reset';
+@import '../../scss/media';
+
+:root {
+    --color-background-body: rgb(245 245 250);
+    --color-background-row: rgb(255 255 255);
+}
+
+.account{
+    background-color: var(--color-background-body);
+    padding: 10px 0 30px 0;
+    &_title{
+        padding: 20px 20px 0 20px;
+        text-align: start;
+        font-weight: 500;
+        font-size: 20px;
+        text-transform: uppercase;
+    }
+    &_content{
+        
+    }
+}

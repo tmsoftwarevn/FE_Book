@@ -41,6 +41,8 @@ import {
 } from "../../redux/category/categorySlice";
 import CarouselBanner from "../../components/carousel/carousel-banner/CarouselBanner";
 import CarouselSanpham from "../../components/carousel/carousel-sanpham/CarouselSanpham";
+import banner_quangcao from "../../images/banner_qc.jpg"
+
 
 const Home = () => {
   const [form] = Form.useForm();
@@ -120,6 +122,8 @@ const Home = () => {
     }
     if (params.get("page")) {
       setCurrent(params.get("page"));
+    }else{
+      setCurrent(1);
     }
     if (params.get("price")) {
       setPrice(params.get("price"));
@@ -158,8 +162,8 @@ const Home = () => {
       d = d + 1;
     }
     if (url[0] === "&") url = url.substring(1); // xóa kí tự & ở đầu
-    url = "?" + url; // thêm ? url
-    // console.log("url: ", url);
+    url = "?" + url; // thêm ? cho url
+    
 
     navigate(`/${url}`);
   }, [current, queryCategory, sort, price, rate]);
@@ -563,7 +567,8 @@ const Home = () => {
                 </Form.Item>
 
                 <Divider />
-                <div
+
+                {/* <div
                   style={{ fontWeight: 600, fontSize: 16, marginBottom: 20 }}
                 >
                   Đánh giá
@@ -585,7 +590,9 @@ const Home = () => {
                     <span className="ant-rate-text">từ 3 sao</span>
                   </div>
                 </Form.Item>
-                <Divider />
+
+                <Divider /> */}
+
                 <Form.Item>
                   <div className="price" style={{ lineHeight: 3 }}>
                     <span
@@ -681,6 +688,11 @@ const Home = () => {
                   </div>
                 </Form.Item>
               </Form>
+
+              <div className="banner-qc">
+                <img src={banner_quangcao} />
+              </div>
+              
             </Col>
 
             <Col lg={19} md={24} sm={24} xs={24} className="homepage-right">
@@ -762,7 +774,7 @@ const Home = () => {
                             />
                           </div>
 
-                          <div className="text-home">
+                          <div className="text-home hover:text-blue-600">
                             <div className="t-h">{item.mainText}</div>
                           </div>
                           <div className="author"> {item.author}</div>

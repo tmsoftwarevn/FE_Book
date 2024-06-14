@@ -1,170 +1,143 @@
-import { Button, Divider, Form, Input, message, notification } from "antd";
-import "./login.scss";
-import { GrFacebook, GrGoogle } from "react-icons/gr";
-import { useNavigate } from "react-router-dom";
-import { ApiLogin } from "../../services/api";
-import { useDispatch, useSelector } from "react-redux";
-import { doLoginAction } from "../../redux/account/accountSlice";
-import { useEffect } from "react";
-import {
-  doLoginSocialFalse,
-  doLoginSocialTrue,
-} from "../../redux/cart/cartSlice";
+import * as React from "react";
+import Avatar from "@mui/material/Avatar";
+import Button from "@mui/material/Button";
+import CssBaseline from "@mui/material/CssBaseline";
+import TextField from "@mui/material/TextField";
 
-const LoginPage = () => {
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import Grid from "@mui/material/Grid";
+import Box from "@mui/material/Box";
+
+import Typography from "@mui/material/Typography";
+import Container from "@mui/material/Container";
+import { createTheme, ThemeProvider } from "@mui/material/styles";
+
+import HomeIcon from "@mui/icons-material/Home";
+import { useDispatch } from "react-redux";
+import { useEffect } from "react";
+
+
+import "./login.scss";
+
+// TODO remove, this demo shouldn't need to reset the theme.
+
+const defaultTheme = createTheme();
+
+export default function SignIn() {
+  const [open, setOpen] = React.useState(false);
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const isLoginSocial = useSelector((state) => state.cart.isLoginSocial);
-  //////////////////
+  const mess = "Đăng xuất thành công";
+  const location = useLocation();
+  const isLogout = location?.state?.isLogout;
+  console.log("ttttt", isLogout);
+  
+ 
 
-  const onFinish = async (values) => {
-    const { email, password } = values;
-    let res = await ApiLogin(email, password);
-    if (res?.data) {
-      localStorage.setItem("access_token", res.access_token);
-      dispatch(doLoginAction(res.data));
-      message.success("Đăng nhập thành công");
-      navigate("/");
-    } else {
-      notification.error({
-        message: "Đăng nhập thất bại",
-        description:
-          res.message && Array.isArray(res.message)
-            ? res.message[0]
-            : res.message,
-        duration: 4,
-      });
-    }
-  };
-  useEffect(() => {
-    if (localStorage.getItem("access_token")) return navigate("/");
-  }, []);
-  useEffect(() => {
-    console.log("check isloginlocal: ", isLoginSocial);
-    if (isLoginSocial === true) {
-      let user = "";
-      const getUser = async () => {
-        await fetch(
-          `${import.meta.env.VITE_BACKEND_URL}/api/v1/login/success`,
-          {
-            method: "GET",
-            credentials: "include",
-            headers: {
-              Accept: "application/json",
-              "Content-Type": "application/json",
-              "Access-Control-Allow-Credentials": true,
-            },
-            cache: "no-cache",
-          }
-        )
-          .then((response) => response.json())
-          .then((resObject) => {
-            console.log("checkkkkkk res", resObject);
-            user = resObject;
-          })
-          .catch((err) => {
-            console.log(err);
-          });
-        dispatch(doLoginSocialFalse());
-        if (user && user.data) {
-          localStorage.setItem("access_token", user?.access_token);
-          dispatch(doLoginAction(user?.data));
-          message.success("Đăng nhập thành công");
-          navigate("/");
-        }
-      };
-      getUser();
-    }
-  }, []);
+  const handleSubmit = (event) => {
+    event.preventDefault();
 
-  const handleLoginWithGoogle = () => {
-    window.open(
-      `${import.meta.env.VITE_BACKEND_URL}/api/v1/auth/google`,
-      "_self"
-    );
-    dispatch(doLoginSocialTrue());
+    const data = new FormData(event.currentTarget);
+    if (!data.get("email")) {
+      setOpen(true);
+      return;
+    }
+    if (!data.get("password")) {
+      setOpen(true);
+      return;
+    }
+    const login = {
+      email: data.get("email"),
+      password: data.get("password"),
+    };
+    const fakeData = {
+      email: data.get("email"),
+      fullName: "test email",
+      id: 34,
+    };
+    console.log("llll", login);
+
+    localStorage.setItem("access_token", "jfksfkjd");
+    dispatch(doLoginAction(fakeData));
+    navigate("/");
   };
-  const handleLoginWithFacebook = () => {
-    window.open(
-      `${import.meta.env.VITE_BACKEND_URL}/api/v1/auth/facebook`,
-      "_self"
-    );
-    dispatch(doLoginSocialTrue());
-  };
+
   return (
-    <div className="login-container">
-      <div className="content">
-        <div className="title-login">Đăng Nhập</div>
-        {/* <Divider /> */}
-        <div className="form-content">
-          <Form name="basic" onFinish={onFinish} autoComplete="off">
-            <Form.Item
-              labelCol={{ span: 24 }}
-              //label="Email"
-              name="email"
-              requiredMark={"optional"} // off star form
-              rules={[
-                {
-                  required: true,
-                  message: "Email không được để trống !",
-                },
-              ]}
+    <div className="login">
+      <ThemeProvider theme={defaultTheme}>
+        <Container component="main" maxWidth="xs">
+          <CssBaseline />
+          <Box
+            sx={{
+              marginTop: 8,
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+            }}
+          >
+            <Avatar sx={{ m: 1, bgcolor: "#2196f3" }}>
+              <HomeIcon
+                className="cursor-pointer"
+                onClick={() => navigate("/")}
+              />
+            </Avatar>
+            <Typography component="h1" variant="h5">
+              ĐĂNG NHẬP
+            </Typography>
+            <Box
+              component="form"
+              onSubmit={handleSubmit}
+              noValidate={false}
+              sx={{ mt: 1 }}
             >
-              <Input placeholder="Email" />
-            </Form.Item>
-
-            <Form.Item
-              labelCol={{ span: 24 }}
-              // label="Mật khẩu"
-              name="password"
-              requiredMark={"optional"}
-              rules={[
-                {
-                  required: true,
-                  message: "Mật khẩu không được để trống !",
-                },
-              ]}
-            >
-              <Input.Password visibilityToggle={false} placeholder="Mật khẩu" />
-            </Form.Item>
-            <Form.Item>
+              <TextField
+                margin="normal"
+                required
+                fullWidth
+                id="email"
+                label="Email"
+                name="email"
+                autoFocus
+              />
+              <TextField
+                margin="normal"
+                required
+                fullWidth
+                name="password"
+                label="Mật khẩu"
+                type="password"
+                id="password"
+              />
+             
               <Button
-                type="primary"
-                htmlType="submit"
-                style={{ width: "100%" }}
+                type="submit"
+                fullWidth
+                variant="contained"
+                sx={{ mt: 3, mb: 2 }}
               >
                 Đăng nhập
               </Button>
-            </Form.Item>
-          </Form>
-        </div>
+              <Grid container>
+                <Grid item xs>
+                  <Link to="/quen-mat-khau" variant="body2">
+                    Quên mật khẩu?
+                  </Link>
+                </Grid>
+                <Grid item>
+                  <Link to="/dang-ky" variant="body2">
+                    {"Chưa có tài khoản? Đăng ký"}
+                  </Link>
+                </Grid>
+              </Grid>
+            </Box>
+          </Box>
+        </Container>
+      </ThemeProvider>
 
-        <div className="text">
-          <p onClick={() => navigate("/register")}>Đăng kí</p>
-          <u onClick={() => navigate("/forgot-password")}>Quên mật khẩu ?</u>
-        </div>
-        <div className="group">
-          <Divider
-            style={{
-              borderColor: "black",
-            }}
-          >
-            Hoặc đăng nhập với
-          </Divider>
-          <div className="login-with">
-            <div className="google" onClick={() => handleLoginWithGoogle()}>
-              <GrGoogle />
-            </div>
-            {/* <div className="faceBook" onClick={handleLoginWithFacebook}>
-              <GrFacebook />
-            </div> */}
-          </div>
-          <div className="home hover:text-blue-400" onClick={() => navigate("/")}>
-            Trang Chủ
-          </div>
-        </div>
-      </div>
+      {/* <AlertCustom open={open} setOpen={setOpen} err ={"Email không hợp lệ"} />
+
+      {isLogout && <AlertSuccess mess={mess} isLogout = {isLogout} />} */}
+
     </div>
   );
-};
-export default LoginPage;
+}

@@ -17,7 +17,7 @@ const Footer = () => {
             <p>Chính Sách Bán Hàng</p>
             <p>Phương Thức Vận Chuyển</p>
           </div>
-          <div className="account">
+          <div className="account-ft">
             <span style={{ fontWeight: 600 }}>TÀI KHOẢN CỦA TÔI</span>
             <Divider style={{ borderColor: "grey" }} />
             <p onClick={() => navigate("/login")}>Đăng nhập</p>

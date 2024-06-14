@@ -67,9 +67,9 @@ const BookPageDetail = (props) => {
   const params = useParams();
   const id = params.slug; // fix lại id = slug
 
-  window.onbeforeunload = function () {
-    window.scrollTo(0, 0);
-  };
+  // window.onbeforeunload = function () {
+  //   window.scrollTo(0, 0);
+  // };
 
   const MAX_LENGTH = 600; // Độ dài tối đa của mô tả rút gọn
   const cleanDescription = DOMPurify.sanitize(detailBook?.description);

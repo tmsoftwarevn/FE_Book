@@ -6,7 +6,7 @@ import {
   useNavigate,
 } from "react-router-dom";
 import { Outlet } from "react-router-dom";
-import LoginPage from "./pages/login/login";
+
 import Header from "./components/header/header";
 import Footer from "./components/Footer";
 import Home from "./pages/Home/index";
@@ -30,6 +30,10 @@ import ManagerOrder from "./pages/admin/managerOrder/managerOrder";
 import GetPassword from "./pages/forgot password/GetPassword";
 import Search from "./pages/search/search";
 import QuanliCategory from "./pages/admin/managerCategory/QuanlyCategory";
+import Account from "./pages/account/Account";
+import SignIn from "./pages/login/login";
+import SignUp from "./pages/signup/Signup";
+import QuenMatkhau from "./pages/quen-mat-khau/QuenMatkhau";
 
 const Layout = () => {
   const role = useSelector((state) => state.account?.user?.role);
@@ -125,19 +129,23 @@ export default function App() {
             path: "search/*",
             element: <Search />,
           },
+          {
+            path: "account",
+            element: <Account />
+          }
         ],
       },
       {
         path: "/login/*",
-        element: <LoginPage />,
+        element: <SignIn />,
       },
       {
-        path: "/register/*",
-        element: <RegisterPage />,
+        path: "/dang-ky/*",
+        element: <SignUp />,
       },
       {
-        path: "/forgot-password",
-        element: <GetPassword />,
+        path: "/quen-mat-khau",
+        element: <QuenMatkhau />,
       },
       {
         path: "/admin",
@@ -167,6 +175,7 @@ export default function App() {
           },
         ],
       },
+     
     ],
     {
       basename: import.meta.env.VITE_BASE_NAME,
@@ -174,7 +183,7 @@ export default function App() {
   );
 
   // cho phep vao route, ko check quyen
-  const permissionPath = ["/login", "/register", "/book", "/forgot-password"];
+  const permissionPath = ["/","/login", "/register", "/book", "/forgot-password"];
 
   const str = window.location.pathname;
 

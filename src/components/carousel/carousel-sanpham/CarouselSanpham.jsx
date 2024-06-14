@@ -99,7 +99,7 @@ const CarouselSanpham = (props) => {
                         currency: "VND",
                       }).format(item.price)}
                     </div>
-                    <div
+                    {/* <div
                       className="sold-carousel"
                       style={{
                         marginRight: 20,
@@ -107,7 +107,7 @@ const CarouselSanpham = (props) => {
                       }}
                     >
                       Đã bán ({item.sold})
-                    </div>
+                    </div> */}
                   </div>
                 </div>
               );

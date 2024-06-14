@@ -11,6 +11,11 @@
   },
   "dependencies": {
     "@ant-design/icons": "5.0.1",
+    "@emotion/react": "^11.11.4",
+    "@emotion/styled": "^11.11.5",
+    "@material-ui/styles": "^4.11.5",
+    "@mui/icons-material": "^5.15.20",
+    "@mui/material": "^5.15.20",
     "@reduxjs/toolkit": "1.9.3",
     "@tinymce/tinymce-react": "^5.0.1",
     "antd": "^5.17.4",

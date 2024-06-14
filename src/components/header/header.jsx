@@ -33,6 +33,7 @@ import {
   doSetListCartLogin,
 } from "../../redux/cart/cartSlice";
 import PreviewCart from "../../pages/cart/PreviewCart";
+import { MdOutlineAccountCircle } from "react-icons/md";
 
 const Header = (props) => {
   const isAuthenticated = useSelector((state) => state.account.isAuthenticated);
@@ -78,13 +79,16 @@ const Header = (props) => {
     if (isAuthenticated === true && role === "USER") {
       setItems([
         {
-          label: <p onClick={showModal}>Quản Lý Tài Khoản</p>,
+          // label: <p onClick={showModal}>Quản Lý Tài Khoản</p>,
+          label: <Link to="/account">Quản Lý Tài Khoản</Link>,
+
           key: "account",
         },
         {
           label: <Link to="/orderHistory">Đơn Mua</Link>,
           key: "orderHistory",
         },
+        
         {
           label: <p onClick={() => handleLogout()}>Đăng Xuất</p>,
           key: "logout",
@@ -179,13 +183,15 @@ const Header = (props) => {
 
   const handleSearch = (e) => {
     if (e.key === "Enter" && e.target.value) {
-      navigate(`/search?mainText=${e.target.value}`);
+      navigate(`/search?text=${e.target.value}`);
     }
   };
   return (
     <div className="header-main">
       <div className="container">
         <div className="header-content">
+          <div className="fle"></div>
+
           <div className="header-left ">
             <div className="search-header">
               <div
@@ -196,8 +202,7 @@ const Header = (props) => {
               >
                 <GiSpellBook />
               </div>
-              <div className="group">
-                <AiOutlineSearch className="icon-search" />
+              <div className="group rounded-full">
                 <input
                   type="text"
                   placeholder="Bạn tìm gì hôm nay "
@@ -205,15 +210,13 @@ const Header = (props) => {
                   value={search}
                   onChange={(e) => setSearch(e.target.value)}
                 />
+                <div
+                  className="icon-search text-xl"
+                  onClick={() => navigate(`/search?text=${search}`)}
+                >
+                  <AiOutlineSearch />
+                </div>
               </div>
-              <button
-                className="button"
-                onClick={(e) => {
-                  search ? navigate(`/search?mainText=${search}`) : "";
-                }}
-              >
-                Tìm kiếm
-              </button>
             </div>
           </div>
 
@@ -236,7 +239,7 @@ const Header = (props) => {
               </Space>
             </div>
             <div className="home">
-              <AiFillHome />
+              <AiFillHome className="mr-1" />
               <p onClick={() => navigate("/")}> Trang chủ</p>
             </div>
             <div className="account">
@@ -247,19 +250,20 @@ const Header = (props) => {
                       items,
                     }}
                     placement="bottomRight"
+                    arrow
                   >
                     {isAuthenticated === true ? (
                       <div className="username">
-                        <div style={{ marginTop: "3px" }}>
-                          <VscAccount />
-                        </div>
+                        <VscAccount />
+
                         <div className="user">
                           {username ? username : userEmail}
                         </div>
                       </div>
                     ) : (
                       <div className="username">
-                        <VscAccount className="icon-acount" />
+                        <MdOutlineAccountCircle className="icon-account" />
+
                         <div className="name">Tài khoản</div>
                       </div>
                     )}

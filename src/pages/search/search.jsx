@@ -13,7 +13,8 @@ const Search = () => {
   const [total, setTotal] = useState(0);
   const location = useLocation();
   const params = new URLSearchParams(location.search);
-  const search = params.get("mainText");
+  //const search = params.get("text");
+  const [search, setSearch] = useState(params.get("text"));
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -26,6 +27,20 @@ const Search = () => {
     };
     fetchSearchBook();
   }, [current, search]);
+
+  useEffect(() => {
+    if (params.get("page")) {
+      setCurrent(params.get("page"));
+    } else {
+      setCurrent(1);
+    }
+    if (params.get("text")) {
+      setSearch(params.get("text"));
+    }else{
+      setSearch("")
+    }
+    window.scrollTo(0, 0);
+  }, [location.search]);
 
   const a = [
     {
@@ -44,16 +59,17 @@ const Search = () => {
     // const slug = convertSlug(book.mainText);
     navigate(`/book/${book.slug}`);
   };
-  
+
   const handleChangePage = (p, s) => {
     setCurrent(p);
+    navigate(`/search?text=${search}&page=${p}`);
   };
   return (
     <div className="page-search">
       <div className="container">
         <Breadcrumb
           separator=">"
-          style={{ padding: "10px 0", fontSize: 16 }}
+          style={{ padding: "10px", fontSize: 16 }}
           items={a}
         />
         {dataBook.length > 0 ? (
@@ -71,6 +87,7 @@ const Search = () => {
                       <div className="wrapper">
                         <div className="thumbnail">
                           <img
+                            loading="lazy"
                             src={`${
                               import.meta.env.VITE_BACKEND_URL
                             }/images/book/${item?.thumbnail}`}
@@ -78,9 +95,11 @@ const Search = () => {
                           />
                         </div>
 
-                        <div className="text-search">
+                        <div className="text-search hover:text-blue-600">
                           <div className="t-s">{item.mainText}</div>
                         </div>
+
+                        <div className="author">{item.author}</div>
 
                         <div className="group-child">
                           <div
@@ -95,7 +114,8 @@ const Search = () => {
                               currency: "VND",
                             }).format(item.price)}
                           </div>
-                          <div className="rating">
+
+                          {/* <div className="rating">
                             <Rate value={item.rate} disabled className="star" />
 
                             <span className="rate">{item.rate}</span>
@@ -106,7 +126,7 @@ const Search = () => {
                             >
                               Đã bán {item.sold}
                             </span>
-                          </div>
+                          </div> */}
                         </div>
                       </div>
                     </div>
