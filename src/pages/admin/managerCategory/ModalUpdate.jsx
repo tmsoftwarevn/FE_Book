@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Button, Checkbox, Col, Form, Input, Modal, Row, message } from "antd";
+import { Select, Col, Form, Input, Modal, Row, message } from "antd";
 
 import { callUpdate_Category } from "../../../services/api";
 const UpdateModal = (props) => {
@@ -69,7 +69,22 @@ const UpdateModal = (props) => {
                 <Input />
               </Form.Item>
             </Col>
-           
+            <Col span={24}>
+            <Form.Item
+                labelCol={{ span: 24 }}
+                label="Tên thể loại cha"
+                name="parentName"
+                rules={[
+                  {
+                    required: true,
+                    message: "Thể loại cha không được để trống !",
+                  },
+                ]}
+                initialValue={dataUpdate.parentId}
+              >
+                <Input />
+              </Form.Item>
+            </Col>    
           </Row>
         </Form>
       </Modal>

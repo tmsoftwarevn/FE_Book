@@ -1,12 +1,10 @@
 import React, { useEffect, useRef, useState } from "react";
-
 import { useParams } from "react-router-dom";
-
 import { CiEdit } from "react-icons/ci";
 import { MdDelete } from "react-icons/md";
 import {
   Button,
-  Checkbox,
+  Select,
   Flex,
   Popconfirm,
   Table,
@@ -56,6 +54,7 @@ const QuanliCategory = () => {
         STT: index + 1,
         id: item.id,
         name: item.category,
+        parentId: item.parentId,
         action: index,
       });
     });
@@ -77,7 +76,11 @@ const QuanliCategory = () => {
       dataIndex: "name",
       key: "name",
     },
-   
+    {
+      title: "Đường dẫn thể loại cha",
+      dataIndex: "parentId",
+      key: "parentId",
+    },
     {
       title: "Thao tác",
       dataIndex: "action",

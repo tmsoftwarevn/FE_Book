@@ -34,6 +34,7 @@ import {
 } from "../../redux/cart/cartSlice";
 import PreviewCart from "../../pages/cart/PreviewCart";
 import { MdOutlineAccountCircle } from "react-icons/md";
+import { FaRegNewspaper } from "react-icons/fa";
 
 const Header = (props) => {
   const isAuthenticated = useSelector((state) => state.account.isAuthenticated);
@@ -88,7 +89,7 @@ const Header = (props) => {
           label: <Link to="/orderHistory">Đơn Mua</Link>,
           key: "orderHistory",
         },
-        
+
         {
           label: <p onClick={() => handleLogout()}>Đăng Xuất</p>,
           key: "logout",
@@ -190,8 +191,6 @@ const Header = (props) => {
     <div className="header-main">
       <div className="container">
         <div className="header-content">
-          <div className="fle"></div>
-
           <div className="header-left ">
             <div className="search-header">
               <div
@@ -238,9 +237,13 @@ const Header = (props) => {
                 ></Badge>
               </Space>
             </div>
-            <div className="home">
+            {/* <div className="home">
               <AiFillHome className="mr-1" />
               <p onClick={() => navigate("/")}> Trang chủ</p>
+            </div> */}
+            <div className="text-lg text-gray-500 flex items-center">
+              <FaRegNewspaper className="mr-2" />
+              <span>Tin tức</span>
             </div>
             <div className="account">
               <Space direction="vertical">

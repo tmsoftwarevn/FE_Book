@@ -13,6 +13,8 @@ import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import HomeIcon from "@mui/icons-material/Home";
 import { useEffect } from "react";
+import { message } from "antd";
+import { RegisterUser } from "../../services/api";
 // TODO remove, this demo shouldn't need to reset the theme.
 
 const defaultTheme = createTheme();
@@ -21,20 +23,33 @@ export default function SignUp() {
   const refForm = React.useRef();
   const navigate = useNavigate();
 
-  // useEffect(() => {
-  //   if (localStorage.getItem("access_token")) return navigate("/");
-  // }, []);
+  useEffect(() => {
+    if (localStorage.getItem("access_token")) return navigate("/");
+  }, []);
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    console.log({
+    const register = {
       email: data.get("email"),
       password: data.get("password"),
       fullName: data.get("fullName"),
-      phone: data.get("phone"),
       cf_password: data.get("confirm-password"),
-    });
+    };
+
+    if (register.password !== register.cf_password) {
+      message.error("Xác nhận mật khẩu không khớp !");
+      return;
+    }
+
+    let res = await RegisterUser(register.fullName, register.email, register.password);
+    if (res?.data?.user) {
+      message.success("Đăng ký tài khoản thành công!");
+
+      navigate("/login");
+    } else {
+      message.error("Đăng nhập thất bại !");
+    }
   };
 
   return (
@@ -71,20 +86,12 @@ export default function SignUp() {
                   name="fullName"
                   required
                   fullWidth
-                  id="fullname"
+                  id="fullName"
                   label="Họ và tên"
                   autoFocus
                 />
               </Grid>
-              <Grid item xs={12} sm={12}>
-                <TextField
-                  required
-                  fullWidth
-                  id="lastName"
-                  label="Số điện thoại"
-                  name="phone"
-                />
-              </Grid>
+
               <Grid item xs={12}>
                 <TextField
                   required

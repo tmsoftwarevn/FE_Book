@@ -7,7 +7,7 @@ import {
 } from "react-router-dom";
 import { Outlet } from "react-router-dom";
 
-import Header from "./components/header/header";
+import Header from "./components/header antd/header";
 import Footer from "./components/Footer";
 import Home from "./pages/Home/index";
 import RegisterPage from "./pages/register";
@@ -27,13 +27,14 @@ import PageOrder from "./pages/order/order";
 import OrderHistory from "./pages/order history/OrderHistory";
 import DetailOrderById from "./pages/Order detail/OrderDetailById";
 import ManagerOrder from "./pages/admin/managerOrder/managerOrder";
-import GetPassword from "./pages/forgot password/GetPassword";
+
 import Search from "./pages/search/search";
 import QuanliCategory from "./pages/admin/managerCategory/QuanlyCategory";
 import Account from "./pages/account/Account";
-import SignIn from "./pages/login/login";
+import SignIn from "./pages/login/Login";
 import SignUp from "./pages/signup/Signup";
 import QuenMatkhau from "./pages/quen-mat-khau/QuenMatkhau";
+import NavBar from "./components/header/NavBar";
 
 const Layout = () => {
   const role = useSelector((state) => state.account?.user?.role);
@@ -50,7 +51,8 @@ const Layout = () => {
 
   return (
     <div className="layout-app">
-      <Header />
+      {/* <Header /> */}
+      <NavBar />
       <Outlet context={[searchBook, setSearchBook]} />
       <Footer />
     </div>
@@ -94,7 +96,7 @@ export default function App() {
             ),
           },
           {
-            path: "checkout",
+            path: "check-out",
             element: (
               <ProtectedRoute>
                 <Checkout />
@@ -140,7 +142,7 @@ export default function App() {
         element: <SignIn />,
       },
       {
-        path: "/dang-ky/*",
+        path: "/register/*",
         element: <SignUp />,
       },
       {

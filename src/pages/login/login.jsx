@@ -3,65 +3,105 @@ import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
 import TextField from "@mui/material/TextField";
-
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
-
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-
 import HomeIcon from "@mui/icons-material/Home";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
-
-
 import "./login.scss";
-
-// TODO remove, this demo shouldn't need to reset the theme.
+import { message } from "antd";
+import { ApiLogin } from "../../services/api";
+import { doLoginAction } from "../../redux/account/accountSlice";
+import { doLoginSocialFalse, doLoginSocialTrue } from "../../redux/cart/cartSlice";
+import GoogleButton from "react-google-button";
 
 const defaultTheme = createTheme();
 
 export default function SignIn() {
-  const [open, setOpen] = React.useState(false);
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const mess = "Đăng xuất thành công";
   const location = useLocation();
-  const isLogout = location?.state?.isLogout;
-  console.log("ttttt", isLogout);
-  
- 
+  const isLoginSocial = useSelector((state) => state.cart.isLoginSocial);
 
-  const handleSubmit = (event) => {
+  useEffect(() => {
+    if (localStorage.getItem("access_token")) return navigate("/");
+  }, []);
+
+  const handleSubmit = async (event) => {
     event.preventDefault();
-
     const data = new FormData(event.currentTarget);
     if (!data.get("email")) {
-      setOpen(true);
+      message.error("Hãy nhập đầy đủ thông tin !");
       return;
     }
+
     if (!data.get("password")) {
-      setOpen(true);
+      message.error("Hãy nhập đầy đủ thông tin !");
       return;
     }
     const login = {
       email: data.get("email"),
       password: data.get("password"),
     };
-    const fakeData = {
-      email: data.get("email"),
-      fullName: "test email",
-      id: 34,
-    };
-    console.log("llll", login);
 
-    localStorage.setItem("access_token", "jfksfkjd");
-    dispatch(doLoginAction(fakeData));
-    navigate("/");
+    let res = await ApiLogin(login.email, login.password);
+    if (res?.data) {
+      localStorage.setItem("access_token", res.access_token);
+      dispatch(doLoginAction(res.data));
+      message.success("Đăng nhập thành công");
+      navigate("/");
+    } else {
+      message.error("Tài khoản hoặc mật khẩu không chính xác !");
+    }
   };
 
+  useEffect(() => {
+    if (isLoginSocial === true) {
+      let user = "";
+      const getUser = async () => {
+        await fetch(
+          `${import.meta.env.VITE_BACKEND_URL}/api/v1/login/success`,
+          {
+            method: "GET",
+            credentials: "include",
+            headers: {
+              Accept: "application/json",
+              "Content-Type": "application/json",
+              "Access-Control-Allow-Credentials": true,
+            },
+            cache: "no-cache",
+          }
+        )
+          .then((response) => response.json())
+          .then((resObject) => {
+            console.log("checkkkkkk res", resObject);
+            user = resObject;
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+        dispatch(doLoginSocialFalse());
+        if (user && user.data) {
+          localStorage.setItem("access_token", user?.access_token);
+          dispatch(doLoginAction(user?.data));
+          message.success("Đăng nhập thành công");
+          navigate("/");
+        }
+      };
+      getUser();
+    }
+  }, []);
+  const handleLoginWithGoogle = () => {
+    window.open(
+      `${import.meta.env.VITE_BACKEND_URL}/api/v1/auth/google`,
+      "_self"
+    );
+    dispatch(doLoginSocialTrue());
+  };
   return (
     <div className="login">
       <ThemeProvider theme={defaultTheme}>
@@ -108,7 +148,7 @@ export default function SignIn() {
                 type="password"
                 id="password"
               />
-             
+
               <Button
                 type="submit"
                 fullWidth
@@ -129,15 +169,17 @@ export default function SignIn() {
                   </Link>
                 </Grid>
               </Grid>
+              <div className="text-center font-bold "></div>
+              <div className="mx-auto w-fit mt-5">
+                <GoogleButton
+                  onClick={() => handleLoginWithGoogle()}
+                  label="Đăng nhập với Google"
+                />
+              </div>
             </Box>
           </Box>
         </Container>
       </ThemeProvider>
-
-      {/* <AlertCustom open={open} setOpen={setOpen} err ={"Email không hợp lệ"} />
-
-      {isLogout && <AlertSuccess mess={mess} isLogout = {isLogout} />} */}
-
     </div>
   );
 }

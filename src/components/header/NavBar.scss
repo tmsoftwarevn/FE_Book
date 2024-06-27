@@ -1,0 +1,107 @@
+// color-main: #3b82f6
+@import "../../scss/media.scss";
+
+.left{
+    @include xs{
+        padding: 0 20px;
+    }
+    @include sm{
+        padding: 0 20px;
+    }
+    @include xl{
+        padding: 0;
+    }
+    .search-header{
+        width: 600px;
+        max-width: 100%;
+    }
+   
+}
+
+.basket {
+    color: grey;
+    position: relative;
+    //margin-top: 4px;
+    cursor: pointer;
+    @include xs {
+        font-size: 18px;
+        // width: 50%;
+        text-align: center;
+    }
+    @include sm {
+        font-size: 18px;
+        // width: 30%;
+    }
+    @include lg {
+        font-size: 20px;
+        // width: 10%;
+    }
+   
+    .badge {
+        @include xs {
+            position: absolute;
+            bottom: 17px;
+            left: 60%;
+        }
+        @include sm {
+            position: absolute;
+            bottom: 17px;
+            left: 15px;
+        }
+        @include md {
+            position: absolute;
+            bottom: 17px;
+            left: 15px;
+        }
+        @include lg {
+            position: absolute;
+            bottom: 17px;
+            left: 15px;
+        }
+    }
+}
+.toggle{
+    @include xs{
+        padding: 0 20px;
+    }
+    @include sm{
+        padding: 0 20px;
+    }
+    @include xl{
+        padding: 0;
+    }
+}
+.logo {
+    width: 50px;
+    img {
+        width: 100%;
+    }
+}
+.group-login {
+    position: relative;
+    &:hover{
+        .box{
+            display: block;
+        }
+    }
+    .box {
+        display: none;
+        box-shadow:
+            rgba(0, 0, 0, 0.02) 0px 1px 3px 0px,
+            rgba(27, 31, 35, 0.15) 0px 0px 0px 1px;
+        position: absolute;
+        right: 0;
+        top: 40px;
+        border-radius: 5px;
+        z-index: 99999;
+        .info {
+            border-bottom: 1px solid #ccc;
+        }
+       
+        background-color: #ffffff;
+        z-index: 100;
+        p {
+            width: 100%;
+        }
+    }
+}

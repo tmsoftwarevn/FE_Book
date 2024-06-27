@@ -166,7 +166,7 @@ const Cart = () => {
     if (isEmptyBuy === true) {
       message.error("Bạn chưa chọn sản phẩm nào");
     } else {
-      navigate("/checkout", {
+      navigate("/check-out", {
         state: { listBook: arrSelect },
       });
     }
