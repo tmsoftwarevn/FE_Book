@@ -232,14 +232,18 @@ export const callSearchBook = (mainText, current, pageSize) => {
 };
 
 // category
-export const callCreate_Category = (category) => {
-  return axios.post(`/api/v1/category/create`, { category });
+export const callCreate_Category = (category, parentId) => {
+  return axios.post(`/api/v1/category/create`, { category , parentId});
 };
 
-export const callUpdate_Category = (id, category) => {
-  return axios.put(`/api/v1/category/${id}`, { category });
+export const callUpdate_Category = (id, category, parentId) => {
+  return axios.put(`/api/v1/category/${id}`, { category, parentId });
 };
 
 export const callDelete_Category = (id) => {
   return axios.delete(`/api/v1/category/${id}`);
 };
+
+export const callGet_ParentCategory = (id) =>{
+  return axios.get(`/api/v1/parentCategory/${id}`)
+}

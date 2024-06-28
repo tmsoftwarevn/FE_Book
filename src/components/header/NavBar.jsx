@@ -11,6 +11,8 @@ import { SlBasket } from "react-icons/sl";
 import PreviewCart from "../../pages/cart/PreviewCart";
 import { Badge, Space } from "antd";
 import { FaRegNewspaper } from "react-icons/fa";
+import { callLogout } from "../../services/api";
+import { doRemoveCartLogout } from "../../redux/cart/cartSlice";
 
 const NavBar = () => {
   const navigate = useNavigate();
@@ -18,10 +20,14 @@ const NavBar = () => {
   const isAuthenticated = useSelector((state) => state.account.isAuthenticated);
   const dispatch = useDispatch();
   const location = useLocation();
-
+  const idUser = useSelector((state) => state.account?.user?.id);
   const countProduct = useSelector((state) =>
     state.cart?.listCart ? state.cart.listCart : 0
   );
+  const username = useSelector((state) => state.account.user?.fullName);
+  const userEmail = useSelector((state) => state.account.user?.email);
+  const role = useSelector((state) => state.account.user.role);
+
 
 
   const toggleMobileMenu = () => {
@@ -29,13 +35,20 @@ const NavBar = () => {
   };
 
   const handleLogout = async () => {
-    // const res = await callLogout(idUser);
-    // if (res && res.data) {
-    //   dispatch(doLogoutAction());
-    //   dispatch(doRemoveCartLogout());
-    // }
-    dispatch(doLogoutAction());
-    navigate("/login");
+    
+    // dispatch(doLogoutAction());
+    // navigate("/login");
+    const res = await callLogout(idUser);
+    if (res && res.data) {
+      dispatch(doLogoutAction());
+      dispatch(doRemoveCartLogout());
+      window.open(
+        `${import.meta.env.VITE_BACKEND_URL}/api/v1/social/logout`,
+        "_self"
+      );
+      message.success("Đăng xuất thành công");
+    }
+
   };
 
   return (
@@ -128,9 +141,20 @@ const NavBar = () => {
                     <Stack>
                       <Avatar src="/broken-image.jpg" />
                     </Stack>
-                    <span className="ml-3">test@gmail.com</span>
+                    <span className="ml-3">{userEmail}</span>
                   </div>
                   <div className="p-3 leading-loose">
+                    {
+                      isAuthenticated === true && role === "ADMIN" ?
+                      <p
+                      className="cursor-pointer hover:text-blue-600"
+                      onClick={() => {
+                        navigate("/admin");
+                      }}
+                    >
+                      Trang quản trị
+                    </p>
+                    :
                     <p
                       className="cursor-pointer hover:text-blue-600"
                       onClick={() => {
@@ -139,6 +163,8 @@ const NavBar = () => {
                     >
                       Khóa học
                     </p>
+                    }
+                    
                     <p
                       className="cursor-pointer hover:text-blue-600"
                       onClick={() => {

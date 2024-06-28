@@ -16,10 +16,10 @@ function SearchBar(props) {
   };
   
   return (
-    <div class="cursor-pointer w-full flex items-center">
-      <div class="relative flex items-center w-full h-10 rounded-full bg-white overflow-hidden">
+    <div className="cursor-pointer w-full flex items-center">
+      <div className="relative flex items-center w-full h-10 rounded-full bg-white overflow-hidden">
         <div
-          class="grid place-items-center h-full w-12 text-blue-600 bg-gray-200"
+          className="grid place-items-center h-full w-12 text-blue-600 bg-gray-200"
           onClick={() => {
             navigate(`/blog/tim-kiem?s=${inputValue}`);
             setKeySearch(inputValue)

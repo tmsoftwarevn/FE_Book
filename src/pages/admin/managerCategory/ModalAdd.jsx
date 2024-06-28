@@ -3,23 +3,25 @@ import { Button, Col, Form, Input, Modal, Row, message } from "antd";
 
 import { useParams } from "react-router-dom";
 import { callCreate_Category } from "../../../services/api";
+import SelectCategory from "../util/select category/SelectCategory";
 
 const AddModal = (props) => {
-  const { isModalAdd, setIsModalAdd, fetch_listCategory } = props;
+  const { isModalAdd, setIsModalAdd, fetch_listCategory, list } = props;
   const params = useParams();
   const [form] = Form.useForm();
+  const [idCategoryParent, setIdCategoryParent] = useState();
 
   const handleCancel = () => {
     setIsModalAdd(false);
   };
   const onFinish = (values) => {
     const { name } = values;
-    fetchAdd(name);
+    fetchAdd(name, idCategoryParent);
     form.resetFields();
   };
 
-  const fetchAdd = async (category) => {
-    let res = await callCreate_Category(category);
+  const fetchAdd = async (category, idCategoryParent) => {
+    let res = await callCreate_Category(category, idCategoryParent);
     if (res && res.EC === 1) {
       message.success("Thêm thành công");
       setIsModalAdd(false);
@@ -58,6 +60,19 @@ const AddModal = (props) => {
                 ]}
               >
                 <Input />
+              </Form.Item>
+            </Col>
+            <Col span={24}>
+              <Form.Item
+                labelCol={{ span: 24 }}
+                label="Tên thể loại cha"
+                name="parentName"
+              >
+                <SelectCategory
+                  setIdCategoryParent={setIdCategoryParent}
+                  list={list}
+                  isModalAdd = {isModalAdd}
+                />
               </Form.Item>
             </Col>
           </Row>

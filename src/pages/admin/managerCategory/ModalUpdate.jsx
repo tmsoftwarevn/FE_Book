@@ -2,37 +2,45 @@ import React, { useEffect, useState } from "react";
 import { Select, Col, Form, Input, Modal, Row, message } from "antd";
 
 import { callUpdate_Category } from "../../../services/api";
+import SelectCategory from "../util/select category/SelectCategory";
+
 const UpdateModal = (props) => {
   const {
     isModalUpdate,
     setIsModalUpdate,
     dataUpdate,
-    fetch_listCategory
+    fetch_listCategory,
+    list,
   } = props;
- 
+
   const [form] = Form.useForm();
+
+  const [idCategoryParent, setIdCategoryParent] = useState();
 
   const handleCancel = () => {
     setIsModalUpdate(false);
   };
   const onFinish = async (values) => {
     const { name } = values;
-    
+
     fetchUpdate(name);
   };
+
   useEffect(() => {
     form.resetFields();
-    
+    setIdCategoryParent(dataUpdate?.parentId)
   }, [dataUpdate]);
 
-  
   const fetchUpdate = async (category) => {
-    let res = await callUpdate_Category(dataUpdate?.id, category);
+    let res = await callUpdate_Category(
+      dataUpdate?.id,
+      category,
+      idCategoryParent
+    );
     if (res && res.EC === 1) {
       message.success("Cập nhật thành công");
       setIsModalUpdate(false);
-      fetch_listCategory()
-
+      fetch_listCategory();
     } else {
       message.error("Cập nhật thất bại ");
     }
@@ -70,25 +78,25 @@ const UpdateModal = (props) => {
               </Form.Item>
             </Col>
             <Col span={24}>
-            <Form.Item
+              <Form.Item
                 labelCol={{ span: 24 }}
                 label="Tên thể loại cha"
                 name="parentName"
-                rules={[
-                  {
-                    required: true,
-                    message: "Thể loại cha không được để trống !",
-                  },
-                ]}
-                initialValue={dataUpdate.parentId}
+                
               >
-                <Input />
+                <SelectCategory
+                  dataUpdate={dataUpdate}
+                  setIdCategoryParent={setIdCategoryParent}
+                 
+                  list={list}
+                />
               </Form.Item>
-            </Col>    
+            </Col>
           </Row>
         </Form>
       </Modal>
     </>
   );
 };
+
 export default UpdateModal;

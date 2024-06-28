@@ -13,7 +13,12 @@ import {
 } from "antd";
 import UpdateModal from "./ModalUpdate";
 import AddModal from "./ModalAdd";
-import { callDelete_Category, callFetchCategory } from "../../../services/api";
+import {
+  callDelete_Category,
+  callFetchCategory,
+  callGet_ParentCategory,
+} from "../../../services/api";
+import AsyncParentCategory from "./AsyncParentCategory";
 
 const title = "Xác nhận xóa ?";
 const QuanliCategory = () => {
@@ -38,15 +43,15 @@ const QuanliCategory = () => {
     let res = await callDelete_Category(id);
     if (res && res.EC === 1) {
       message.success("Xóa thành công ");
-      fetch_listCategory()
-      
+      fetch_listCategory();
     } else {
       notification.error({
         description: "Có lỗi xảy ra",
       });
     }
   };
-  const customMenu = (list) => {
+
+  const customMenu = async (list) => {
     let arr = [];
     list.map((item, index) => {
       arr.push({
@@ -60,6 +65,7 @@ const QuanliCategory = () => {
     });
     setList(arr);
   };
+  
   const handleUpdate = (record) => {
     setIsModalUpdate(true);
     setDataUpdate(record);
@@ -80,6 +86,13 @@ const QuanliCategory = () => {
       title: "Đường dẫn thể loại cha",
       dataIndex: "parentId",
       key: "parentId",
+      render: (text, record, index) => {
+        return (
+          <>
+            <AsyncParentCategory idParent={record.parentId} id={record.id} />
+          </>
+        );
+      },
     },
     {
       title: "Thao tác",
@@ -165,13 +178,14 @@ const QuanliCategory = () => {
         isModalUpdate={isModalUpdate}
         setIsModalUpdate={setIsModalUpdate}
         dataUpdate={dataUpdate}
-        fetch_listCategory = {fetch_listCategory}
-
+        fetch_listCategory={fetch_listCategory}
+        list={list}
       />
       <AddModal
         isModalAdd={isModalAdd}
         setIsModalAdd={setIsModalAdd}
-        fetch_listCategory = {fetch_listCategory}
+        fetch_listCategory={fetch_listCategory}
+        list={list}
       />
     </>
   );
