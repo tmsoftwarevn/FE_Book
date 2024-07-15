@@ -41,8 +41,8 @@ import {
 } from "../../redux/category/categorySlice";
 import CarouselBanner from "../../components/carousel/carousel-banner/CarouselBanner";
 import CarouselSanpham from "../../components/carousel/carousel-sanpham/CarouselSanpham";
-import banner_quangcao from "../../images/banner_qc.jpg"
-
+import banner_quangcao from "../../images/banner_qc.jpg";
+import DanhMuc from "../../components/danh muc/DanhMuc";
 
 const Home = () => {
   const [form] = Form.useForm();
@@ -122,7 +122,7 @@ const Home = () => {
     }
     if (params.get("page")) {
       setCurrent(params.get("page"));
-    }else{
+    } else {
       setCurrent(1);
     }
     if (params.get("price")) {
@@ -134,7 +134,6 @@ const Home = () => {
       c: params.get("price") === "120000,300000" ? true : false,
       d: params.get("price") === "300000,99999999" ? true : false,
     });
-    
   }, [location]);
 
   useEffect(() => {
@@ -163,7 +162,6 @@ const Home = () => {
     }
     if (url[0] === "&") url = url.substring(1); // xóa kí tự & ở đầu
     url = "?" + url; // thêm ? cho url
-    
 
     navigate(`/${url}`);
   }, [current, queryCategory, sort, price, rate]);
@@ -505,13 +503,11 @@ const Home = () => {
       <div className="homepage">
         <div className="container">
           <Row style={{ gap: 40, paddingTop: 20 }}>
-            <Col lg={4} md={0} sm={0} xs={0} className="homepage-left">
-              <Form
+            <Col lg={6} md={0} sm={0} xs={0} className="homepage-left">
+              {/* <Form
                 onFinish={onFinish}
                 form={form}
-                // onValuesChange={(changedValues, values) =>
-                //   handleChangeFilter(changedValues, values)
-                // }
+               
                 initialValues={{ priceFrom: searchPrice }}
               >
                 <div
@@ -545,10 +541,8 @@ const Home = () => {
                                 }
                               ></input>
                               <label htmlFor={index}>
-                                {" "}
                                 <div>{item.category}</div>
                               </label>
-                              {/* <div>{item.category}</div> */}
                             </Col>
                           );
                         })}
@@ -567,31 +561,6 @@ const Home = () => {
                 </Form.Item>
 
                 <Divider />
-
-                {/* <div
-                  style={{ fontWeight: 600, fontSize: 16, marginBottom: 20 }}
-                >
-                  Đánh giá
-                </div>
-                <Form.Item
-                  labelCol={{ span: 24 }}
-                  style={{ cursor: "pointer" }}
-                >
-                  <div>
-                    <Rate value={5} disabled style={{ fontSize: 12 }} />
-                    <span className="ant-rate-text">từ 5 sao</span>
-                  </div>
-                  <div>
-                    <Rate value={4} disabled style={{ fontSize: 12 }} />
-                    <span className="ant-rate-text">từ 4 sao</span>
-                  </div>
-                  <div>
-                    <Rate value={3} disabled style={{ fontSize: 12 }} />
-                    <span className="ant-rate-text">từ 3 sao</span>
-                  </div>
-                </Form.Item>
-
-                <Divider /> */}
 
                 <Form.Item>
                   <div className="price" style={{ lineHeight: 3 }}>
@@ -634,7 +603,6 @@ const Home = () => {
                       onClick={() => {
                         handleSelectPrice("d", "300000,99999999");
                       }}
-                      // className={activePrice.d === true ? "active" : ""}
                       type={activePrice.d === true ? "primary" : "default"}
                     >
                       {" "}
@@ -687,15 +655,12 @@ const Home = () => {
                     </Button>
                   </div>
                 </Form.Item>
-              </Form>
+              </Form> */}
+            <DanhMuc />
 
-              <div className="banner-qc">
-                <img src={banner_quangcao} />
-              </div>
-              
             </Col>
 
-            <Col lg={19} md={24} sm={24} xs={24} className="homepage-right">
+            <Col lg={17} md={24} sm={24} xs={24} className="homepage-right">
               <CarouselBanner />
 
               <div className="carousel-homepage">
@@ -791,8 +756,7 @@ const Home = () => {
                                 currency: "VND",
                               }).format(item.price)}
                             </div>
-                             
-                            
+
                             {/* <div className="rating">
                               <Rate
                                 value={item.rate}
@@ -809,7 +773,6 @@ const Home = () => {
                                 Đã bán {item.sold}
                               </span>
                             </div> */}
-
                           </div>
                         </div>
                       </div>

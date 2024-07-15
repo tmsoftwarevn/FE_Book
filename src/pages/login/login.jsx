@@ -164,7 +164,7 @@ export default function SignIn() {
                   </Link>
                 </Grid>
                 <Grid item>
-                  <Link to="/dang-ky" variant="body2">
+                  <Link to="/register" variant="body2">
                     {"Chưa có tài khoản? Đăng ký"}
                   </Link>
                 </Grid>

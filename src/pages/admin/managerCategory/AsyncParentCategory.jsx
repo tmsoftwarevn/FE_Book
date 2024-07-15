@@ -10,15 +10,15 @@ const AsyncParentCategory = ({ idParent, id }) => {
     if (idParent) {
       let res = await callGet_ParentCategory(idParent);
       if (res && res.EC === 1) {
-        res.data.map((item) => {
-          s = s + item + "/";
+        res.data.reverse().map((item) => {
+          s = s + item.category + "/";
         });
       }
     } else {
       let res = await callGet_ParentCategory(id);
       if (res && res.EC === 1) {
         res.data.map((item) => {
-          s = s + item + "/";
+          s = s + "/";
         });
       }
     }

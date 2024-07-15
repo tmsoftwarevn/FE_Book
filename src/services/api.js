@@ -247,3 +247,7 @@ export const callDelete_Category = (id) => {
 export const callGet_ParentCategory = (id) =>{
   return axios.get(`/api/v1/parentCategory/${id}`)
 }
+
+export const callGet_ParentCategory_Home =() =>{
+  return axios.get(`/api/v1/parentCategoryHome`);
+}
