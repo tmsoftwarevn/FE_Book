@@ -10,8 +10,7 @@ const CarouselBanner = () => {
   const refCarousel = useRef("");
   return (
     <div className="carousel-banner">
-      {/* <div className="text-xl font-bold text-red-500">Banner</div> */}
-
+     
       <div className="carousel">
         <Carousel ref={refCarousel} dots={false} autoplay>
           <div>

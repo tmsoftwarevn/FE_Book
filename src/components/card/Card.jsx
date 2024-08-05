@@ -21,6 +21,7 @@ const Card = (props) => {
       </div>
 
       <div className="text-cr">{item.mainText}</div>
+      
       <div
         className="price-sold pb-3"
         style={{

@@ -17,7 +17,7 @@ const TheLoaiNoiBat = (props) => {
     fetch_listbook_idparent();
   }, [arrId]);
 
- // console.log("llllll", list);
+ console.log("llllll", list);
 
   return (
     <div>

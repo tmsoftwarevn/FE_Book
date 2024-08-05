@@ -38,6 +38,7 @@ import SignUp from "./pages/signup/Signup";
 import QuenMatkhau from "./pages/quen-mat-khau/QuenMatkhau";
 import NavBar from "./components/header/NavBar";
 import MenuHeader from "./components/danh muc/DropdownMenu";
+import TheLoai from "./pages/the loai/TheLoai";
 
 const Layout = () => {
   const role = useSelector((state) => state.account?.user?.role);
@@ -90,6 +91,10 @@ export default function App() {
           {
             path: "book/:slug",
             element: <BookPageDetail />,
+          },
+          {
+            path: "the-loai/:slug",
+            element: <TheLoai />,
           },
           {
             path: "cart",
