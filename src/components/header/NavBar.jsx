@@ -99,7 +99,7 @@ const NavBar = () => {
             </div>
 
             {/* ======== */}
-            <div className="flex items-center">
+            <div className="flex items-center gap-5">
               {/* gio hang */}
               <div
                 className="basket ml-10"
@@ -119,14 +119,15 @@ const NavBar = () => {
               <nav className="hidden lg:flex space-x-4 items-center ml-10">
                 <div
                   className={
-                    location.pathname.startsWith("/khoa-hoc") === true
+                    location.pathname.startsWith("/tin-tuc") === true
                       ? "cursor-pointer flex items-center text-blue-600 font-medium hover:text-blue-500 px-3 py-2"
                       : "cursor-pointer flex items-center text-gray-600 font-medium hover:text-blue-500 "
                   }
-                  onClick={() => navigate("/khoa-hoc")}
+                  onClick={() => navigate("/tin-tuc")}
                 >
                   <FaRegNewspaper className="mr-1" />
                   <span>Tin tức</span>
+
                 </div>
               </nav>
             </div>

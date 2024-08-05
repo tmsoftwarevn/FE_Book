@@ -4,13 +4,14 @@ import Slider from "react-slick";
 import { convertSlug } from "../../../utils/convertSlug";
 import { useNavigate } from "react-router-dom";
 import "./carouselsanpham.scss";
+import Card from "../../card/Card";
 
 let settings = {
-  //   dots: true,
+  
   infinite: true,
-  slidesToShow: 4,
+  slidesToShow: 5,
   slidesToScroll: 1,
-  autoplay: true,   ///
+  autoplay: true, ///
   speed: 4000,
   autoplaySpeed: 0,
   cssEase: "linear",
@@ -37,15 +38,17 @@ let settings = {
     },
   ],
 };
+
 const CarouselSanpham = (props) => {
   const { listPopularAll } = props;
- 
+
   const navigate = useNavigate();
 
   const handleRedirectBook = (book) => {
     // const slug = convertSlug(book.mainText);
     navigate(`/book/${book.slug}`);
   };
+
   return (
     <div>
       <div
@@ -53,62 +56,19 @@ const CarouselSanpham = (props) => {
           padding: 20,
           backgroundColor: "rgb(255 255 255)",
           fontWeight: 600,
-          fontSize: 16,
         }}
-        className="popular"
+        className="popular text-xl uppercase"
       >
-        Phổ biến
+        Sách mới
       </div>
-      <div className="carousel-sanpham">
+      <div className="carousel-sanpham overflow-hidden">
         <Slider {...settings}>
           {listPopularAll &&
             listPopularAll.length > 0 &&
             listPopularAll.map((item, index) => {
               return (
-                <div
-                  className="wrapper"
-                  key={`itemcarosel-${index}`}
-                  onClick={() => handleRedirectBook(item)}
-                >
-                  <div className="thumbnail">
-                    <img
-                      src={`${import.meta.env.VITE_BACKEND_URL}/images/book/${
-                        item?.thumbnail
-                      }`}
-                      alt="thumbnail book"
-                    />
-                  </div>
-
-                  <div className="text-cr">{item.mainText}</div>
-                  <div
-                    className="price-sold"
-                    style={{
-                      display: "flex",
-                      justifyContent: "space-between",
-                    }}
-                  >
-                    <div
-                      className="price-carousel"
-                      style={{
-                        color: "rgb(255 66 78)",
-                        fontWeight: 600,
-                      }}
-                    >
-                      {new Intl.NumberFormat("vi-VN", {
-                        style: "currency",
-                        currency: "VND",
-                      }).format(item.price)}
-                    </div>
-                    {/* <div
-                      className="sold-carousel"
-                      style={{
-                        marginRight: 20,
-                        color: "#535c68",
-                      }}
-                    >
-                      Đã bán ({item.sold})
-                    </div> */}
-                  </div>
+                <div className="shadow-gray-400 shadow-md border border-transparent hover:border hover:border-blue-600">
+                  <Card item={item} />
                 </div>
               );
             })}

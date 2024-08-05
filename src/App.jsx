@@ -10,6 +10,8 @@ import { Outlet } from "react-router-dom";
 import Header from "./components/header antd/header";
 import Footer from "./components/Footer";
 import Home from "./pages/Home/index";
+import HomeFix from "./pages/Home fix/index";
+
 import RegisterPage from "./pages/register";
 import { useDispatch, useSelector } from "react-redux";
 import { callGetAccount } from "./services/api";
@@ -46,7 +48,7 @@ const Layout = () => {
 
   useEffect(() => {
     if (role && role === "ADMIN" && prevUrl !== true) {
-      navigate("/admin/book");
+      //navigate("/admin/book");
     }
   }, []);
 
@@ -82,7 +84,8 @@ export default function App() {
         element: <Layout />,
         errorElement: <Notfound />,
         children: [
-          { index: true, element: <Home /> },
+          //<Home />
+          { index: true, element: <HomeFix /> },
 
           {
             path: "book/:slug",

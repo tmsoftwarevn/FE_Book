@@ -233,7 +233,7 @@ export const callSearchBook = (mainText, current, pageSize) => {
 
 // category
 export const callCreate_Category = (category, parentId) => {
-  return axios.post(`/api/v1/category/create`, { category , parentId});
+  return axios.post(`/api/v1/category/create`, { category, parentId });
 };
 
 export const callUpdate_Category = (id, category, parentId) => {
@@ -244,10 +244,17 @@ export const callDelete_Category = (id) => {
   return axios.delete(`/api/v1/category/${id}`);
 };
 
-export const callGet_ParentCategory = (id) =>{
-  return axios.get(`/api/v1/parentCategory/${id}`)
-}
+export const callGet_ParentCategory = (id) => {
+  return axios.get(`/api/v1/parentCategory/${id}`);
+};
 
-export const callGet_ParentCategory_Home =() =>{
+//    ParentCategory_Home
+
+export const callGet_ParentCategory_Home = () => {
   return axios.get(`/api/v1/parentCategoryHome`);
-}
+};
+
+export const callGet_listbook_idparent = (arrId) => {
+  
+  return axios.post(`/api/v1/listbook_idparent`, { arrId });
+};

@@ -124,6 +124,7 @@ const ManagerBook = () => {
           </Button>
         </div>
       </div>
+      
       <div className="table-book" style={{ marginTop: "30px" }}>
         <TableBook searchData={searchData} />
       </div>

@@ -39,7 +39,9 @@ const itemss = [
     ],
   },
 ];
+
 const DropdownMenu = () => {
+  
   const [items, setListParent] = useState([]);
 
   const fetch_parent_category_home = async () => {
@@ -54,10 +56,9 @@ const DropdownMenu = () => {
 
   }, []);
 
-
   console.log('llll', items);
-  //console.log('item: ', items);
 
+  
   return (
     <Dropdown
       menu={{ 

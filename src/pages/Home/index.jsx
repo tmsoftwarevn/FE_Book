@@ -504,10 +504,10 @@ const Home = () => {
         <div className="container">
           <Row style={{ gap: 40, paddingTop: 20 }}>
             <Col lg={6} md={0} sm={0} xs={0} className="homepage-left">
-              {/* <Form
+            
+              <Form
                 onFinish={onFinish}
                 form={form}
-               
                 initialValues={{ priceFrom: searchPrice }}
               >
                 <div
@@ -655,9 +655,9 @@ const Home = () => {
                     </Button>
                   </div>
                 </Form.Item>
-              </Form> */}
-            <DanhMuc />
+              </Form>
 
+              {/* <DanhMuc /> */}
             </Col>
 
             <Col lg={17} md={24} sm={24} xs={24} className="homepage-right">
