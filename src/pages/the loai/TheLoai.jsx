@@ -17,6 +17,7 @@ import "./theloai.scss";
 import { useEffect, useRef, useState } from "react";
 import {
   callFetchCategory,
+  callGet_ParentCategory,
   callGet_ParentCategory_Home,
   callGetListBookHome,
   callListBookPopularAll,
@@ -26,7 +27,12 @@ import { GrPowerReset } from "react-icons/gr";
 import { AiOutlineDown } from "react-icons/ai";
 import { AiOutlineUp } from "react-icons/ai";
 import { AiFillStar } from "react-icons/ai";
-import { useLocation, useNavigate, useOutletContext, useParams } from "react-router-dom";
+import {
+  useLocation,
+  useNavigate,
+  useOutletContext,
+  useParams,
+} from "react-router-dom";
 import HomeSkeleton from "./homeSkeleton";
 import { AiOutlineLeft, AiOutlineRight } from "react-icons/ai";
 import ResponsiveHome from "./responsiveHome";
@@ -45,6 +51,11 @@ import CarouselBanner from "../../components/carousel/carousel-banner/CarouselBa
 import CarouselSanpham from "../../components/carousel/carousel-sanpham/CarouselSanpham";
 import banner_quangcao from "../../images/banner_qc.jpg";
 import DanhMuc from "../../components/danh muc/DanhMuc";
+import BreadcrumbCustom from "../../components/breadcrum/BreadCrumCustom";
+import {
+  getCategory_ChildrenById,
+  getCategoryById,
+} from "../../utils/function";
 
 const TheLoai = () => {
   const [form] = Form.useForm();
@@ -56,14 +67,12 @@ const TheLoai = () => {
   const [showMore, setShowMore] = useState(false);
   const [modalFilter, setModalFilter] = useState(false);
 
-  const refCarousel = useRef("");
   const refCheckbox = useRef([]);
   const navigate = useNavigate();
   const location = useLocation();
 
   const [listPopularAll, setListPopularAll] = useState([]);
 
-  let numberOfItems = showMore ? listCategory.length : 5;
   // let filterCategory = location.state?.category;
   const [filterCategory, setFilterCategory] = useState();
 
@@ -103,54 +112,53 @@ const TheLoai = () => {
   });
   const [arrId, setArrId] = useState([]);
   const slugPrams = useParams();
-  
-  // window.onbeforeunload = function () {
-  //   window.scrollTo(0, 0);
-  // };
-
+  const [nameCategory, setNameCategory] = useState("");
+  const [listBread, setListBread] = useState(); // set cho arrId
 
   useEffect(() => {
     const getListCategory = async () => {
       let res = await callGet_ParentCategory_Home();
       if (res && res.data) {
-        setIsLoading(false)
-        setlistCategory(res.data);
+        setIsLoading(false);
+
+        const { arrCate } = getCategoryById(res.data, slugPrams.slug);
+
+        setListBread(arrCate);
+
         getAllChildrenIds(res.data);
-        console.log('lisstt', res.data)
       }
     };
     getListCategory();
-  }, []);
+  }, [slugPrams.slug]);
 
   function getAllChildrenIds(categories) {
     let ids = [];
-    let arrId = [];
-    let name = [];
+
     //lặp kiếm tất cả con của cha
     function traverse(node) {
-      if (node.children && node.children.length > 0) {
+      // nếu slug == param url
+      if (node.slug === slugPrams.slug) {
+        setlistCategory(node); // để lặp .children
+        setNameCategory(node);
+
+        const { arrId } = getCategory_ChildrenById(node, node.id);
+        setArrId(arrId);
+      }
+
+      node.children &&
         node.children.forEach((child) => {
-          ids.push(child.id);
           traverse(child);
         });
-      }
     }
     // set điều kiện hiển thị home
     categories.forEach((category) => {
       // điều kiện id cate cha = 9
-      if (category.slug === slugPrams.slug ) {
-        traverse(category);
-        name.push(category.category);
-        arrId.push(ids);
-        ids = [];
-      }
+      traverse(category);
     });
-    //return ids;
-
-    setArrId(arrId);
   }
-  //get id cate
-console.log('arrrrr', arrId)
+
+  console.log(arrId); // Output: [9, 6, 3, 2]
+  console.log(listBread);
 
   const getListBookPopularAll = async () => {
     let res = await callListBookPopularAll();
@@ -214,16 +222,6 @@ console.log('arrrrr', arrId)
     //navigate(`/${url}`);
   }, [current, queryCategory, sort, price, rate]);
 
-  // useEffect(() => {
-  //   const getListCategory = async () => {
-  //     let res = await callFetchCategory();
-  //     if (res && res.data) {
-  //       setlistCategory(res.data);
-  //     }
-  //   };
-  //   getListCategory();
-  // }, []);
-
   const getListBook = async () => {
     let query = "";
     let arr = [];
@@ -244,7 +242,7 @@ console.log('arrrrr', arrId)
       rate
     );
     if (res && res.data) {
-      setIsLoading(false)
+      setIsLoading(false);
       setDataBook(res.data.result);
       setTotal(res.data.meta.total);
       if (res.data.meta.pages < currentRedux) {
@@ -309,44 +307,6 @@ console.log('arrrrr', arrId)
     }
   };
 
-  const handleSelectStar = (name) => {
-    if (name === "five") {
-      setActiveStar({
-        five: !activeStar.five,
-        four: false,
-        three: false,
-      });
-      if (activeStar.five === true) {
-        setRate(0);
-      } else {
-        setRate(5);
-      }
-    }
-    if (name === "four") {
-      setActiveStar({
-        five: false,
-        four: !activeStar.four,
-        three: false,
-      });
-      if (activeStar.four === true) {
-        setRate(0);
-      } else {
-        setRate(4);
-      }
-    }
-    if (name === "three") {
-      setActiveStar({
-        five: false,
-        four: false,
-        three: !activeStar.three,
-      });
-      if (activeStar.three === true) {
-        setRate(0);
-      } else {
-        setRate(3);
-      }
-    }
-  };
   const onClose = () => {
     setModalFilter(false);
   };
@@ -510,14 +470,15 @@ console.log('arrrrr', arrId)
     return (
       <div className="theloai">
         <div className="container">
-          <div className="uppercase text-2xl font-semibold text-center pt-10 text-slate-800 ">
-            {/* <span className="cursor-pointer hover:text-blue-600">
-              Trang chủ -{" "}
-            </span> */}
+          {/* <div className="uppercase text-2xl font-semibold text-center pt-10 text-slate-800 ">
+            
             <span className="cursor-pointer hover:text-blue-600">
-              Tên thể loại
+              {nameCategory.category}
             </span>
-          </div>
+          </div> */}
+
+          {/* <BreadcrumbCustom listBread={listSlug} /> */}
+
           <Row style={{ gap: 40, paddingTop: 20 }}>
             <Col
               lg={6}
@@ -535,8 +496,9 @@ console.log('arrrrr', arrId)
 
                 <Form.Item name="category" labelCol={{ span: 24 }}>
                   <Row>
-                    {listCategory?.length > 0 &&
-                      listCategory.map((item, index) => {
+                    {listCategory.children ? (
+                      listCategory?.children &&
+                      listCategory.children.map((item, index) => {
                         return (
                           <Col
                             span={24}
@@ -555,8 +517,19 @@ console.log('arrrrr', arrId)
                             </label>
                           </Col>
                         );
-                      })}
-                    
+                      })
+                    ) : (
+                      <Col span={24} className="category-group">
+                        <input
+                          type="checkbox"
+                          style={{ marginRight: 10 }}
+                          onClick={() => handleSelectCategory(listCategory)}
+                        ></input>
+                        <label>
+                          <div>{listCategory.category}</div>
+                        </label>
+                      </Col>
+                    )}
                   </Row>
                 </Form.Item>
 
@@ -788,7 +761,7 @@ console.log('arrrrr', arrId)
 
           {/* =============responsive============ */}
 
-          <ResponsiveHome
+          {/* <ResponsiveHome
             onClose={onClose}
             modalFilter={modalFilter}
             onFinish={onFinish}
@@ -809,7 +782,7 @@ console.log('arrrrr', arrId)
             queryCategory={queryCategory}
             setCurrent={setCurrent}
             setActiveStar={setActiveStar}
-          />
+          /> */}
         </div>
       </div>
     );

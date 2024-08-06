@@ -61,7 +61,7 @@ const Home = () => {
     const getListCategory = async () => {
       let res = await callGet_ParentCategory_Home();
       if (res && res.data) {
-        setIsLoading(false)
+        setIsLoading(false);
         setlistCategory(res.data);
         getAllChildrenIds(res.data);
         // setArrId(arr)
@@ -82,25 +82,27 @@ const Home = () => {
           traverse(child);
         });
       }
-
     }
     // set điều kiện hiển thị home
     categories.forEach((category) => {
       // điều kiện id cate cha = 9 , 7
+
+      // nhớ add thêm id cha vào, [7,4]
       if (category.id === 7 || category.id === 9) {
         traverse(category);
         name.push(category.category);
         setNameCategory(name);
         arrId.push(ids);
-        ids = []
+        ids = [];
       }
     });
     //return ids;
 
     setArrId(arrId);
   }
-console.log('arrrrrrr', arrId)
-  
+
+  console.log('arrridddd 11111111', arrId);
+
   const handleSelectCategory = (item) => {
     navigate(`/the-loai/${item.slug}`);
   };
