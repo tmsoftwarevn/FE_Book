@@ -1,51 +1,39 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Breadcrumb } from "antd";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { convertSlug } from "../../utils/convertSlug";
 
 const BreadcrumbCustom = (props) => {
   const { listBread } = props;
   const params = useParams();
+  const [bread, setBread] = useState([]);
 
-  //console.log("breaddd", list);
+  
   useEffect(() => {
     customBreadcrumb();
-  }, [params.slug]);
+  }, [listBread]);
 
   const customBreadcrumb = () => {
-    let breadcrumbs = [];
-
-    listBread.forEach((item) => {
+    let breadcrumbs = [
+      {
+        title: <Link to="/">Trang chủ</Link>,
+      },
+    ];
+    listBread?.map((item) => {
       let slug = convertSlug(item);
-      breadcrumbs.push(item);
-      if (slug === params.slug) {
-        return; // Use 'return' in a forEach to exit the current iteration early
-      }
-
-      breadcrumbs.push(item);
+      let navi = `/the-loai/${slug}`;
+      breadcrumbs.push({
+        title: <Link to={navi}>{item}</Link>,
+      });
     });
-    console.log("bbbbbb", listBread);
-    return breadcrumbs; // Return the collected breadcrumbs
-
+    setBread(breadcrumbs);
   };
 
+ 
   return (
-    <Breadcrumb
-      items={[
-        {
-          title: "Home",
-        },
-        {
-          title: <a href="">Application Center</a>,
-        },
-        {
-          title: <a href="">Application List</a>,
-        },
-        {
-          title: "An Application",
-        },
-      ]}
-    />
+    <div className="mt-5 mb-2">
+      <Breadcrumb className="text-lg font-semibold" items={bread} />
+    </div>
   );
 };
 

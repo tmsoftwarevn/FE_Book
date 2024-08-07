@@ -2,9 +2,7 @@ import { Row, Col, Form } from "antd";
 import "./home.scss";
 import { useEffect, useRef, useState } from "react";
 import {
-  callFetchCategory,
   callGet_ParentCategory_Home,
-  callGetListBookHome,
   callListBookPopularAll,
 } from "../../services/api";
 
@@ -19,6 +17,7 @@ import banner_quangcao from "../../images/banner_qc.jpg";
 import DanhMuc from "../../components/danh muc/DanhMuc";
 import TheLoaiNoiBat from "../../components/theloai noibat/TheLoaiNoiBat";
 import { convertSlug } from "../../utils/convertSlug";
+import { MdKeyboardDoubleArrowRight } from "react-icons/md";
 
 const Home = () => {
   const [form] = Form.useForm();
@@ -84,24 +83,39 @@ const Home = () => {
       }
     }
     // set điều kiện hiển thị home
+    let test=[7,9]
     categories.forEach((category) => {
       // điều kiện id cate cha = 9 , 7
 
       // nhớ add thêm id cha vào, [7,4]
-      if (category.id === 7 || category.id === 9) {
-        traverse(category);
-        name.push(category.category);
-        setNameCategory(name);
-        arrId.push(ids);
-        ids = [];
-      }
+      test.map((item) =>{
+        if (category.id === item ) {
+          traverse(category);
+          name.push(category.category);
+          setNameCategory(name);
+          // thêm id cha
+          ids.push(category.id);
+          arrId.push(ids);
+          ids = [];
+        }
+      })
+
+      // if (category.id === 7 || category.id === 9) {
+      //   traverse(category);
+      //   name.push(category.category);
+      //   setNameCategory(name);
+      //   // thêm id cha
+
+      //   arrId.push(ids);
+      //   ids = [];
+      // }
     });
     //return ids;
 
     setArrId(arrId);
   }
 
-  console.log('arrridddd 11111111', arrId);
+  console.log("arrridddd 11111111", arrId);
 
   const handleSelectCategory = (item) => {
     navigate(`/the-loai/${item.slug}`);
@@ -118,34 +132,36 @@ const Home = () => {
       <div className="homepage">
         <div className="container">
           <Row style={{ gap: 0 }} className="my-5">
-            <Col lg={6} md={0} sm={0} xs={0} className="bg-white px-7 py-5">
-              <div className="text-2xl font-semibold">Danh mục sản phẩm</div>
+            <Col
+              lg={5}
+              md={0}
+              sm={0}
+              xs={0}
+              className="bg-blue-600 text-white shadow-gray-400 shadow-lg"
+            >
+              <div className="text-xl text-center font-semibold p-3 uppercase border-b border-gray">
+                Danh mục sản phẩm
+              </div>
               <Row>
                 {listCategory?.length > 0 &&
                   listCategory.map((item, index) => {
                     return (
                       <Col
                         span={24}
-                        className="flex items-center mt-5"
+                        className="flex font-semibold items-center hover:pl-5 hover:bg-blue-900 cursor-pointer px-2 py-2 border-b border-gray"
                         key={`itemcategory-${index}`}
                       >
-                        <input
-                          id={index}
-                          ref={(el) => (refCheckbox.current[index] = el)}
-                          type="checkbox"
-                          style={{ marginRight: 10 }}
-                          onClick={() => handleSelectCategory(item)}
-                        ></input>
-                        <label htmlFor={index}>
-                          <div>{item.category}</div>
-                        </label>
+                        <MdKeyboardDoubleArrowRight />
+                        <div onClick={() => handleSelectCategory(item)}>
+                          {item.category}
+                        </div>
                       </Col>
                     );
                   })}
               </Row>
             </Col>
 
-            <Col lg={18} md={24} sm={24} xs={24}>
+            <Col lg={19} md={24} sm={24} xs={24}>
               <CarouselBanner />
             </Col>
           </Row>

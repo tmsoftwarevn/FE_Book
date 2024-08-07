@@ -50,7 +50,7 @@ const CarouselSanpham = (props) => {
   };
 
   return (
-    <div>
+    <div className="">
       <div
         style={{
           padding: 20,
@@ -61,13 +61,13 @@ const CarouselSanpham = (props) => {
       >
         Sách mới
       </div>
-      <div className="carousel-sanpham overflow-hidden">
+      <div className=" overflow-hidden">
         <Slider {...settings}>
           {listPopularAll &&
             listPopularAll.length > 0 &&
             listPopularAll.map((item, index) => {
               return (
-                <div className="shadow-gray-400 shadow-md border border-transparent hover:border hover:border-blue-600">
+                <div className="shadow-gray-400 bg-white shadow-md border border-transparent hover:border hover:border-blue-600">
                   <Card item={item} />
                 </div>
               );

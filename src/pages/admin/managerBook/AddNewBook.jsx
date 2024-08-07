@@ -78,11 +78,11 @@ const AddNewBook = (props) => {
   const onChangeDate = (date, dateString) => {
     setNgayxuatban(dateString);
   };
-  
+
   const onFinish = async (values) => {
-    const { name, author, price, quantity, sold, rate,hinhthuc,nhaxuatban } = values;
-    
-    
+    const { name, author, price, quantity, sold, rate, hinhthuc, nhaxuatban } =
+      values;
+
     let description = refEditor?.current?.getContent();
 
     if (dataThumbnail.length === 0) {
@@ -200,9 +200,12 @@ const AddNewBook = (props) => {
     const fetchCategory = async () => {
       const res = await callFetchCategory();
       if (res && res.data) {
-        const d = res.data.map((item) => {
-          return { label: item.category, value: item.id };
+        let d = [];
+        res.data.map((item) => {
+          if (item.parentId !== 0)
+            d.push({ label: item.category, value: item.id });
         });
+
         setListCategory(d);
       }
     };
@@ -285,10 +288,9 @@ const AddNewBook = (props) => {
                 labelCol={{ span: 24 }}
                 label="Ngày xuất bản"
                 name="ngayxuatban"
-               
               >
                 <Space direction="vertical">
-                  <DatePicker onChange={onChangeDate} placeholder="Ngày"  />
+                  <DatePicker onChange={onChangeDate} placeholder="Ngày" />
                 </Space>
               </Form.Item>
             </Col>

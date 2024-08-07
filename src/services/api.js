@@ -255,6 +255,12 @@ export const callGet_ParentCategory_Home = () => {
 };
 
 export const callGet_listbook_idparent = (arrId) => {
-  
   return axios.post(`/api/v1/listbook_idparent`, { arrId });
+};
+
+export const callGet_listbook_arrid_paginate = (page, limit, arrId) => {
+  return axios.post(
+    `/api/v1/listbook_arrid_paginate?page=${page}&limit=${limit}`,
+    { arrId }
+  );
 };

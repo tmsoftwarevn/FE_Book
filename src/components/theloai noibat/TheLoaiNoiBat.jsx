@@ -34,7 +34,7 @@ const TheLoaiNoiBat = (props) => {
         {list &&
           list.map((item, idx) => {
             return (
-              <div className="col-span-1 shadow-gray-400 shadow-md border border-transparent hover:border hover:border-blue-600">
+              <div className="col-span-1 bg-white shadow-gray-400 shadow-md border border-transparent hover:border hover:border-blue-600">
                 <Card item={item} />
               </div>
             );

@@ -12,7 +12,7 @@ const CarouselBanner = () => {
     <div className="carousel-banner">
      
       <div className="carousel">
-        <Carousel ref={refCarousel} dots={false} autoplay>
+        <Carousel ref={refCarousel} draggable={true} dots={false} autoplay>
           <div>
             <div className="carousel__img">
               <img className="w-full" src={img1} />
@@ -30,7 +30,7 @@ const CarouselBanner = () => {
           </div>
         </Carousel>
 
-        <div
+        {/* <div
           className="left-carousel"
           onClick={() => refCarousel.current.prev()}
         >
@@ -41,7 +41,8 @@ const CarouselBanner = () => {
           onClick={() => refCarousel.current.next()}
         >
           <AiOutlineRight />
-        </div>
+        </div> */}
+
       </div>
     </div>
   );

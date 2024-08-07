@@ -19,13 +19,17 @@ const SelectCategory = (props) => {
   };
 
   const customCategory = (list) => {
-    let arr = [];
+    let arr = [{
+      value: 0,
+      label: "Không có",
+    }];
     list.map((item) => {
       arr.push({
         value: item.id,
         label: item.name,
       });
     });
+    // 
     setSelectMenu(arr);
   };
 
