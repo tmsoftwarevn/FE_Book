@@ -13,6 +13,7 @@ const Card = (props) => {
     <div className="wrapper pb-3 " onClick={() => handleRedirectBook(item)}>
       <div className="thumbnail">
         <img
+          loading="lazy"
           src={`${import.meta.env.VITE_BACKEND_URL}/images/book/${
             item?.thumbnail
           }`}

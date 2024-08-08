@@ -13,26 +13,30 @@
     color: rgba(0, 0, 0, 0.88);
     background: none;
 }
-.image-gallery-thumbnail .image-gallery-thumbnail-image {
-    vertical-align: middle;
-    width: 100%;
-    max-height: 92px;
-}
-.image-gallery-slide .image-gallery-image {
-    @include xs {
-        height: 200px;
-    }
-    @include sm {
-        height: 250px;
-    }
-    @include md {
-        height: 300px;
-    }
-    @include lg {
-        height: 100%;
-    }
-}
 
+// .image-gallery-thumbnail .image-gallery-thumbnail-image {
+//     vertical-align: middle;
+//     width: 100%;
+//     max-height: 92px;
+// }
+
+// .image-gallery-slide .image-gallery-image {
+//     @include xs {
+//         height: 200px;
+//     }
+//     @include sm {
+//         height: 250px;
+//     }
+//     @include md {
+//         height: 300px;
+//     }
+//     @include lg {
+//         height: 100%;
+//     }
+// }
+.image-gallery-thumbnails-container{
+    display: flex;
+}
 .view-detail-book {
     .thumbnail-image {
         cursor: pointer;

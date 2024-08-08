@@ -8,7 +8,8 @@ const BreadcrumbCustom = (props) => {
   const params = useParams();
   const [bread, setBread] = useState([]);
 
-  
+  console.log('bbbbbbbbb', listBread);
+
   useEffect(() => {
     customBreadcrumb();
   }, [listBread]);
@@ -31,7 +32,7 @@ const BreadcrumbCustom = (props) => {
 
  
   return (
-    <div className="mt-5 mb-2">
+    <div className="py-5 uppercase px-5 lg:px-0">
       <Breadcrumb className="text-lg font-semibold" items={bread} />
     </div>
   );

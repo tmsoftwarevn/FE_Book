@@ -5,9 +5,9 @@ import { convertSlug } from "../../../utils/convertSlug";
 import { useNavigate } from "react-router-dom";
 import "./carouselsanpham.scss";
 import Card from "../../card/Card";
+import { BsBook } from "react-icons/bs";
 
 let settings = {
-  
   infinite: true,
   slidesToShow: 5,
   slidesToScroll: 1,
@@ -51,14 +51,8 @@ const CarouselSanpham = (props) => {
 
   return (
     <div className="">
-      <div
-        style={{
-          padding: 20,
-          backgroundColor: "rgb(255 255 255)",
-          fontWeight: 600,
-        }}
-        className="popular text-xl uppercase"
-      >
+      <div className="text-xl px-2 mb-5 mt-10 text-blue-600 flex items-center uppercase font-semibold max-w-56 sm:max-w-full">
+        <BsBook className="mr-3 hidden sm:block " />
         Sách mới
       </div>
       <div className=" overflow-hidden">
@@ -67,7 +61,7 @@ const CarouselSanpham = (props) => {
             listPopularAll.length > 0 &&
             listPopularAll.map((item, index) => {
               return (
-                <div className="shadow-gray-400 bg-white shadow-md border border-transparent hover:border hover:border-blue-600">
+                <div className="shadow-gray-400 bg-white shadow-md border border-transparent hover:-translate-y-2 duration-300">
                   <Card item={item} />
                 </div>
               );

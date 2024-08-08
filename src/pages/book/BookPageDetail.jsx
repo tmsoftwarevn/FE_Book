@@ -14,7 +14,7 @@ import ModalGallery from "./ModalImageGallery";
 import { MinusOutlined, PlusOutlined } from "@ant-design/icons";
 import { BsCartPlus } from "react-icons/bs";
 import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
-import { callGetDetailBook } from "../../services/api";
+import { callGet_ParentCategory, callGetDetailBook } from "../../services/api";
 import BookSkeleton from "./BookSkeleton";
 
 import { doAddBookAction, saveInfoCartUser } from "../../redux/cart/cartSlice";
@@ -28,6 +28,7 @@ import dayjs from "dayjs";
 import "dayjs/locale/vi";
 import utc from "dayjs/plugin/utc";
 import timezone from "dayjs/plugin/timezone";
+import BreadcrumbCustom from "../../components/breadcrum/BreadCrumCustom";
 // timezone vietnam
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -70,8 +71,9 @@ const BookPageDetail = (props) => {
   // window.onbeforeunload = function () {
   //   window.scrollTo(0, 0);
   // };
+  const [listBread, setListBread] = useState([]);
 
-  const MAX_LENGTH = 600; // Độ dài tối đa của mô tả rút gọn
+  const MAX_LENGTH = 1000; // Độ dài tối đa của mô tả rút gọn
   const cleanDescription = DOMPurify.sanitize(detailBook?.description);
   const toggleExpanded = () => {
     setIsExpanded(!isExpanded);
@@ -81,37 +83,32 @@ const BookPageDetail = (props) => {
     const getDetailBook = async () => {
       //NProgress.start();
       let res = await callGetDetailBook(id);
-
       if (res && res.data) {
         setDetailBook(res.data);
         customDataBook(res.data);
+        console.log("rrrr", res.data);
+        fetch_breadCrumb_cate(res.data["category.id"]);
       }
       setIsLoading(false);
     };
     getDetailBook();
-
     window.scrollTo(0, 0);
   }, []);
 
-  const a = [
-    {
-      title: <Link to="/">Trang chủ</Link>,
-    },
-    {
-      title: (
-        // <Link to={"/"} state={{ category: detailBook.category }}>
-        //   {detailBook.category}
-        // </Link>
-        <Link to={`/?category=${detailBook.category}`}>
-          {detailBook.category}
-        </Link>
-      ),
-    },
+  const fetch_breadCrumb_cate = async (id) => {
+    const res = await callGet_ParentCategory(id);
+    if (res && res.EC === 1) {
+      // custom truyen xuon bread
+      let d = res.data.reverse();
+     
+      let arr = [];
+      d.map((item) =>{
+        arr.push(item.category) // lấy name
+      })
+      setListBread(arr)
+    }
+  };
 
-    {
-      title: `${detailBook.mainText}`,
-    },
-  ];
   const customDataBook = (detailBook) => {
     let arr = [];
     let obj = {
@@ -279,11 +276,8 @@ const BookPageDetail = (props) => {
       <div className="book-page">
         <div className="container">
           <div>
-            <Breadcrumb
-              separator=">"
-              style={{ padding: "10px ", fontSize: 16 }}
-              items={a}
-            />
+            <BreadcrumbCustom listBread={listBread} />
+
             <div className="view-detail-book">
               <div
                 style={{
@@ -305,6 +299,7 @@ const BookPageDetail = (props) => {
                       onThumbnailClick={(e, index) =>
                         handleOnClickImage(e, index)
                       }
+                      showThumbnails={true}
                     />
                   </Col>
                   <Col
@@ -442,8 +437,8 @@ const BookPageDetail = (props) => {
             <div className="detail">
               {/* <div className="detail__title">CHI TIẾT SẢN PHẨM</div> */}
               <div className="detail__content">
-              <div className="detail__title font-bold">CHI TIẾT SẢN PHẨM</div>
-              <div className="border border-black-400 mb-5"></div>
+                <div className="detail__title font-bold">CHI TIẾT SẢN PHẨM</div>
+                <div className="border border-black-400 mb-5"></div>
                 <div
                   dangerouslySetInnerHTML={{
                     __html: isExpanded

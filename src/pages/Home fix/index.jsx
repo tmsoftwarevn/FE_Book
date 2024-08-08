@@ -16,8 +16,8 @@ import CarouselSanpham from "../../components/carousel/carousel-sanpham/Carousel
 import banner_quangcao from "../../images/banner_qc.jpg";
 import DanhMuc from "../../components/danh muc/DanhMuc";
 import TheLoaiNoiBat from "../../components/theloai noibat/TheLoaiNoiBat";
-import { convertSlug } from "../../utils/convertSlug";
-import { MdKeyboardDoubleArrowRight } from "react-icons/md";
+import { BsBook } from "react-icons/bs";
+import { SiGitbook } from "react-icons/si";
 
 const Home = () => {
   const [form] = Form.useForm();
@@ -26,18 +26,12 @@ const Home = () => {
   const [listCategory, setlistCategory] = useState([]);
   const [nameCategory, setNameCategory] = useState([]);
 
-  const refCheckbox = useRef([]);
   const navigate = useNavigate();
   const location = useLocation();
-
   const [listPopularAll, setListPopularAll] = useState([]);
-
-  const [filterCategory, setFilterCategory] = useState();
-
   const dispatch = useDispatch();
   const params = new URLSearchParams(location.search);
 
-  const [queryCategory, setQueryCategory] = useState([]);
 
   const [arrId, setArrId] = useState([]);
 
@@ -151,7 +145,8 @@ const Home = () => {
                         className="flex font-semibold items-center hover:pl-5 hover:bg-blue-900 cursor-pointer px-2 py-2 border-b border-gray"
                         key={`itemcategory-${index}`}
                       >
-                        <MdKeyboardDoubleArrowRight />
+                        {/* <MdKeyboardDoubleArrowRight /> */}
+                        <SiGitbook className="mr-2"/>
                         <div onClick={() => handleSelectCategory(item)}>
                           {item.category}
                         </div>

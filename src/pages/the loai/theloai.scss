@@ -31,17 +31,9 @@ input[type='checkbox'] {
 .slick-dots li.slick-active button {
     background-color: blue !important;
 }
-.carousel-1 {
-    @include sm {
-        height: 290px;
-    }
-    @include md {
-        height: 300px;
-    }
-    @include xs {
-        height: 250px;
-    }
-}
+
+
+
 .homepage-left {
     background-color: rgb(255 255 255);
     height: fit-content;
@@ -85,46 +77,4 @@ input[type='checkbox'] {
         }
     }
 }
-.homepage-right {
-    .carousel-homepage {
-        background-color: rgb(255 255 255);
-        
-        .tabs {
-            padding: 0 20px;
-            position: relative;
-            @include xs {
-                display: none;
-            }
-            .filter {
-                @include xs {
-                    display: none;
-                }
-                @include lg {
-                    display: none;
-                }
-                cursor: pointer;
-                display: flex;
-                font-size: 16px;
-                align-items: center;
-                position: absolute;
-                right: 20px;
-                bottom: 30px;
-            }
-        }
-        ////////// =============responsive tab  ===========
-        .tab-reponsive {
-            .text-tab {
-                color: blue;
-            }
-            @include sm {
-                display: none;
-            }
-            @include xs {
-                display: flex;
-                justify-content: space-between;
-                padding: 10px 20px;
-            }
-        }
-    }
-    
-}
+

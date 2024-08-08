@@ -243,7 +243,7 @@ export const callUpdate_Category = (id, category, parentId) => {
 export const callDelete_Category = (id) => {
   return axios.delete(`/api/v1/category/${id}`);
 };
-
+// ở admin
 export const callGet_ParentCategory = (id) => {
   return axios.get(`/api/v1/parentCategory/${id}`);
 };
@@ -258,9 +258,16 @@ export const callGet_listbook_idparent = (arrId) => {
   return axios.post(`/api/v1/listbook_idparent`, { arrId });
 };
 
-export const callGet_listbook_arrid_paginate = (page, limit, arrId) => {
+export const callGet_listbook_arrid_paginate = (
+  page,
+  limit,
+  price,
+  sp,
+  sd,
+  arrId
+) => {
   return axios.post(
-    `/api/v1/listbook_arrid_paginate?page=${page}&limit=${limit}`,
+    `/api/v1/listbook_arrid_paginate?page=${page}&limit=${limit}&price=${price}&sp=${sp}&sd=${sd}`,
     { arrId }
   );
 };

@@ -11,6 +11,7 @@ import {
   Carousel,
   Dropdown,
   Space,
+  Flex,
 } from "antd";
 import "./theloai.scss";
 
@@ -56,60 +57,43 @@ import {
 } from "../../utils/function";
 import { MdKeyboardDoubleArrowRight } from "react-icons/md";
 import Card from "../../components/card/Card";
+import SelectCustom from "../../components/select/SelectCustom";
+import { SiGitbook } from "react-icons/si";
 
 const TheLoai = () => {
   const [form] = Form.useForm();
   const [total, setTotal] = useState(1);
-  const [pageSize, setPageSize] = useState(16);
+  const [pageSize, setPageSize] = useState(16); //16
   const [dataBook, setDataBook] = useState("");
   const [isLoading, setIsLoading] = useState(true);
   const [listCategory, setlistCategory] = useState([]);
-  const [showMore, setShowMore] = useState(false);
-  const [modalFilter, setModalFilter] = useState(false);
-
-  const refCheckbox = useRef([]);
   const navigate = useNavigate();
   const location = useLocation();
-
-  // let filterCategory = location.state?.category;
-  const [filterCategory, setFilterCategory] = useState();
-
   const dispatch = useDispatch();
   const params = new URLSearchParams(location.search);
 
-  const keyTabHome = useSelector((state) => state.category?.keyTabHome);
-  const rateRedux = useSelector((state) => state.category.rateRedux);
-  const priceRedux = useSelector((state) => state.category.priceRedux);
   const querySort = useSelector((state) => state.category?.querySort);
   const searchPrice = useSelector((state) => state.category.searchPrice);
-
-  const [queryCategory, setQueryCategory] = useState([]);
   const [current, setCurrent] = useState(
     params.get("page") ? params.get("page") : 1
   );
 
-  const [sort, setSort] = useState(querySort); // set lai de tu dong lay lai
-  const [price, setPrice] = useState(priceRedux);
-  const [rate, setRate] = useState(rateRedux);
+  const [price, setPrice] = useState(params.get("p") ? params.get("p") : "");
 
-  const [activeRes, setActiveRes] = useState({
-    a1: keyTabHome === 1 ? true : false,
-    a2: keyTabHome === 2 ? true : false,
-    a3: keyTabHome === 3 ? true : false,
-    a4: keyTabHome === 4 ? true : false,
-  });
+  const [sortPrice, setSortPrice] = useState(
+    params.get("sp") ? params.get("sp") : ""
+  );
+  const [sortDay, setSortDay] = useState(
+    params.get("sd") ? params.get("sd") : ""
+  );
+
   const [activePrice, setactivePrice] = useState({
-    a: price === "0,40000" ? true : false,
-    b: price === "40000,120000" ? true : false,
-    c: price === "120000,300000" ? true : false,
-    d: price === "300000,99999999" ? true : false,
+    a: price === "0,80000" ? true : false,
+    b: price === "80000,200000" ? true : false,
+    c: price === "200000,400000" ? true : false,
+    d: price === "400000,99999999" ? true : false,
   });
 
-  const [activeStar, setActiveStar] = useState({
-    five: +rateRedux === 5 ? true : false,
-    four: +rateRedux === 4 ? true : false,
-    three: +rateRedux === 3 ? true : false,
-  });
   const [arrId, setArrId] = useState([]);
   const slugPrams = useParams();
   const [nameCategory, setNameCategory] = useState("");
@@ -155,30 +139,41 @@ const TheLoai = () => {
     });
   }
 
-  console.log('priceee', price)
+  console.log("priceee", price);
   useEffect(() => {
     if (params.get("page")) {
       setCurrent(params.get("page"));
     } else {
       setCurrent(1);
     }
-    
+
     setactivePrice({
-      a: params.get("price") === "0,40000" ? true : false,
-      b: params.get("price") === "40000,120000" ? true : false,
-      c: params.get("price") === "120000,300000" ? true : false,
-      d: params.get("price") === "300000,99999999" ? true : false,
+      a: params.get("p") === "0,80000" ? true : false,
+      b: params.get("p") === "80000,200000" ? true : false,
+      c: params.get("p") === "200000,400000" ? true : false,
+      d: params.get("p") === "400000,99999999" ? true : false,
     });
   }, [location]);
 
+  // window.onbeforeunload = function () {
+  //   window.scrollTo(0, 0);
+  // };
+
   useEffect(() => {
     fetch_listbook_arrid_paginate();
-  }, [current, arrId]);
+  }, [current, price, arrId, sortDay, sortPrice]);
 
   const fetch_listbook_arrid_paginate = async () => {
-    let res = await callGet_listbook_arrid_paginate(current, pageSize, arrId);
+    let res = await callGet_listbook_arrid_paginate(
+      current,
+      pageSize,
+      price,
+      sortPrice,
+      sortDay,
+      arrId
+    );
     if (res && res.data) {
-      console.log("ressss", res);
+      // console.log("ressss", res);
 
       setIsLoading(false);
       setDataBook(res.list);
@@ -196,8 +191,10 @@ const TheLoai = () => {
       });
       if (activePrice.a === true) {
         setPrice("");
+        navigate(`${location.pathname}?page=${1}`);
       } else {
         setPrice(price);
+        navigate(`${location.pathname}?page=${1}&p=${price}`);
       }
     }
     if (name === "b") {
@@ -209,8 +206,10 @@ const TheLoai = () => {
       });
       if (activePrice.b === true) {
         setPrice("");
+        navigate(`${location.pathname}?page=${1}`);
       } else {
         setPrice(price);
+        navigate(`${location.pathname}?page=${1}&p=${price}`);
       }
     }
     if (name === "c") {
@@ -222,8 +221,10 @@ const TheLoai = () => {
       });
       if (activePrice.c === true) {
         setPrice("");
+        navigate(`${location.pathname}?page=${1}`);
       } else {
         setPrice(price);
+        navigate(`${location.pathname}?page=${1}&p=${price}`);
       }
     }
     if (name === "d") {
@@ -235,8 +236,10 @@ const TheLoai = () => {
       });
       if (activePrice.d === true) {
         setPrice("");
+        navigate(`${location.pathname}?page=${1}`);
       } else {
         setPrice(price);
+        navigate(`${location.pathname}?page=${1}&p=${price}`);
       }
     }
   };
@@ -259,102 +262,14 @@ const TheLoai = () => {
     onClose();
   };
 
-  const onChangeTab = (key) => {
-    if (+key === 1) {
-      setActiveRes({
-        a1: true,
-        a2: false,
-        a3: false,
-      });
-      setSort("&field=&sort=");
-      dispatch(doSetKeyTabHomeAction(key));
-      dispatch(doSetQuerySortHomeAction("&field=&sort="));
-    }
-    if (+key === 2) {
-      setActiveRes({
-        a1: false,
-        a2: true,
-        a3: false,
-      });
-      setSort("&field=createdAt&sort=DESC");
-      dispatch(doSetKeyTabHomeAction(key));
-      dispatch(doSetQuerySortHomeAction("&field=createdAt&sort=DESC"));
-    }
-    if (+key === 3) {
-      setActiveRes({
-        a1: false,
-        a2: false,
-        a3: true,
-      });
-      setSort("&field=price&sort=ASC");
-      dispatch(doSetKeyTabHomeAction(key));
-      dispatch(doSetQuerySortHomeAction("&field=price&sort=ASC"));
-    }
-    if (+key === 4) {
-      setActiveRes({
-        a1: false,
-        a2: false,
-        a3: false,
-        a4: true,
-      });
-      setSort("&field=price&sort=DESC");
-      dispatch(doSetKeyTabHomeAction(key));
-      dispatch(doSetQuerySortHomeAction("&field=price&sort=DESC"));
-    }
-  };
-
-  const item = [
-    {
-      key: "1",
-      label: `Tất cả`,
-      children: <></>,
-    },
-    {
-      key: "2",
-      label: `Hàng Mới`,
-      children: <></>,
-    },
-    {
-      key: "3",
-      label: `Giá Thấp Đến Cao`,
-      children: <></>,
-    },
-    {
-      key: "4",
-      label: `Giá Cao Đến Thấp`,
-      children: <></>,
-    },
-  ];
-
-  const items = [
-    {
-      label: (
-        <p
-          style={{ color: activeRes.a3 === true ? "blue" : "black" }}
-          onClick={() => onChangeTab(3)}
-        >
-          Thấp đến cao
-        </p>
-      ),
-      key: "3",
-    },
-    {
-      label: (
-        <p
-          style={{ color: activeRes.a4 === true ? "blue" : "black" }}
-          onClick={() => onChangeTab(4)}
-        >
-          Cao đến thấp
-        </p>
-      ),
-      key: "4",
-    },
-  ];
   const handleChangePage = (p, s) => {
-    navigate(`?page=${p}`)
-    
+    if (price) navigate(`${location.pathname}?page=${p}&p=${price}`);
+    else {
+      navigate(`${location.pathname}?page=${p}`);
+    }
+    //navigate(`?page=${p}`);
   };
-  
+
   const handleReset = () => {
     setQueryCategory([]);
     form.resetFields();
@@ -365,17 +280,14 @@ const TheLoai = () => {
       d: false,
     });
     setPrice("");
-    setRate(0);
-    setActiveStar({
-      five: false,
-      four: false,
-      three: false,
-    });
   };
 
   const handleSelectCategory = (item) => {
     navigate(`/the-loai/${item.slug}`);
   };
+
+  console.log('sss price', sortPrice)
+  console.log('sss day', sortDay)
 
   if (isLoading === true) {
     return (
@@ -387,16 +299,10 @@ const TheLoai = () => {
     return (
       <div className="theloai">
         <div className="container">
-          {/* <div className="uppercase text-2xl font-semibold text-center pt-10 text-slate-800 ">
-            
-            <span className="cursor-pointer hover:text-blue-600">
-              {nameCategory.category}
-            </span>
-          </div> */}
-
+         
           <BreadcrumbCustom listBread={listBread} />
 
-          <Row style={{ gap: 0 }}>
+          <Row style={{ gap: 30 }}>
             <Col lg={5} md={0} sm={0} xs={0}>
               <div className=" shadow-gray-400 shadow-lg pb-5">
                 <div className="bg-blue-600 text-white">
@@ -414,7 +320,8 @@ const TheLoai = () => {
                             className="flex font-semibold items-center hover:pl-5 hover:bg-blue-900 cursor-pointer px-2 py-2 border-b border-gray"
                             key={`itemcategory-${index}`}
                           >
-                            <MdKeyboardDoubleArrowRight />
+                            {/* <MdKeyboardDoubleArrowRight /> */}
+                            <SiGitbook className="mr-2" />
                             <div onClick={() => handleSelectCategory(item)}>
                               {item.category}
                             </div>
@@ -426,7 +333,8 @@ const TheLoai = () => {
                         span={24}
                         className="flex font-semibold items-center hover:pl-5 hover:bg-blue-900 cursor-pointer px-2 py-2 border-b border-gray"
                       >
-                        <MdKeyboardDoubleArrowRight />
+                        {/* <MdKeyboardDoubleArrowRight /> */}
+                        <SiGitbook className="mr-2" />
                         <div onClick={() => handleSelectCategory(listCategory)}>
                           {listCategory.category}
                         </div>
@@ -448,66 +356,43 @@ const TheLoai = () => {
                     <div className="grid gap-4">
                       <Button
                         onClick={() => {
-                          handleSelectPrice("a", "0,40000");
+                          handleSelectPrice("a", "0,80000");
                         }}
                         type={activePrice.a === true ? "primary" : "default"}
                       >
-                        Dưới 40.000
+                        Dưới 80.000
                       </Button>
                       <Button
                         onClick={() => {
-                          handleSelectPrice("b", "40000,120000");
+                          handleSelectPrice("b", "80000,200000");
                         }}
                         type={activePrice.b === true ? "primary" : "default"}
                       >
                         {" "}
-                        40.000 - 120.000
+                        80.000 - 200.000
                       </Button>
                       <Button
                         onClick={() => {
-                          handleSelectPrice("c", "120000,300000");
+                          handleSelectPrice("c", "200000,400000");
                         }}
                         type={activePrice.c === true ? "primary" : "default"}
                       >
                         {" "}
-                        120.000 - 300.000
+                        200.000 - 400.000
                       </Button>
                       <Button
                         onClick={() => {
-                          handleSelectPrice("d", "300000,99999999");
+                          handleSelectPrice("d", "400000,99999999");
                         }}
                         type={activePrice.d === true ? "primary" : "default"}
                       >
                         {" "}
-                        Trên 300.000
+                        Trên 400.000
                       </Button>
                     </div>
                   </Form.Item>
 
-                  {/* <Form.Item label="Chọn khoảng giá từ" labelCol={{ span: 24 }}>
-                  <div
-                    style={{
-                      display: "flex",
-                      justifyContent: "space-between",
-                    }}
-                  >
-                    <Form.Item name="priceFrom">
-                      <InputNumber
-                        className="input-number"
-                        min={0}
-                        placeholder="đ"
-                        onChange={() => handleSearchPriceInput()}
-                        formatter={(value) =>
-                          `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-                        }
-                        style={{ width: "60%" }}
-                      />
-                    </Form.Item>
-                  </div>
-
-                  
-                </Form.Item> */}
-                  <div
+                  {/* <div
                     style={{
                       gap: 20,
                       display: "flex",
@@ -518,80 +403,36 @@ const TheLoai = () => {
                       onClick={() => form.submit()}
                       style={{ width: "60%" }}
                       type="primary"
+                      className="hidden"
                     >
                       Tìm kiếm
                     </Button>
 
                     <Button
                       onClick={() => handleReset()}
-                      style={{ width: "30%" }}
+                      style={{ width: "fit-content" }}
+                      className="mx-auto"
                     >
                       <GrPowerReset />
                     </Button>
-                  </div>
+                  </div> */}
                 </Form>
               </div>
             </Col>
 
-            <Col
-              lg={19}
-              md={24}
-              sm={24}
-              xs={24}
-              className="homepage-right px-3"
-            >
-              <div className="carousel-homepage">
-                <div className="tabs">
-                  <Tabs
-                    defaultActiveKey={keyTabHome}
-                    items={item}
-                    onChange={onChangeTab}
+            <Col lg={18} md={24} sm={24} xs={24} className="bg-white px-3">
+              <Flex justify="space-between" className="mb-5">
+                <div className="font-semibold text-xl uppercase">
+                  {nameCategory.category}
+                </div>
+                <div className="flex gap-4 text-md items-center">
+                  <div className="font-semibold">Sắp xếp:</div>
+                  <SelectCustom
+                    setSortDay={setSortDay}
+                    setSortPrice={setSortPrice}
                   />
-                  <div className="filter" onClick={() => setModalFilter(true)}>
-                    <span style={{ marginRight: 10 }}>Bộ lọc</span>
-                    <AiFillFilter style={{ marginTop: 3 }} />
-                  </div>
                 </div>
-                {/* ---------Reponsive xs tabs -------- */}
-                <div className="tab-reponsive">
-                  <span
-                    className={activeRes.a1 === true ? "text-tab" : ""}
-                    onClick={() => onChangeTab(1)}
-                  >
-                    Tất cả
-                  </span>
-                  <span
-                    className={activeRes.a2 === true ? "text-tab" : ""}
-                    onClick={() => onChangeTab(2)}
-                  >
-                    Hàng Mới
-                  </span>
-                  <span>
-                    <Dropdown
-                      menu={{
-                        items,
-                      }}
-                      trigger={["click"]}
-                    >
-                      <a onClick={(e) => e.preventDefault()}>
-                        <Space
-                          style={{
-                            color:
-                              activeRes.a3 === true || activeRes.a4 === true
-                                ? "blue"
-                                : "black",
-                          }}
-                        >
-                          Giá
-                        </Space>
-                      </a>
-                    </Dropdown>
-                  </span>
-                  <span onClick={() => setModalFilter(true)}>
-                    <AiFillFilter style={{ marginTop: 3 }} />
-                  </span>
-                </div>
-              </div>
+              </Flex>
 
               <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
                 {dataBook &&
@@ -600,7 +441,7 @@ const TheLoai = () => {
                     return (
                       <div
                         key={`itemlist-${index}`}
-                        className="col-span-1 bg-white shadow-gray-400 shadow-sm"
+                        className="col-span-1 bg-white shadow-gray-400 shadow-sm hover:-translate-y-2 duration-300"
                       >
                         <Card item={item} />
                       </div>
