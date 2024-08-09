@@ -17,18 +17,10 @@ import "./theloai.scss";
 
 import { useEffect, useRef, useState } from "react";
 import {
-  callFetchCategory,
   callGet_listbook_arrid_paginate,
-  callGet_ParentCategory,
   callGet_ParentCategory_Home,
-  callGetListBookHome,
-  callListBookPopularAll,
 } from "../../services/api";
-import { AiFillFilter } from "react-icons/ai";
-import { GrPowerReset } from "react-icons/gr";
-import { AiOutlineDown } from "react-icons/ai";
-import { AiOutlineUp } from "react-icons/ai";
-import { AiFillStar } from "react-icons/ai";
+
 import {
   useLocation,
   useNavigate,
@@ -36,29 +28,21 @@ import {
   useParams,
 } from "react-router-dom";
 import HomeSkeleton from "./homeSkeleton";
-import { AiOutlineLeft, AiOutlineRight } from "react-icons/ai";
-import ResponsiveHome from "./responsiveHome";
-import { convertSlug } from "../../utils/convertSlug";
 
 import { useDispatch, useSelector } from "react-redux";
-import {
-  doSetCurrentPageAction,
-  doSetKeyTabHomeAction,
-  doSetPriceAction,
-  doSetQuerySortHomeAction,
-  doSetRateReduxAction,
-  doSetSearchPriceAction,
-} from "../../redux/category/categorySlice";
+import { doSetSearchPriceAction } from "../../redux/category/categorySlice";
 
 import BreadcrumbCustom from "../../components/breadcrum/BreadCrumCustom";
 import {
   getCategory_ChildrenById,
   getCategoryById,
 } from "../../utils/function";
-import { MdKeyboardDoubleArrowRight } from "react-icons/md";
+
 import Card from "../../components/card/Card";
 import SelectCustom from "../../components/select/SelectCustom";
 import { SiGitbook } from "react-icons/si";
+import { FaFilter } from "react-icons/fa";
+import DrawDanhmuc from "./drawDanhmuc";
 
 const TheLoai = () => {
   const [form] = Form.useForm();
@@ -86,6 +70,7 @@ const TheLoai = () => {
   const [sortDay, setSortDay] = useState(
     params.get("sd") ? params.get("sd") : ""
   );
+  const [openDraw, setOpenDraw] = useState(false);
 
   const [activePrice, setactivePrice] = useState({
     a: price === "0,80000" ? true : false,
@@ -111,6 +96,9 @@ const TheLoai = () => {
       }
     };
     getListCategory();
+    // click reset price , off draw
+    setOpenDraw(false);
+    setPrice("");
   }, [slugPrams.slug]);
 
   function getAllChildrenIds(categories) {
@@ -182,6 +170,8 @@ const TheLoai = () => {
   };
 
   const handleSelectPrice = (name, price) => {
+    setOpenDraw(false);
+
     if (name === "a") {
       setactivePrice({
         a: !activePrice.a,
@@ -283,11 +273,12 @@ const TheLoai = () => {
   };
 
   const handleSelectCategory = (item) => {
+    setOpenDraw(false);
     navigate(`/the-loai/${item.slug}`);
   };
 
-  console.log('sss price', sortPrice)
-  console.log('sss day', sortDay)
+  console.log("sss price", sortPrice);
+  console.log("sss day", sortDay);
 
   if (isLoading === true) {
     return (
@@ -299,15 +290,27 @@ const TheLoai = () => {
     return (
       <div className="theloai">
         <div className="container">
-         
-          <BreadcrumbCustom listBread={listBread} />
+          <DrawDanhmuc
+            listCategory={listCategory}
+            openDraw={openDraw}
+            setOpenDraw={setOpenDraw}
+            handleSelectCategory={handleSelectCategory}
+            listBread={listBread}
+            handleSelectPrice={handleSelectPrice}
+            activePrice={activePrice}
+          />
 
-          <Row style={{ gap: 30 }}>
-            <Col lg={5} md={0} sm={0} xs={0}>
+          <div className="hidden sm:block">
+            <BreadcrumbCustom listBread={listBread} />
+          </div>
+
+          <Row style={{ gap: 0 }}>
+            <Col lg={6} md={6} sm={0} xs={0} className="px-3">
               <div className=" shadow-gray-400 shadow-lg pb-5">
                 <div className="bg-blue-600 text-white">
                   <div className="text-xl text-center font-semibold p-3 uppercase border-b border-gray">
                     Danh mục sản phẩm
+                    {/* {nameCategory.category} */}
                   </div>
 
                   <Row>
@@ -319,12 +322,10 @@ const TheLoai = () => {
                             span={24}
                             className="flex font-semibold items-center hover:pl-5 hover:bg-blue-900 cursor-pointer px-2 py-2 border-b border-gray"
                             key={`itemcategory-${index}`}
+                            onClick={() => handleSelectCategory(item)}
                           >
-                            {/* <MdKeyboardDoubleArrowRight /> */}
                             <SiGitbook className="mr-2" />
-                            <div onClick={() => handleSelectCategory(item)}>
-                              {item.category}
-                            </div>
+                            <div>{item.category}</div>
                           </Col>
                         );
                       })
@@ -420,19 +421,30 @@ const TheLoai = () => {
               </div>
             </Col>
 
-            <Col lg={18} md={24} sm={24} xs={24} className="bg-white px-3">
-              <Flex justify="space-between" className="mb-5">
-                <div className="font-semibold text-xl uppercase">
+            <Col lg={18} md={18} sm={24} xs={24} className="bg-white px-3">
+              <div className="mb-5 md:flex md:justify-between block">
+                <div className="font-semibold text-xl text-center uppercase my-4">
                   {nameCategory.category}
                 </div>
-                <div className="flex gap-4 text-md items-center">
-                  <div className="font-semibold">Sắp xếp:</div>
-                  <SelectCustom
-                    setSortDay={setSortDay}
-                    setSortPrice={setSortPrice}
-                  />
+                <div className="flex justify-between gap-4 text-md items-center">
+                  <div className="flex items-center gap-4">
+                    <div className="font-semibold hidden sm:block">
+                      Sắp xếp:
+                    </div>
+                    <SelectCustom
+                      setSortDay={setSortDay}
+                      setSortPrice={setSortPrice}
+                    />
+                  </div>
+
+                  <div
+                    className="md:hidden text-blue-600 text-xl"
+                    onClick={() => setOpenDraw(true)}
+                  >
+                    <FaFilter />
+                  </div>
                 </div>
-              </Flex>
+              </div>
 
               <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
                 {dataBook &&
@@ -461,31 +473,6 @@ const TheLoai = () => {
               </Row>
             </Col>
           </Row>
-
-          {/* =============responsive============ */}
-
-          {/* <ResponsiveHome
-            onClose={onClose}
-            modalFilter={modalFilter}
-            onFinish={onFinish}
-            form={form}
-            listCategory={listCategory}
-            showMore={showMore}
-            setShowMore={setShowMore}
-            handleShowMore={handleShowMore}
-            handleSelectStar={handleSelectStar}
-            activeStar={activeStar}
-            activePrice={activePrice}
-            handleSelectPrice={handleSelectPrice}
-            handleReset={handleReset}
-            filterCategory={filterCategory}
-            setIsLoading={setIsLoading}
-            handleSearchPriceInput={handleSearchPriceInput}
-            setQueryCategory={setQueryCategory}
-            queryCategory={queryCategory}
-            setCurrent={setCurrent}
-            setActiveStar={setActiveStar}
-          /> */}
         </div>
       </div>
     );

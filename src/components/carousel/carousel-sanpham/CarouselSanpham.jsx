@@ -51,7 +51,7 @@ const CarouselSanpham = (props) => {
 
   return (
     <div className="">
-      <div className="text-xl px-2 mb-5 mt-10 text-blue-600 flex items-center uppercase font-semibold max-w-56 sm:max-w-full">
+      <div className="text-xl px-2 mb-5 mt-10 text-blue-600 flex text-center w-fit mx-auto items-center uppercase font-semibold ">
         <BsBook className="mr-3 hidden sm:block " />
         Sách mới
       </div>

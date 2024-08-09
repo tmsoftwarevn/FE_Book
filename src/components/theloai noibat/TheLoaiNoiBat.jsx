@@ -30,17 +30,12 @@ const TheLoaiNoiBat = (props) => {
 
   return (
     <div>
-      <div className="flex justify-between mb-5 mt-10 px-2">
-        <div className="text-xl text-blue-600 flex items-center uppercase font-semibold max-w-56 sm:max-w-full">
+      <div className="flex mb-5 mt-10 px-2">
+        <div className="text-xl text-blue-600 flex items-center mx-auto uppercase font-semibold ">
           <BsBook className="mr-3 hidden sm:block "/>
           {nameCategory}
         </div>
-        <div
-          className="flex items-center cursor-pointer hover:text-blue-600"
-          onClick={() => handleNav()}
-        >
-          Xem thêm <MdKeyboardDoubleArrowRight className="mr-2" />
-        </div>
+        
       </div>
 
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3 px-2">
@@ -53,6 +48,13 @@ const TheLoaiNoiBat = (props) => {
             );
           })}
       </div>
+      <div
+          className="px-3 py-2 my-3 cursor-pointer flex items-center justify-end rounded text-blue-600 font-semibold"
+          onClick={() => handleNav()}
+        >
+          Xem thêm 
+          <MdKeyboardDoubleArrowRight className="mr-2" />
+        </div>
     </div>
   );
 };

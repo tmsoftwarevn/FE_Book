@@ -11,6 +11,7 @@ const Footer = () => {
             <span style={{ fontWeight: 600 }}>VỀ CHÚNG TÔI</span>
             <Divider style={{ borderColor: "grey" }} />
             <p>Giới Thiệu Về Nhà Sách Windy</p>
+            
             <p>Hệ Thống Nhà Sách Windy</p>
             <p>Điều Khoản Sử Dụng</p>
             <p>Chính Sách Bảo Mật</p>

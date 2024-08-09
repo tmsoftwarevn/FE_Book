@@ -7,8 +7,8 @@ import {
 } from "react-router-dom";
 import { Outlet } from "react-router-dom";
 
-import Header from "./components/header antd/header";
-import Footer from "./components/Footer";
+import Header from "./components/layout/header/Header";
+import Footer from "./components/layout/footer/Footer";
 import Home from "./pages/Home/index";
 import HomeFix from "./pages/Home fix/index";
 
@@ -56,7 +56,8 @@ const Layout = () => {
   return (
     <div className="layout-app">
       {/* <Header /> */}
-      <NavBar />
+      {/* <NavBar /> */}
+      <Header />
       <Outlet context={[searchBook, setSearchBook]} />
       <Footer />
     </div>

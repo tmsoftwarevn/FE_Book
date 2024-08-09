@@ -18,6 +18,7 @@ import DanhMuc from "../../components/danh muc/DanhMuc";
 import TheLoaiNoiBat from "../../components/theloai noibat/TheLoaiNoiBat";
 import { BsBook } from "react-icons/bs";
 import { SiGitbook } from "react-icons/si";
+import { FaThList } from "react-icons/fa";
 
 const Home = () => {
   const [form] = Form.useForm();
@@ -31,7 +32,6 @@ const Home = () => {
   const [listPopularAll, setListPopularAll] = useState([]);
   const dispatch = useDispatch();
   const params = new URLSearchParams(location.search);
-
 
   const [arrId, setArrId] = useState([]);
 
@@ -77,13 +77,13 @@ const Home = () => {
       }
     }
     // set điều kiện hiển thị home
-    let test=[7,9]
+    let test = [7, 9];
     categories.forEach((category) => {
       // điều kiện id cate cha = 9 , 7
 
       // nhớ add thêm id cha vào, [7,4]
-      test.map((item) =>{
-        if (category.id === item ) {
+      test.map((item) => {
+        if (category.id === item) {
           traverse(category);
           name.push(category.category);
           setNameCategory(name);
@@ -92,7 +92,7 @@ const Home = () => {
           arrId.push(ids);
           ids = [];
         }
-      })
+      });
 
       // if (category.id === 7 || category.id === 9) {
       //   traverse(category);
@@ -146,7 +146,7 @@ const Home = () => {
                         key={`itemcategory-${index}`}
                       >
                         {/* <MdKeyboardDoubleArrowRight /> */}
-                        <SiGitbook className="mr-2"/>
+                        <SiGitbook className="mr-2" />
                         <div onClick={() => handleSelectCategory(item)}>
                           {item.category}
                         </div>
@@ -161,6 +161,11 @@ const Home = () => {
             </Col>
           </Row>
 
+          <div className="mx-auto text-center w-fit md:hidden text-blue-600">
+            <FaThList />
+          </div>
+
+          {/* sach moi */}
           <div>
             <CarouselSanpham listPopularAll={listPopularAll} />
           </div>

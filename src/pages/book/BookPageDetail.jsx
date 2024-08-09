@@ -86,7 +86,7 @@ const BookPageDetail = (props) => {
       if (res && res.data) {
         setDetailBook(res.data);
         customDataBook(res.data);
-        console.log("rrrr", res.data);
+        //console.log("rrrr", res.data);
         fetch_breadCrumb_cate(res.data["category.id"]);
       }
       setIsLoading(false);
