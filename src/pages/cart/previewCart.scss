@@ -1,12 +1,12 @@
 @import '../../scss/reset';
 @import '../../scss/media';
 .previewCart {
-    @include xs {
-        display: none;
-    }
-    @include sm {
-        display: none;
-    }
+    // @include xs {
+    //     display: none;
+    // }
+    // @include sm {
+    //     display: none;
+    // }
     @include xl {
         display: block;
     }

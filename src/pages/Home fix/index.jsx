@@ -142,10 +142,10 @@ const Home = () => {
                     return (
                       <Col
                         span={24}
-                        className="flex font-semibold items-center hover:pl-5 hover:bg-blue-900 cursor-pointer px-2 py-2 border-b border-gray"
+                        className="flex uppercase font-semibold items-center hover:pl-5 hover:bg-blue-900 cursor-pointer px-2 py-2 border-b border-gray"
                         key={`itemcategory-${index}`}
                       >
-                        {/* <MdKeyboardDoubleArrowRight /> */}
+                      
                         <SiGitbook className="mr-2" />
                         <div onClick={() => handleSelectCategory(item)}>
                           {item.category}
