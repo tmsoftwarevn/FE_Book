@@ -236,8 +236,8 @@ export const callCreate_Category = (category, parentId) => {
   return axios.post(`/api/v1/category/create`, { category, parentId });
 };
 
-export const callUpdate_Category = (id, category, parentId) => {
-  return axios.put(`/api/v1/category/${id}`, { category, parentId });
+export const callUpdate_Category = (id, category, parentId, active) => {
+  return axios.put(`/api/v1/category/${id}`, { category, parentId, active });
 };
 
 export const callDelete_Category = (id) => {
@@ -270,4 +270,22 @@ export const callGet_listbook_arrid_paginate = (
     `/api/v1/listbook_arrid_paginate?page=${page}&limit=${limit}&price=${price}&sp=${sp}&sd=${sd}`,
     { arrId }
   );
+};
+
+// home
+
+export const call_create_home = (banner, description, is_banner) => {
+  return axios.post(`/api/v1/home`, { banner, description, is_banner });
+};
+
+export const call_update_home = (id, banner, description, is_banner) => {
+  return axios.put(`/api/v1/home/${id}`, { banner, description, is_banner });
+};
+
+export const call_delete_home = (id) => {
+  return axios.delete(`/api/v1/home/${id}`);
+};
+
+export const call_list_home = (id) => {
+  return axios.get(`/api/v1/home`);
 };

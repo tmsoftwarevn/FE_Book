@@ -5,7 +5,8 @@ import { useSelector } from "react-redux";
 import "./previewCart.scss";
 import { useNavigate } from "react-router-dom";
 import { BsBagPlus } from "react-icons/bs";
-const text = <span style={{ color: "#ccc" }}>Sản phẩm trong giỏ</span>;
+
+const text = <span style={{ color: "black" }}>Sản phẩm trong giỏ</span>;
 
 const PreviewCart = () => {
   const listCart = useSelector((state) => state.cart.listCart);
@@ -41,7 +42,7 @@ const PreviewCart = () => {
         );
       })}
 
-      <div onClick={() => navigate("/cart")} className="btn-view">
+      <div onClick={() => navigate("/cart")} className="btn-view bg-blue-600 hover:bg-blue-500">
         Xem giỏ hàng
       </div>
     </div>
@@ -59,10 +60,10 @@ const PreviewCart = () => {
     <div className="previewCart">
       <Popover
         placement="bottomRight"
-        title={listCart.length > 0 ? text : ""}
+        //title={listCart.length > 0 ? text : ""}
         content={listCart.length > 0 ? content : contentEmpty}
       >
-        <SlBasket />
+        <SlBasket className="text-xl" />
       </Popover>
     </div>
   );

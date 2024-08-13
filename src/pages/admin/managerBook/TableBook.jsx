@@ -1,4 +1,4 @@
-import { Button, Popconfirm, Table, message, notification } from "antd";
+import { Button, Image, Popconfirm, Table, message, notification } from "antd";
 import { useEffect, useState } from "react";
 import { callDeleteBook, callGetListBookAdmin } from "../../../services/api";
 import Loading from "../../../components/Loading/loading";
@@ -121,6 +121,8 @@ const TableBook = (props) => {
           action: index,
           createdAt: moment(item?.createdAt).format("DD-MM-YY hh:mm:ss"),
           updatedAt: moment(item?.updatedAt).format("DD-MM-YY hh:mm:ss"),
+          thumbnail: item.thumbnail
+
         });
       });
       setDataTable(arr);
@@ -158,8 +160,20 @@ const TableBook = (props) => {
       sorter: true,
     },
     {
-      title: "Ngày cập nhật",
-      dataIndex: "updatedAt",
+      title: "Image",
+      dataIndex: "thumbnail",
+      render: (text, record, index) => {
+        return (
+          <div>
+            <Image
+             
+              src={`${import.meta.env.VITE_BACKEND_URL}/images/book/${record?.thumbnail}`}
+              width={100}
+              height={100}
+            />
+          </div>
+        );
+      },
     },
     {
       title: "Action",

@@ -39,6 +39,9 @@ import QuenMatkhau from "./pages/quen-mat-khau/QuenMatkhau";
 import NavBar from "./components/header/NavBar";
 import MenuHeader from "./components/danh muc/DropdownMenu";
 import TheLoai from "./pages/the loai/TheLoai";
+import QuanliHome from "./pages/admin/managerHome/QuanliHome";
+import ScrollToTop from "./utils/ScrollToTop"
+
 
 const Layout = () => {
   const role = useSelector((state) => state.account?.user?.role);
@@ -57,7 +60,11 @@ const Layout = () => {
     <div className="layout-app">
       {/* <Header /> */}
       {/* <NavBar /> */}
+
+      <ScrollToTop />
+
       <Header />
+
       <Outlet context={[searchBook, setSearchBook]} />
       <Footer />
     </div>
@@ -184,6 +191,10 @@ export default function App() {
           {
             path: "category",
             element: <QuanliCategory />,
+          },
+          {
+            path: "home",
+            element: <QuanliHome />,
           },
         ],
       },

@@ -46,8 +46,8 @@ const Header = () => {
     <div className=" bg-gradient-to-tr from-blue-600 to-blue-300 text-white sticky top-0 left-0 w-full z-50 shadow">
       <div className="container">
         <Navbar1 />
-        <div className="flex justify-between items-center pb-4 px-2">
-          <div className="w-[70px]">
+        <div className="flex justify-between items-center pb-4 px-5 lg:px-0">
+          <div className="w-[70px]" onClick={() => navigate("/")}>
             <img src={logo} className="w-full h-auto" />
           </div>
 
@@ -105,7 +105,7 @@ const Header = () => {
                                 onClick={() =>
                                   navigate(`/the-loai/${item.slug}`)
                                 }
-                                className="block px-3 py-2 hover:bg-blue-600 text-black hover:text-white font-semibold"
+                                className="block px-3 py-2 hover:bg-blue-600 text-black hover:text-white "
                               >
                                 {item.category}
                               </span>
@@ -125,7 +125,7 @@ const Header = () => {
           </ul>
 
           <div className="hidden lg:block">
-            <Space direction="vertical" className="w-full sm:w-[400px]">
+            <Space direction="vertical" className="w-full sm:w-[400px] max-w-full">
               <Space.Compact
                 style={{
                   width: "100%",
@@ -148,7 +148,7 @@ const Header = () => {
           </div>
         </div>
 
-        <ResponsiveHeader open={open} setOpen={setOpen} />
+        <ResponsiveHeader dropdown= {dropdown} open={open} setOpen={setOpen} />
       </div>
     </div>
   );

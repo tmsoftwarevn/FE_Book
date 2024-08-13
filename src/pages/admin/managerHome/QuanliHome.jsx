@@ -1,75 +1,80 @@
+
 import React, { useEffect, useRef, useState } from "react";
-import { useParams } from "react-router-dom";
+
 import { CiEdit } from "react-icons/ci";
 import { MdDelete } from "react-icons/md";
 import {
   Button,
-  Select,
+  Checkbox,
   Flex,
+  Image,
+  Input,
   Popconfirm,
+  Space,
   Table,
   message,
   notification,
-  Checkbox,
 } from "antd";
-import UpdateModal from "./ModalUpdate";
-import AddModal from "./ModalAdd";
-import {
-  callDelete_Category,
-  callFetchCategory,
-  callGet_ParentCategory,
-} from "../../../services/api";
-import AsyncParentCategory from "./AsyncParentCategory";
+
+import UpdateHome from "./ModalUpdate";
+import AddHome from "./ModalAdd";
+
+import { call_delete_home, call_list_home } from "../../../services/api";
 
 const title = "Xác nhận xóa ?";
-const QuanliCategory = () => {
-  const params = useParams();
-  const [list, setList] = useState([]);
+const QuanliHome = () => {
+  /// search
+  const [listHome, setListHome] = useState([]);
 
-  const [isModalAdd, setIsModalAdd] = useState(false);
+  const [isModalAddHome, setIsModalAddHome] = useState(false);
   const [dataUpdate, setDataUpdate] = useState("");
-  const [isModalUpdate, setIsModalUpdate] = useState(false);
+  const [isModalUpdateHome, setIsModalUpdateHome] = useState(false);
+
+  const [loading, setLoading] = useState(true);
+  const [listCustomParent, setListCustomParent] = useState([]);
 
   useEffect(() => {
-    fetch_listCategory();
+    fetchAllHome();
   }, []);
 
-  const fetch_listCategory = async () => {
-    let res = await callFetchCategory();
+  const fetchAllHome = async () => {
+    const res = await call_list_home();
     if (res && res.EC === 1) {
-      customMenu(res.data);
+      // setListHome(res.data)
+      customHome(res.data);
     }
   };
-  const confirm = async (id) => {
-    let res = await callDelete_Category(id);
-    if (res && res.EC === 1) {
-      message.success("Xóa thành công ");
-      fetch_listCategory();
-    } else {
-      notification.error({
-        description: "Có lỗi xảy ra",
-      });
-    }
-  };
-
-  const customMenu = async (list) => {
+  const customHome = (list) => {
     let arr = [];
     list.map((item, index) => {
       arr.push({
         key: index + 1,
         STT: index + 1,
         id: item.id,
-        name: item.category,
-        parentId: item.parentId,
+        banner: item.banner,
+        description: item.gioi_thieu,
         action: index,
-        active: item.active
+        is_banner: item.is_banner,
+
       });
     });
-    setList(arr);
+
+    setListHome(arr);
   };
-  
-  const handleUpdate = (record) => {
-    setIsModalUpdate(true);
+
+  const confirm = async (id) => {
+    
+    const res = await call_delete_home(id);
+    if (res && res.EC === 1) {
+      message.success("Xóa thành công ");
+      fetchAllHome()
+    } else {
+      message.error("Có lỗi !");
+    }
+  };
+
+  const handleUpdateHome = (record) => {
+    setIsModalUpdateHome(true);
     setDataUpdate(record);
   };
 
@@ -79,35 +84,26 @@ const QuanliCategory = () => {
       dataIndex: "STT",
       key: "STT",
     },
+
     {
-      title: "Tên thể loại",
-      dataIndex: "name",
-      key: "name",
-    },
-    {
-      title: "Trạng thái ở trang chủ",
-      dataIndex: "active",
-      key: "active",
+      title: "Ảnh",
+      dataIndex: "banner",
+      key: "banner",
       render: (text, record, index) => {
         return (
-          <Checkbox checked={+record.active === 1 ? true : false}>
-            Hiện
-          </Checkbox>
+          <div>
+            <Image
+             
+              src={`${import.meta.env.VITE_BACKEND_URL}/images/book/${record?.banner}`}
+              width="auto"
+              height='auto'
+              className="max-w-60"
+            />
+          </div>
         );
       },
     },
-    {
-      title: "Đường dẫn thể loại cha",
-      dataIndex: "parentId",
-      key: "parentId",
-      render: (text, record, index) => {
-        return (
-          <>
-            <AsyncParentCategory idParent={record.parentId} id={record.id} />
-          </>
-        );
-      },
-    },
+   
     {
       title: "Thao tác",
       dataIndex: "action",
@@ -157,7 +153,7 @@ const QuanliCategory = () => {
                 <CiEdit
                   style={{ fontSize: "15px" }}
                   onClick={() => {
-                    handleUpdate(record);
+                    handleUpdateHome(record);
                   }}
                 />
               </Button>
@@ -167,14 +163,14 @@ const QuanliCategory = () => {
       },
     },
   ];
-  
+
   return (
     <>
       <Flex justify="flex-end">
         <Button
           type="primary"
           className="mb-3"
-          onClick={() => setIsModalAdd(true)}
+          onClick={() => setIsModalAddHome(true)}
         >
           Thêm mới
         </Button>
@@ -182,27 +178,29 @@ const QuanliCategory = () => {
 
       <Table
         columns={columns}
-        dataSource={list}
+        dataSource={listHome}
         pagination={{
           showSizeChanger: true,
           position: ["bottomCenter"],
           pageSizeOptions: [2, 10, 50, 100],
         }}
       />
-      <UpdateModal
-        isModalUpdate={isModalUpdate}
-        setIsModalUpdate={setIsModalUpdate}
+      <UpdateHome
+        isModalUpdateHome={isModalUpdateHome}
+        setIsModalUpdateHome={setIsModalUpdateHome}
         dataUpdate={dataUpdate}
-        fetch_listCategory={fetch_listCategory}
-        list={list}
+        fetchAllHome={fetchAllHome}
+        
+        
       />
-      <AddModal
-        isModalAdd={isModalAdd}
-        setIsModalAdd={setIsModalAdd}
-        fetch_listCategory={fetch_listCategory}
-        list={list}
+      <AddHome
+        isModalAddHome={isModalAddHome}
+        setIsModalAddHome={setIsModalAddHome}
+        fetchAllHome={fetchAllHome}
+       
       />
     </>
   );
 };
-export default QuanliCategory;
+
+export default QuanliHome;

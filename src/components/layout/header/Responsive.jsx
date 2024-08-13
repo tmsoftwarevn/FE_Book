@@ -1,32 +1,121 @@
-
-import React, { useState } from 'react';
-import { Button, Drawer, Radio, Space } from 'antd';
-
+import React, { useState } from "react";
+import { Button, Drawer, Input, Radio, Space } from "antd";
+import { Menu } from "antd";
+import { Link, useNavigate } from "react-router-dom";
+import { FaSearch } from "react-icons/fa";
+function getItem(label, key, icon, children, type) {
+  return {
+    key,
+    icon,
+    children,
+    label,
+    type,
+  };
+}
 const ResponsiveHeader = (props) => {
-  
-  const {open, setOpen} = props;
-  const [placement, setPlacement] = useState('left');
-  
+  const { dropdown } = props;
+  const { open, setOpen } = props;
+  const [placement, setPlacement] = useState("left");
+  const [searchValue, setSearchValue] = useState("");
+
+  const navigate = useNavigate();
   const onClose = () => {
     setOpen(false);
   };
-  const onChange = (e) => {
-    setPlacement(e.target.value);
+
+  const renderItems = (list) => {
+    let arr = [];
+
+    list.map((item, index) => {
+      arr.push(
+        getItem(
+          <div
+            onClick={() =>
+              navigate(
+                `/the-loai/${item.slug}`,
+
+                onClose()
+              )
+            }
+          >
+            {item.category}
+          </div>,
+
+          item.id
+        )
+      );
+    });
+
+    return arr;
   };
+  const items = [
+    getItem(
+      <Link onClick={() => onClose()} to="/">
+        Trang chủ
+      </Link>,
+      "/"
+    ),
+    getItem(
+      <Link onClick={() => onClose()} to="/">
+        Giới thiệu
+      </Link>,
+      "/fdsf"
+    ),
+    getItem("Tủ sách", "sub1", "", renderItems(dropdown)),
+    getItem(
+      <Link onClick={() => onClose()} to="/">
+        Tin tức
+      </Link>,
+      "/fsdf"
+    ),
+  ];
+  const handleSearch = () => {
+    console.log("vvvvv", searchValue);
+  };
+
+  const handleKeyPress = (event) => {
+    if (event.key === "Enter") {
+      handleSearch();
+    }
+  };
+
   return (
     <>
-     
       <Drawer
-        title="Basic Drawer"
+        // title="TM BOOK"
         placement={placement}
         closable={true}
         onClose={onClose}
         open={open}
         key={placement}
       >
-        <p>Some contents...</p>
-        <p>Some contents...</p>
-        <p>Some contents...</p>
+        <Menu
+          style={{
+            width: "100%",
+            fontFamily: "roboto",
+          }}
+          defaultSelectedKeys={["/"]}
+          mode="inline"
+          items={items}
+        />
+
+        <Space direction="vertical" className="w-full ">
+          <Space.Compact
+            style={{
+              width: "100%",
+              marginTop: "20px"
+            }}
+          >
+            <Input
+              onChange={(e) => setSearchValue(e.target.value)}
+              placeholder="Tìm kiếm sản phẩm"
+              onKeyDown={handleKeyPress}
+            />
+            <Button onClick={() => handleSearch()} type="primary">
+              <FaSearch />
+            </Button>
+          </Space.Compact>
+        </Space>
       </Drawer>
     </>
   );

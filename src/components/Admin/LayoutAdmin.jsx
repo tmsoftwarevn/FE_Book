@@ -33,6 +33,11 @@ const items = [
     <ExceptionOutlined />
   ),
   getItem(
+    <Link to="/admin/home">Quản lý banner</Link>,
+    "/admin/home",
+    <ExceptionOutlined />
+  ),
+  getItem(
     <Link to="/admin/category">Quản lý thể loại</Link>,
     "/admin/category",
     <DollarCircleOutlined />

@@ -2,6 +2,7 @@ import { Row, Col, Form } from "antd";
 import "./home.scss";
 import { useEffect, useRef, useState } from "react";
 import {
+  call_list_home,
   callGet_ParentCategory_Home,
   callListBookPopularAll,
 } from "../../services/api";
@@ -19,6 +20,7 @@ import TheLoaiNoiBat from "../../components/theloai noibat/TheLoaiNoiBat";
 import { BsBook } from "react-icons/bs";
 import { SiGitbook } from "react-icons/si";
 import { FaThList } from "react-icons/fa";
+import CarouselSlick from "../../components/carousel/carousel-banner/CarouselSlick";
 
 const Home = () => {
   const [form] = Form.useForm();
@@ -34,6 +36,7 @@ const Home = () => {
   const params = new URLSearchParams(location.search);
 
   const [arrId, setArrId] = useState([]);
+  const [listBanner, setListBanner] = useState([]);
 
   // window.onbeforeunload = function () {
   //   window.scrollTo(0, 0);
@@ -46,8 +49,15 @@ const Home = () => {
     }
   };
 
+  const get_list_banner = async () => {
+    let res = await call_list_home();
+    if (res && res.EC === 1) {
+      setListBanner(res.data);
+    }
+  };
   useEffect(() => {
     getListBookPopularAll();
+    get_list_banner()
   }, []);
 
   useEffect(() => {
@@ -76,8 +86,15 @@ const Home = () => {
         });
       }
     }
-    // set điều kiện hiển thị home
-    let test = [7, 9];
+    // set điều kiện hiển thị home, active = 1
+    let test = [];
+   
+    categories.map((item) =>{
+      if(+item.active === 1){
+        test.push(item.id)
+      }
+    })
+    
     categories.forEach((category) => {
       // điều kiện id cate cha = 9 , 7
 
@@ -93,18 +110,7 @@ const Home = () => {
           ids = [];
         }
       });
-
-      // if (category.id === 7 || category.id === 9) {
-      //   traverse(category);
-      //   name.push(category.category);
-      //   setNameCategory(name);
-      //   // thêm id cha
-
-      //   arrId.push(ids);
-      //   ids = [];
-      // }
     });
-    //return ids;
 
     setArrId(arrId);
   }
@@ -125,7 +131,7 @@ const Home = () => {
     return (
       <div className="homepage">
         <div className="container">
-          <Row style={{ gap: 0 }} className="my-5">
+          <Row style={{ gap: 0 }} className="my-4">
             <Col
               lg={5}
               md={0}
@@ -145,7 +151,6 @@ const Home = () => {
                         className="flex uppercase font-semibold items-center hover:pl-5 hover:bg-blue-900 cursor-pointer px-2 py-2 border-b border-gray"
                         key={`itemcategory-${index}`}
                       >
-                      
                         <SiGitbook className="mr-2" />
                         <div onClick={() => handleSelectCategory(item)}>
                           {item.category}
@@ -157,13 +162,10 @@ const Home = () => {
             </Col>
 
             <Col lg={19} md={24} sm={24} xs={24}>
-              <CarouselBanner />
+              <CarouselBanner listBanner={listBanner} />
+              {/* <CarouselSlick /> */}
             </Col>
           </Row>
-
-          <div className="mx-auto text-center w-fit md:hidden text-blue-600">
-            <FaThList />
-          </div>
 
           {/* sach moi */}
           <div>

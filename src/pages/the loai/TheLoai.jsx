@@ -143,12 +143,10 @@ const TheLoai = () => {
     });
   }, [location]);
 
-  // window.onbeforeunload = function () {
-  //   window.scrollTo(0, 0);
-  // };
 
   useEffect(() => {
     fetch_listbook_arrid_paginate();
+    window.scrollTo(0, 0);
   }, [current, price, arrId, sortDay, sortPrice]);
 
   const fetch_listbook_arrid_paginate = async () => {
@@ -257,19 +255,6 @@ const TheLoai = () => {
     else {
       navigate(`${location.pathname}?page=${p}`);
     }
-    //navigate(`?page=${p}`);
-  };
-
-  const handleReset = () => {
-    setQueryCategory([]);
-    form.resetFields();
-    setactivePrice({
-      a: false,
-      b: false,
-      c: false,
-      d: false,
-    });
-    setPrice("");
   };
 
   const handleSelectCategory = (item) => {
