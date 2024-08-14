@@ -5,10 +5,11 @@ import { convertSlug } from "../../utils/convertSlug";
 import { useEffect, useState } from "react";
 import { callSearchBook } from "../../services/api";
 import "./search.scss";
+import Card from "../../components/card/Card";
 
 const Search = () => {
   const [current, setCurrent] = useState(1);
-  const [pageSize, setPageSize] = useState(16);
+  const [pageSize, setPageSize] = useState(20);
   const [dataBook, setDataBook] = useState("");
   const [total, setTotal] = useState(0);
   const location = useLocation();
@@ -20,6 +21,7 @@ const Search = () => {
   useEffect(() => {
     const fetchSearchBook = async () => {
       let res = await callSearchBook(search, current, pageSize);
+      //console.log('checkkk', res)
       if (res && res.data) {
         setDataBook(res.data.result);
         setTotal(res.data.meta.total);
@@ -28,6 +30,7 @@ const Search = () => {
     fetchSearchBook();
   }, [current, search]);
 
+  
   useEffect(() => {
     if (params.get("page")) {
       setCurrent(params.get("page"));
@@ -36,8 +39,8 @@ const Search = () => {
     }
     if (params.get("text")) {
       setSearch(params.get("text"));
-    }else{
-      setSearch("")
+    } else {
+      setSearch("");
     }
     window.scrollTo(0, 0);
   }, [location.search]);
@@ -62,73 +65,24 @@ const Search = () => {
 
   const handleChangePage = (p, s) => {
     setCurrent(p);
-    navigate(`/search?text=${search}&page=${p}`);
+    navigate(`/tim-kiem?text=${search}&page=${p}`);
   };
   return (
     <div className="page-search">
       <div className="container">
         <Breadcrumb
           separator=">"
-          style={{ padding: "10px", fontSize: 16 }}
+          style={{ padding: "10px", fontSize: 18 }}
           items={a}
         />
         {dataBook.length > 0 ? (
           <>
-            <div className="home-list">
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3 px-2">
               {dataBook &&
-                dataBook.length > 0 &&
-                dataBook.map((item, index) => {
+                dataBook.map((item, idx) => {
                   return (
-                    <div
-                      className="column"
-                      key={`itemlist-${index}`}
-                      onClick={() => handleRedirectBook(item)}
-                    >
-                      <div className="wrapper">
-                        <div className="thumbnail">
-                          <img
-                            loading="lazy"
-                            src={`${
-                              import.meta.env.VITE_BACKEND_URL
-                            }/images/book/${item?.thumbnail}`}
-                            alt="thumbnail book"
-                          />
-                        </div>
-
-                        <div className="text-search hover:text-blue-600">
-                          <div className="t-s">{item.mainText}</div>
-                        </div>
-
-                        <div className="author">{item.author}</div>
-
-                        <div className="group-child">
-                          <div
-                            className="price"
-                            style={{
-                              color: "rgb(255 66 78)",
-                              fontWeight: 600,
-                            }}
-                          >
-                            {new Intl.NumberFormat("vi-VN", {
-                              style: "currency",
-                              currency: "VND",
-                            }).format(item.price)}
-                          </div>
-
-                          {/* <div className="rating">
-                            <Rate value={item.rate} disabled className="star" />
-
-                            <span className="rate">{item.rate}</span>
-                            <AiFillStar className="responsive-star" />
-                            <span
-                              style={{ display: "inline-block" }}
-                              className="sold"
-                            >
-                              Đã bán {item.sold}
-                            </span>
-                          </div> */}
-                        </div>
-                      </div>
+                    <div className="col-span-1 bg-white shadow-gray-400 shadow-md border border-transparent hover:-translate-y-2 duration-300">
+                      <Card item={item} />
                     </div>
                   );
                 })}

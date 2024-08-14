@@ -37,9 +37,15 @@ const items = [
     "/admin/home",
     <ExceptionOutlined />
   ),
+  
   getItem(
-    <Link to="/admin/category">Quản lý thể loại</Link>,
-    "/admin/category",
+    <Link to="/admin/gioi-thieu">Quản lý giới thiệu</Link>,
+    "/admin/gioi-thieu",
+    <ExceptionOutlined />
+  ),
+  getItem(
+    <Link to="/admin/bai-viet">Quản lý bài viết</Link>,
+    "/admin/bai-viet",
     <DollarCircleOutlined />
   ),
   getItem(

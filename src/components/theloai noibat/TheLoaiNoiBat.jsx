@@ -6,6 +6,7 @@ import { convertSlug } from "../../utils/convertSlug";
 import { useNavigate } from "react-router-dom";
 import { BsBook } from "react-icons/bs";
 
+
 const TheLoaiNoiBat = (props) => {
   const { nameCategory, arrId } = props;
 

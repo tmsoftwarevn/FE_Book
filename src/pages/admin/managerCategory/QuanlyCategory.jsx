@@ -42,6 +42,7 @@ const QuanliCategory = () => {
   };
   const confirm = async (id) => {
     let res = await callDelete_Category(id);
+
     if (res && res.EC === 1) {
       message.success("Xóa thành công ");
       fetch_listCategory();
@@ -62,12 +63,12 @@ const QuanliCategory = () => {
         name: item.category,
         parentId: item.parentId,
         action: index,
-        active: item.active
+        active: item.active,
       });
     });
     setList(arr);
   };
-  
+
   const handleUpdate = (record) => {
     setIsModalUpdate(true);
     setDataUpdate(record);
@@ -167,7 +168,7 @@ const QuanliCategory = () => {
       },
     },
   ];
-  
+
   return (
     <>
       <Flex justify="flex-end">

@@ -56,26 +56,28 @@ const ResponsiveHeader = (props) => {
       "/"
     ),
     getItem(
-      <Link onClick={() => onClose()} to="/">
+      <Link onClick={() => onClose()} to="/gioi-thieu">
         Giới thiệu
       </Link>,
       "/fdsf"
     ),
     getItem("Tủ sách", "sub1", "", renderItems(dropdown)),
     getItem(
-      <Link onClick={() => onClose()} to="/">
+      <Link onClick={() => onClose()} to="/tin-tuc">
         Tin tức
       </Link>,
-      "/fsdf"
+      "/fsdfe"
     ),
   ];
   const handleSearch = () => {
-    console.log("vvvvv", searchValue);
+    navigate(`/tim-kiem?text=${searchValue}`)
+    onClose()
   };
 
   const handleKeyPress = (event) => {
     if (event.key === "Enter") {
       handleSearch();
+
     }
   };
 

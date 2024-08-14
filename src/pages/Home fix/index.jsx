@@ -52,7 +52,13 @@ const Home = () => {
   const get_list_banner = async () => {
     let res = await call_list_home();
     if (res && res.EC === 1) {
-      setListBanner(res.data);
+      let arr = [];
+      res.data.map((item) =>{
+        if(+item.is_banner === 1){
+          arr.push(item)
+        }
+      })
+      setListBanner(arr);
     }
   };
   useEffect(() => {

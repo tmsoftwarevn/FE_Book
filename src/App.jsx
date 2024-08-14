@@ -9,10 +9,9 @@ import { Outlet } from "react-router-dom";
 
 import Header from "./components/layout/header/Header";
 import Footer from "./components/layout/footer/Footer";
-import Home from "./pages/Home/index";
+
 import HomeFix from "./pages/Home fix/index";
 
-import RegisterPage from "./pages/register";
 import { useDispatch, useSelector } from "react-redux";
 import { callGetAccount } from "./services/api";
 import { doGetAccountAction } from "./redux/account/accountSlice";
@@ -36,12 +35,16 @@ import Account from "./pages/account/Account";
 import SignIn from "./pages/login/Login";
 import SignUp from "./pages/signup/Signup";
 import QuenMatkhau from "./pages/quen-mat-khau/QuenMatkhau";
-import NavBar from "./components/header/NavBar";
 import MenuHeader from "./components/danh muc/DropdownMenu";
 import TheLoai from "./pages/the loai/TheLoai";
 import QuanliHome from "./pages/admin/managerHome/QuanliHome";
 import ScrollToTop from "./utils/ScrollToTop"
-
+import GioiThieu from "./pages/admin/managerHome/GioiThieu";
+import GioiThieuHome from "./pages/gioi-thieu/GioiThieuHome";
+import DetailBlog from "./pages/blog/DetailBlog";
+import SearchBlog from "./pages/blog/SearchBlog";
+import ListBlog from "./pages/blog/ListBlog";
+import QuanlyBaiviet from "./pages/admin/quan ly bai viet/QuanlyBaiviet";
 
 const Layout = () => {
   const role = useSelector((state) => state.account?.user?.role);
@@ -145,13 +148,29 @@ export default function App() {
             ),
           },
           {
-            path: "search/*",
+            path: "tim-kiem/*",
             element: <Search />,
           },
           {
             path: "account",
             element: <Account />
-          }
+          },
+          {
+            path: "gioi-thieu",
+            element: <GioiThieuHome />,
+          },
+          {
+            path: "tin-tuc",
+            element: <ListBlog />,
+          },
+          {
+            path: "tin-tuc/:slug",
+            element: <DetailBlog />,
+          },
+          {
+            path: "tin-tuc/tim-kiem",
+            element: <SearchBlog />,
+          },
         ],
       },
       {
@@ -195,6 +214,14 @@ export default function App() {
           {
             path: "home",
             element: <QuanliHome />,
+          },
+          {
+            path: "gioi-thieu",
+            element: <GioiThieu />,
+          },
+          {
+            path: "bai-viet",
+            element: <QuanlyBaiviet />,
           },
         ],
       },

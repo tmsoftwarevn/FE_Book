@@ -3,15 +3,19 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 function SearchBar(props) {
-  const {setKeySearch} = props;
+  const { setKeySearch } = props;
   const [barValue, setBarValue] = useState("");
   const [inputValue, setInputValue] = useState("");
 
   const navigate = useNavigate();
+
+  const handleSearch = (event) => {
+    navigate(`/tin-tuc/tim-kiem?s=${inputValue}`);
+  };
+
   const handleKeyPress = (event) => {
     if (event.key === "Enter") {
-      setKeySearch(inputValue)
-      navigate(`/blog/tim-kiem?s=${inputValue}`);
+      handleSearch();
     }
   };
   
@@ -21,8 +25,7 @@ function SearchBar(props) {
         <div
           className="grid place-items-center h-full w-12 text-blue-600 bg-gray-200"
           onClick={() => {
-            navigate(`/blog/tim-kiem?s=${inputValue}`);
-            setKeySearch(inputValue)
+            handleSearch()
           }}
         >
           <svg

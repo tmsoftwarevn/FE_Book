@@ -289,3 +289,62 @@ export const call_delete_home = (id) => {
 export const call_list_home = (id) => {
   return axios.get(`/api/v1/home`);
 };
+
+// bai viet
+
+export const call_create_baiviet = (
+  tieude,
+  key_word,
+  meta_des,
+  noidung,
+  thumbnail,
+  mota_ngan,
+  slug
+) => {
+  return axios.post(`/api/v1/baiviet`, {
+    tieude,
+    key_word,
+    meta_des,
+    noidung,
+    thumbnail,
+    mota_ngan,
+    slug,
+  });
+};
+export const call_put_baiviet = (
+  id,
+  tieude,
+  key_word,
+  meta_des,
+  noidung,
+  thumbnail,
+  mota_ngan,
+  slug
+) => {
+  return axios.put(`/api/v1/baiviet/${id}`, {
+    tieude,
+    key_word,
+    meta_des,
+    noidung,
+    thumbnail,
+    mota_ngan,
+    slug,
+  });
+};
+export const call_delete_baiviet = (id) => {
+  return axios.delete(`/api/v1/baiviet/${id}`);
+};
+export const call_detail_baiviet = (slug) => {
+  return axios.get(`/api/v1/baiviet/${slug}`);
+};
+export const call_paginate_list_blog = (page, limit) => {
+  return axios.get(`/api/v1/listbaiviet-home?page=${page}&limit=${limit}`);
+};
+
+export const call_baiviet_admin = () => {
+  return axios.get(`/api/v1/listbaiviet-admin`);
+};
+
+export const call_noibat_home = () => {
+  return axios.get(`/api/v1/noibat-home`);
+};

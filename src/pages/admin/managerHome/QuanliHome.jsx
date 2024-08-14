@@ -1,4 +1,3 @@
-
 import React, { useEffect, useRef, useState } from "react";
 
 import { CiEdit } from "react-icons/ci";
@@ -47,27 +46,27 @@ const QuanliHome = () => {
   const customHome = (list) => {
     let arr = [];
     list.map((item, index) => {
-      arr.push({
-        key: index + 1,
-        STT: index + 1,
-        id: item.id,
-        banner: item.banner,
-        description: item.gioi_thieu,
-        action: index,
-        is_banner: item.is_banner,
-
-      });
+      if (+item.is_banner === 1)
+        // check đk ko lấy is_banner =2 là giưới thiệu
+        arr.push({
+          key: index + 1,
+          STT: index + 1,
+          id: item.id,
+          banner: item.banner,
+          description: item.gioi_thieu,
+          action: index,
+          is_banner: item.is_banner,
+        });
     });
 
     setListHome(arr);
   };
 
   const confirm = async (id) => {
-    
     const res = await call_delete_home(id);
     if (res && res.EC === 1) {
       message.success("Xóa thành công ");
-      fetchAllHome()
+      fetchAllHome();
     } else {
       message.error("Có lỗi !");
     }
@@ -93,17 +92,18 @@ const QuanliHome = () => {
         return (
           <div>
             <Image
-             
-              src={`${import.meta.env.VITE_BACKEND_URL}/images/book/${record?.banner}`}
+              src={`${import.meta.env.VITE_BACKEND_URL}/images/book/${
+                record?.banner
+              }`}
               width="auto"
-              height='auto'
+              height="auto"
               className="max-w-60"
             />
           </div>
         );
       },
     },
-   
+
     {
       title: "Thao tác",
       dataIndex: "action",
@@ -190,14 +190,11 @@ const QuanliHome = () => {
         setIsModalUpdateHome={setIsModalUpdateHome}
         dataUpdate={dataUpdate}
         fetchAllHome={fetchAllHome}
-        
-        
       />
       <AddHome
         isModalAddHome={isModalAddHome}
         setIsModalAddHome={setIsModalAddHome}
         fetchAllHome={fetchAllHome}
-       
       />
     </>
   );
