@@ -3,6 +3,7 @@ import "./home.scss";
 import { useEffect, useRef, useState } from "react";
 import {
   call_list_home,
+  call_noibat_home,
   callGet_ParentCategory_Home,
   callListBookPopularAll,
 } from "../../services/api";
@@ -14,13 +15,14 @@ import { useDispatch, useSelector } from "react-redux";
 import { doSetCurrentPageAction } from "../../redux/category/categorySlice";
 import CarouselBanner from "../../components/carousel/carousel-banner/CarouselBanner";
 import CarouselSanpham from "../../components/carousel/carousel-sanpham/CarouselSanpham";
-import banner_quangcao from "../../images/banner_qc.jpg";
-import DanhMuc from "../../components/danh muc/DanhMuc";
+
 import TheLoaiNoiBat from "../../components/theloai noibat/TheLoaiNoiBat";
 import { BsBook } from "react-icons/bs";
 import { SiGitbook } from "react-icons/si";
 import { FaThList } from "react-icons/fa";
 import CarouselSlick from "../../components/carousel/carousel-banner/CarouselSlick";
+import Blog from "../blog/Blog";
+import CarouselTailwind from "../../components/carousel/carousel-tailwind/CarouselTailwind";
 
 const Home = () => {
   const [form] = Form.useForm();
@@ -37,7 +39,7 @@ const Home = () => {
 
   const [arrId, setArrId] = useState([]);
   const [listBanner, setListBanner] = useState([]);
-
+  const [listBaiviet, setListBaiviet] = useState([]);
   // window.onbeforeunload = function () {
   //   window.scrollTo(0, 0);
   // };
@@ -53,30 +55,34 @@ const Home = () => {
     let res = await call_list_home();
     if (res && res.EC === 1) {
       let arr = [];
-      res.data.map((item) =>{
-        if(+item.is_banner === 1){
-          arr.push(item)
+      res.data.map((item) => {
+        if (+item.is_banner === 1) {
+          arr.push(item);
         }
-      })
+      });
       setListBanner(arr);
+    }
+  };
+  const getListCategory = async () => {
+    let res = await callGet_ParentCategory_Home();
+    if (res && res.data) {
+      setIsLoading(false);
+      setlistCategory(res.data);
+      getAllChildrenIds(res.data);
+      // setArrId(arr)
+    }
+  };
+  const get_list_baiviet_home = async () => {
+    let res = await call_noibat_home();
+    if (res && res.EC === 1) {
+      setListBaiviet(res.data);
     }
   };
   useEffect(() => {
     getListBookPopularAll();
-    get_list_banner()
-  }, []);
-
-  useEffect(() => {
-    const getListCategory = async () => {
-      let res = await callGet_ParentCategory_Home();
-      if (res && res.data) {
-        setIsLoading(false);
-        setlistCategory(res.data);
-        getAllChildrenIds(res.data);
-        // setArrId(arr)
-      }
-    };
+    get_list_banner();
     getListCategory();
+    get_list_baiviet_home();
   }, []);
 
   function getAllChildrenIds(categories) {
@@ -94,13 +100,13 @@ const Home = () => {
     }
     // set điều kiện hiển thị home, active = 1
     let test = [];
-   
-    categories.map((item) =>{
-      if(+item.active === 1){
-        test.push(item.id)
+
+    categories.map((item) => {
+      if (+item.active === 1) {
+        test.push(item.id);
       }
-    })
-    
+    });
+
     categories.forEach((category) => {
       // điều kiện id cate cha = 9 , 7
 
@@ -189,6 +195,28 @@ const Home = () => {
                 </>
               );
             })}
+          {/* // bai viet */}
+          {/* <div className="text-xl text-blue-600 text-center mb-5 mt-10 uppercase font-semibold">Tin tức</div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 px-2">
+            {listBaiviet &&
+              listBaiviet.map((item, id) => {
+                return (
+                  <>
+                    <div className="col-span-1 ">
+                      <Blog detail={item} />
+                    </div>
+                  </>
+                );
+              })}
+          </div>
+          <div className="pb-5"></div> */}
+
+          <div className="text-xl text-blue-600 text-center mb-5 mt-10 uppercase font-semibold">
+            Tin tức
+          </div>
+
+          <CarouselTailwind list = {listBaiviet}/>
+
         </div>
       </div>
     );

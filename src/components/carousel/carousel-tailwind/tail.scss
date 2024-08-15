@@ -1,0 +1,18 @@
+
+.swiper-wrapper {
+    width: 100%;
+    height: max-content !important;
+    padding-bottom: 40px !important;
+    -webkit-transition-timing-function: linear !important;
+    transition-timing-function: linear !important;
+    position: relative;
+}
+.swiper-pagination-bullet {
+    background: #4f46e5;
+}
+.swiper-button-prev:after{
+    content: unset !important;
+}
+.swiper-button-next:after{
+    content: unset !important;
+}

@@ -13,8 +13,8 @@ export default function Blog(props) {
 
   return (
     <Card
-    onClick={() => navigate(`/tin-tuc/${detail.slug}`)}
-    className="h-full"
+      onClick={() => navigate(`/tin-tuc/${detail.slug}`)}
+      className="h-full"
     >
       <CardActionArea>
         <CardMedia
@@ -24,12 +24,13 @@ export default function Blog(props) {
             detail?.thumbnail
           }`}
           alt="green iguana"
+          className="h-[200px] object-cover"
         />
         <CardContent>
           <Typography
             gutterBottom
             component="span"
-            className="font-semibold h-[46px] text-md !capitalize line-clamp-2 leading-5"
+            className="!font-semibold h-[46px] text-md !capitalize line-clamp-2 leading-5"
           >
             {detail.tieude}
           </Typography>

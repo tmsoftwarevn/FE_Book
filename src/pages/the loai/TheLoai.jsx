@@ -110,7 +110,7 @@ const TheLoai = () => {
       if (node.slug === slugPrams.slug) {
         setlistCategory(node); // để lặp .children
         setNameCategory(node);
-        //get children id category
+        //get children arr id category // tìm con của slug
         const { arrId } = getCategory_ChildrenById(node, node.id);
         setArrId(arrId);
       }

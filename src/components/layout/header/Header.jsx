@@ -9,6 +9,7 @@ import { useEffect, useState } from "react";
 import { callGet_ParentCategory_Home } from "../../../services/api";
 import { VscThreeBars } from "react-icons/vsc";
 import ResponsiveHeader from "./Responsive";
+import "./header.scss";
 
 const Header = () => {
   const countProduct = useSelector((state) =>
@@ -44,8 +45,9 @@ const Header = () => {
       handleSearch();
     }
   };
-  return (
-    <div className=" bg-gradient-to-tr from-blue-600 to-blue-300 text-white sticky top-0 left-0 w-full z-50 shadow">
+  return ( 
+    // bg-custom
+    <div className="bg-gradient-to-tr from-blue-600 to-blue-300 text-white sticky top-0 left-0 w-full z-50 shadow">
       <div className="container">
         <Navbar1 />
         <div className="flex justify-between items-center pb-4 px-5 xl:px-0">
@@ -139,7 +141,7 @@ const Header = () => {
                   </svg>
                 </div>
                 <div
-                  className="dropdown-menu shadow-lg bg-white absolute top-full w-60 hidden group-hover:block"
+                  className="dropdown-menu shadow-lg bg-white absolute z-50 top-full w-60 hidden group-hover:block"
                   aria-labelledby="dropdown-hover"
                 >
                   <ul className="text-sm">
@@ -168,14 +170,14 @@ const Header = () => {
               <span onClick={() => navigate("/tin-tuc")}>Tin tức</span>
               <span
                 className={
-                  location.pathname === "/tin-tuc"
+                  location.pathname.startsWith("/tin-tuc")
                     ? "absolute -bottom-2 left-1/2 w-3/6 transition-all h-0.5 bg-blue-900 group-hover:w-3/6"
                     : "absolute -bottom-2 left-1/2 w-0 transition-all h-0.5 bg-blue-900 group-hover:w-3/6"
                 }
               ></span>
               <span
                 className={
-                  location.pathname === "/tin-tuc"
+                  location.pathname.startsWith("/tin-tuc")
                     ? "absolute -bottom-2 right-1/2 w-3/6 transition-all h-0.5 bg-blue-900 group-hover:w-3/6"
                     : "absolute -bottom-2 right-1/2 w-0 transition-all h-0.5 bg-blue-900 group-hover:w-3/6"
                 }

@@ -13,7 +13,7 @@ const ListBlog = () => {
   const location = useLocation();
   const params = new URLSearchParams(location.search);
   const navigate = useNavigate();
-  const limit = 16;
+  const limit = 12;
   const [list, setList] = useState([]);
   const [total, setTotal] = useState();
 
@@ -26,10 +26,10 @@ const ListBlog = () => {
     if (res && res.EC === 1) {
       //console.log("rrrr", res);
       setList(res.data.list);
-      setTotal(res.data.meta.total);
+      setTotal(res.data.meta.totalPage);
     }
   };
-  //console.log("listtt", list);
+  console.log("toal", total);
 
   useEffect(() => {
     call_Listblog_page();
@@ -43,11 +43,11 @@ const ListBlog = () => {
     <div className="mb-10">
       <div className="container">
         <h1 className="text-center text-4xl font-bold m-10">Tin tức</h1>
-        <div className="w-96 mx-auto px-2 mb-5">
+        <div className="w-80 mx-auto px-2 mb-5">
           <SearchBar />
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-3 gap-5 px-2">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 px-2">
           {list &&
             list.map((item, id) => {
               return (

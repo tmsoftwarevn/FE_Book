@@ -348,3 +348,8 @@ export const call_baiviet_admin = () => {
 export const call_noibat_home = () => {
   return axios.get(`/api/v1/noibat-home`);
 };
+
+export const call_search_baiviet = (search, page, limit) => {
+  
+  return axios.get(`/api/v1/search-baiviet?search=${search}&page=${page}&limit=${limit}`);
+};

@@ -41,8 +41,7 @@ import {
 } from "../../redux/category/categorySlice";
 import CarouselBanner from "../../components/carousel/carousel-banner/CarouselBanner";
 import CarouselSanpham from "../../components/carousel/carousel-sanpham/CarouselSanpham";
-import banner_quangcao from "../../images/banner_qc.jpg";
-import DanhMuc from "../../components/danh muc/DanhMuc";
+
 
 const Home = () => {
   const [form] = Form.useForm();
