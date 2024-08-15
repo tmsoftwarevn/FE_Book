@@ -127,7 +127,7 @@ const TheLoai = () => {
     });
   }
 
-  console.log("priceee", price);
+  console.log("arrid child", arrId);
   useEffect(() => {
     if (params.get("page")) {
       setCurrent(params.get("page"));
@@ -446,7 +446,7 @@ const TheLoai = () => {
                   })}
               </div>
               <Divider />
-              <Row style={{ display: "flex", justifyContent: "center" }}>
+              <Row className="mb-10" style={{ display: "flex", justifyContent: "center" }}>
                 <Pagination
                   showSizeChanger={false}
                   current={current}

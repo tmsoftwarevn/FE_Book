@@ -23,6 +23,7 @@ import { FaThList } from "react-icons/fa";
 import CarouselSlick from "../../components/carousel/carousel-banner/CarouselSlick";
 import Blog from "../blog/Blog";
 import CarouselTailwind from "../../components/carousel/carousel-tailwind/CarouselTailwind";
+import img_ft from "../../assets/bg-book.jpg";
 
 const Home = () => {
   const [form] = Form.useForm();
@@ -195,27 +196,15 @@ const Home = () => {
                 </>
               );
             })}
-          {/* // bai viet */}
-          {/* <div className="text-xl text-blue-600 text-center mb-5 mt-10 uppercase font-semibold">Tin tức</div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 px-2">
-            {listBaiviet &&
-              listBaiviet.map((item, id) => {
-                return (
-                  <>
-                    <div className="col-span-1 ">
-                      <Blog detail={item} />
-                    </div>
-                  </>
-                );
-              })}
-          </div>
-          <div className="pb-5"></div> */}
 
           <div className="text-xl text-blue-600 text-center mb-5 mt-10 uppercase font-semibold">
             Tin tức
           </div>
+          <CarouselTailwind list={listBaiviet} />
 
-          <CarouselTailwind list = {listBaiviet}/>
+          {/* <div className="h-[250px] ">
+            <img className="w-full h-full object-cover" src={img_ft} />
+          </div> */}
 
         </div>
       </div>

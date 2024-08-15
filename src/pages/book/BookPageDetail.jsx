@@ -29,6 +29,7 @@ import "dayjs/locale/vi";
 import utc from "dayjs/plugin/utc";
 import timezone from "dayjs/plugin/timezone";
 import BreadcrumbCustom from "../../components/breadcrum/BreadCrumCustom";
+import RelatedBook from "./RelatedBook";
 // timezone vietnam
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -100,12 +101,12 @@ const BookPageDetail = (props) => {
     if (res && res.EC === 1) {
       // custom truyen xuon bread
       let d = res.data.reverse();
-     
+
       let arr = [];
-      d.map((item) =>{
-        arr.push(item.category) // lấy name
-      })
-      setListBread(arr)
+      d.map((item) => {
+        arr.push(item.category); // lấy name
+      });
+      setListBread(arr);
     }
   };
 
@@ -437,7 +438,7 @@ const BookPageDetail = (props) => {
             <div className="detail">
               {/* <div className="detail__title">CHI TIẾT SẢN PHẨM</div> */}
               <div className="detail__content">
-                <div className="detail__title font-bold">CHI TIẾT SẢN PHẨM</div>
+                <div className="detail__title font-bold text-blue-600">CHI TIẾT SẢN PHẨM</div>
                 <div className="border border-black-400 mb-5"></div>
                 <div
                   dangerouslySetInnerHTML={{
@@ -471,6 +472,10 @@ const BookPageDetail = (props) => {
           </div>
 
           <MessageCart ref={refMessage} />
+          {/* // related */}
+          <div>
+            <RelatedBook arrId={detailBook['category.id']} />
+          </div>
         </div>
       </div>
     );

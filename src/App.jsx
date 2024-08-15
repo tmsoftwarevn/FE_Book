@@ -31,20 +31,23 @@ import ManagerOrder from "./pages/admin/managerOrder/managerOrder";
 
 import Search from "./pages/search/search";
 import QuanliCategory from "./pages/admin/managerCategory/QuanlyCategory";
-import Account from "./pages/account/Account";
 import SignIn from "./pages/login/Login";
 import SignUp from "./pages/signup/Signup";
 import QuenMatkhau from "./pages/quen-mat-khau/QuenMatkhau";
 import MenuHeader from "./components/danh muc/DropdownMenu";
 import TheLoai from "./pages/the loai/TheLoai";
 import QuanliHome from "./pages/admin/managerHome/QuanliHome";
-import ScrollToTop from "./utils/ScrollToTop"
+import ScrollToTop from "./utils/ScrollToTop";
 import GioiThieu from "./pages/admin/managerHome/GioiThieu";
 import GioiThieuHome from "./pages/gioi-thieu/GioiThieuHome";
 import DetailBlog from "./pages/blog/DetailBlog";
 import SearchBlog from "./pages/blog/SearchBlog";
 import ListBlog from "./pages/blog/ListBlog";
 import QuanlyBaiviet from "./pages/admin/quan ly bai viet/QuanlyBaiviet";
+import DonHang from "./pages/account/DonHang";
+import Account from "./pages/account/Account";
+import Info from "./pages/account/Info";
+import Baomat from "./pages/account/Baomat";
 
 const Layout = () => {
   const role = useSelector((state) => state.account?.user?.role);
@@ -132,7 +135,8 @@ export default function App() {
             ),
           },
           {
-            path: "orderHistory",
+            //path: "orderHistory",
+            path: "lich-su-mua-hang",
             element: (
               <ProtectedRoute>
                 <OrderHistory />
@@ -153,7 +157,7 @@ export default function App() {
           },
           {
             path: "account",
-            element: <Account />
+            element: <Account />,
           },
           {
             path: "gioi-thieu",
@@ -171,8 +175,27 @@ export default function App() {
             path: "tin-tuc/tim-kiem",
             element: <SearchBlog />,
           },
+          {
+            path: "account",
+            element: <Account />,
+            children: [
+              {
+                path: "thong-tin",
+                element: <Info />,
+              },
+              {
+                path: "don-hang",
+                element: <DonHang />,
+              },
+              {
+                path: "bao-mat",
+                element: <Baomat />,
+              },
+            ],
+          },
         ],
       },
+
       {
         path: "/login/*",
         element: <SignIn />,
@@ -225,10 +248,11 @@ export default function App() {
           },
         ],
       },
-     {
-      path: "/test",
-      element: <MenuHeader />
-     }
+
+      {
+        path: "/test",
+        element: <MenuHeader />,
+      },
     ],
     {
       basename: import.meta.env.VITE_BASE_NAME,
@@ -236,7 +260,13 @@ export default function App() {
   );
 
   // cho phep vao route, ko check quyen
-  const permissionPath = ["/","/login", "/register", "/book", "/forgot-password"];
+  const permissionPath = [
+    "/",
+    "/login",
+    "/register",
+    "/book",
+    "/forgot-password",
+  ];
 
   const str = window.location.pathname;
 

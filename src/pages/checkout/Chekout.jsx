@@ -58,10 +58,12 @@ const Checkout = () => {
   const dispatch = useDispatch();
   let totalPriceProduct = 0;
   useEffect(() => {
-    if (!listProductBuy) {
+    if (!listProductBuy ) {
       navigate("/cart");
     }
   }, [listProductBuy]);
+
+  
   useEffect(() => {
     checkQuantityDatabase();
     const getInfoDelivery = async () => {

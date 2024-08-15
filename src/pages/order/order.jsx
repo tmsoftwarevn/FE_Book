@@ -9,10 +9,10 @@ const PageOrder = () => {
   const isCheckout = location.state?.isCheckout;
 
   //ko cho quay lai
-  // history.pushState(null, document.title, location.href);
-  // window.addEventListener("popstate", function (event) {
-  //   history.pushState(null, document.title, location.href);
-  // });
+  history.pushState(null, document.title, location.href);
+  window.addEventListener("popstate", function (event) {
+    history.pushState(null, document.title, location.href);
+  });
 
   useEffect(() => {
     if (!isCheckout) {

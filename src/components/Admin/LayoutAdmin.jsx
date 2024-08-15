@@ -49,6 +49,11 @@ const items = [
     <DollarCircleOutlined />
   ),
   getItem(
+    <Link to="/admin/category">Quản lý thể loại</Link>,
+    "/admin/category",
+    <ExceptionOutlined />
+  ),
+  getItem(
     <Link to="/admin/order">Quản lý đơn hàng</Link>,
     "/admin/order",
     <DollarCircleOutlined />

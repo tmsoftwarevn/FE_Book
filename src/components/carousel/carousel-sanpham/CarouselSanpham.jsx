@@ -1,7 +1,5 @@
 import { Divider } from "antd";
-import { AiOutlineLeft, AiOutlineRight } from "react-icons/ai";
 import Slider from "react-slick";
-import { convertSlug } from "../../../utils/convertSlug";
 import { useNavigate } from "react-router-dom";
 import "./carouselsanpham.scss";
 import Card from "../../card/Card";
@@ -40,20 +38,18 @@ let settings = {
 };
 
 const CarouselSanpham = (props) => {
-  const { listPopularAll } = props;
+  const { listPopularAll, name } = props;
 
   const navigate = useNavigate();
 
-  const handleRedirectBook = (book) => {
-    // const slug = convertSlug(book.mainText);
-    navigate(`/book/${book.slug}`);
-  };
+
 
   return (
     <div className="">
       <div className="text-xl px-2 mb-5 mt-10 text-blue-600 flex text-center w-fit mx-auto items-center uppercase font-semibold ">
         <BsBook className="mr-3 hidden sm:block " />
-        Sách mới
+        {name ? name : 'Sách mới'}
+       
       </div>
       <div className=" overflow-hidden">
         <Slider {...settings}>

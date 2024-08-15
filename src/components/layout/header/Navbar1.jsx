@@ -121,8 +121,17 @@ const Navbar1 = () => {
                     </li>
                   )}
                   <li>
-                    <span class="block px-6 py-2 hover:text-blue-600 cursor-pointer text-gray-900 font-medium">
-                      Downloads
+                    <span
+                    onClick={() => navigate('/account/thong-tin')}
+                     class="block px-6 py-2 hover:text-blue-600 cursor-pointer text-gray-900 font-medium">
+                      Quản lý tài khoản
+                    </span>
+                  </li>
+                  <li>
+                    <span
+                    onClick={() => navigate('/lich-su-mua-hang')}
+                     class="block px-6 py-2 hover:text-blue-600 cursor-pointer text-gray-900 font-medium">
+                      Lịch sử mua hàng
                     </span>
                   </li>
                 </ul>

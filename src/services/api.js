@@ -350,6 +350,11 @@ export const call_noibat_home = () => {
 };
 
 export const call_search_baiviet = (search, page, limit) => {
-  
-  return axios.get(`/api/v1/search-baiviet?search=${search}&page=${page}&limit=${limit}`);
+  return axios.get(
+    `/api/v1/search-baiviet?search=${search}&page=${page}&limit=${limit}`
+  );
+};
+
+export const call_related_book = (arrId) => {
+  return axios.post(`/api/v1/listbook_related`, { arrId });
 };
