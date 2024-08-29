@@ -46,7 +46,7 @@ import ListBlog from "./pages/blog/ListBlog";
 import QuanlyBaiviet from "./pages/admin/quan ly bai viet/QuanlyBaiviet";
 import DonHang from "./pages/account/DonHang";
 import Account from "./pages/account/Account";
-import Info from "./pages/account/Info";
+import Taikhoan from "./pages/account/Taikhoan";
 import Baomat from "./pages/account/Baomat";
 
 const Layout = () => {
@@ -180,8 +180,8 @@ export default function App() {
             element: <Account />,
             children: [
               {
-                path: "thong-tin",
-                element: <Info />,
+                path: "tai-khoan",
+                element: <Taikhoan />,
               },
               {
                 path: "don-hang",

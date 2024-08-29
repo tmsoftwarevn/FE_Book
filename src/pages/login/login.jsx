@@ -14,8 +14,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
 import "./login.scss";
 import { message } from "antd";
-import { ApiLogin } from "../../services/api";
-import { doLoginAction } from "../../redux/account/accountSlice";
+import { ApiLogin, callGetInfoDelivery } from "../../services/api";
+import { doLoginAction, doUpdateAddressUser } from "../../redux/account/accountSlice";
 import { doLoginSocialFalse, doLoginSocialTrue } from "../../redux/cart/cartSlice";
 import GoogleButton from "react-google-button";
 
@@ -52,6 +52,7 @@ export default function SignIn() {
     if (res?.data) {
       localStorage.setItem("access_token", res.access_token);
       dispatch(doLoginAction(res.data));
+     
       message.success("Đăng nhập thành công");
       navigate("/");
     } else {
@@ -78,7 +79,7 @@ export default function SignIn() {
         )
           .then((response) => response.json())
           .then((resObject) => {
-            console.log("checkkkkkk res", resObject);
+            //console.log("checkkkkkk res", resObject);
             user = resObject;
           })
           .catch((err) => {

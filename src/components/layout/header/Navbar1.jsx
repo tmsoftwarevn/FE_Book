@@ -25,6 +25,8 @@ const Navbar1 = () => {
 
   const handleLogout = async () => {
     const res = await callLogout(idUser);
+    // thêm
+  
     if (res && res.data) {
       dispatch(doLogoutAction());
       dispatch(doRemoveCartLogout());
@@ -122,7 +124,7 @@ const Navbar1 = () => {
                   )}
                   <li>
                     <span
-                    onClick={() => navigate('/account/thong-tin')}
+                    onClick={() => navigate('/account/tai-khoan')}
                      class="block px-6 py-2 hover:text-blue-600 cursor-pointer text-gray-900 font-medium">
                       Quản lý tài khoản
                     </span>

@@ -169,10 +169,10 @@ const NavBar = () => {
                     <p
                       className="cursor-pointer hover:text-blue-600"
                       onClick={() => {
-                        navigate("/account/thong-tin");
+                        navigate("/account/tai-khoan");
                       }}
                     >
-                      Thông tin
+                      Tài khoản
                     </p>
                     <p
                       className="cursor-pointer hover:text-blue-600"

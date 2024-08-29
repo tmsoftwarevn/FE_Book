@@ -57,13 +57,13 @@ const Account = () => {
                  
                   <p
                     className={
-                      active === "/account/thong-tin"
+                      active === "/account/tai-khoan"
                         ? "cursor-pointer text-blue-600 bg-slate-300 pl-2 rounded mt-1"
                         : "cursor-pointer hover:text-blue-600 hover:bg-slate-300 pl-2 rounded mt-1"
                     }
-                    onClick={() => navigate("/account/thong-tin")}
+                    onClick={() => navigate("/account/tai-khoan")}
                   >
-                    Thông tin
+                    Tài khoản
                   </p>
                   
                   <p

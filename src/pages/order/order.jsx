@@ -43,7 +43,7 @@ const PageOrder = () => {
                 onClick={() => {
                   NProgress.start();
                   setTimeout(() => {
-                    navigate("/orderHistory");
+                    navigate("/lich-su-mua-hang");
                   }, 1000);
                 }}
               >

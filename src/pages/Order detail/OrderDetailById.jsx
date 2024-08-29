@@ -18,6 +18,8 @@ const DetailOrderById = () => {
   useEffect(() => {
     const fetchDetailOrder = async () => {
       let res = await callGetDetailOrderWithId(params.id);
+      console.log('resssss', res)
+
       if (res && res.data) {
         setDataView(res.data);
       }
@@ -27,8 +29,8 @@ const DetailOrderById = () => {
   }, []);
   
   const handleRedirectDetailBook = (book) => {
-    // const slug = convertSlug(book.mainText);
-    navigate(`/book/${book.slug}`);
+    const slug = convertSlug(book.mainText);
+    navigate(`/book/${slug}`);
   };
 
   const showModal = () => {

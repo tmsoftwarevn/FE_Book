@@ -67,8 +67,8 @@ const BookPageDetail = (props) => {
   const navigate = useNavigate();
   // let id = params.get("id");
   const params = useParams();
-  const id = params.slug; // fix lại id = slug
-
+  const slug = params.slug; // fix lại id = slug
+  
   // window.onbeforeunload = function () {
   //   window.scrollTo(0, 0);
   // };
@@ -83,7 +83,7 @@ const BookPageDetail = (props) => {
   useEffect(() => {
     const getDetailBook = async () => {
       //NProgress.start();
-      let res = await callGetDetailBook(id);
+      let res = await callGetDetailBook(slug);  // get theo slug
       if (res && res.data) {
         setDetailBook(res.data);
         customDataBook(res.data);
@@ -197,7 +197,7 @@ const BookPageDetail = (props) => {
 
     const dataAddBook = {
       quantity: +quantity,
-      id: id,
+      id: detailBook?.id,
       detail: {
         slug: detailBook.slug,
         thumbnail: detailBook.thumbnail,
@@ -235,7 +235,7 @@ const BookPageDetail = (props) => {
 
     const dataAddBook = {
       quantity: +quantity,
-      id: id,
+      id: detailBook?.id,
       detail: {
         thumbnail: detailBook.thumbnail,
         mainText: detailBook.mainText,
@@ -245,7 +245,7 @@ const BookPageDetail = (props) => {
     };
     dispatch(doAddBookAction(dataAddBook));
     dispatch(saveInfoCartUser());
-    navigate("/cart", { state: { id_book: id } });
+    navigate("/cart", { state: { id_book: detailBook?.id } });
   };
   const handleClickOutside = (e, name) => {
     if (name === "lg") {

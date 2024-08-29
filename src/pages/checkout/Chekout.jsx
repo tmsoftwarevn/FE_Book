@@ -133,6 +133,8 @@ const Checkout = () => {
     });
   };
   const createOrderDetail = async (orderId) => {
+    console.log('list cart', listCart)
+    console.log('list product buy', listProductBuy)
     let listOrder = listCart.filter((item) => {
       return listProductBuy.includes(item.id);
     });
@@ -170,7 +172,7 @@ const Checkout = () => {
         NProgress.start();
         let d = await callCreateOrder(order);
         if (d && d.data) {
-          createOrderDetail(d.data.id);
+         createOrderDetail(d.data.id);
           dispatch(doRemoveAfterOrder(listProductBuy));
           dispatch(saveInfoCartUser());
           setTimeout(() => {
