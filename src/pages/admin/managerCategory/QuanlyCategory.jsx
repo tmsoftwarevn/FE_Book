@@ -86,7 +86,7 @@ const QuanliCategory = () => {
       key: "name",
     },
     {
-      title: "Trạng thái ở trang chủ",
+      title: "Trạng thái ở trang chủ (chỉ hiện cha)",
       dataIndex: "active",
       key: "active",
       render: (text, record, index) => {

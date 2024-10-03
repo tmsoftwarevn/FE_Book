@@ -1,7 +1,7 @@
 import { Breadcrumb, Divider, Pagination, Rate, Row } from "antd";
 import { AiFillStar } from "react-icons/ai";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { convertSlug } from "../../utils/convertSlug";
+
 import { useEffect, useState } from "react";
 import { callSearchBook } from "../../services/api";
 import "./search.scss";

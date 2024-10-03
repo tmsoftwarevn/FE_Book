@@ -108,6 +108,8 @@ const Home = () => {
       }
     });
 
+    //console.log('testtttttt', test);
+
     categories.forEach((category) => {
       // điều kiện id cate cha = 9 , 7
 
@@ -202,9 +204,6 @@ const Home = () => {
           </div>
           <CarouselTailwind list={listBaiviet} />
 
-          {/* <div className="h-[250px] ">
-            <img className="w-full h-full object-cover" src={img_ft} />
-          </div> */}
 
         </div>
       </div>
